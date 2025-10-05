@@ -11,6 +11,7 @@ const Footer: React.FC = () => {
           <div className="flex space-x-6 mt-4 md:mt-0">
             <Link to="/terminos" className="text-sm text-gray-500 hover:text-black transition-colors">Términos de Servicio</Link>
             <Link to="/pricing" className="text-sm text-gray-500 hover:text-black transition-colors">Precios</Link>
+            <Link to="/style-guide" className="text-sm text-gray-500 hover:text-black transition-colors">Guía de Estilo</Link>
           </div>
         </div>
       </div>

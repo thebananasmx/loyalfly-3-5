@@ -13,6 +13,7 @@ import TermsPage from './pages/TermsPage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import CardEditorPage from './pages/CardEditorPage';
+import StyleGuidePage from './pages/StyleGuidePage';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/pricing" element={<PricingPage />} />
             <Route path="/terminos" element={<TermsPage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/style-guide" element={<StyleGuidePage />} />
           </Route>
           
           <Route 

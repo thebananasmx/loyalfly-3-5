@@ -13,7 +13,7 @@ interface PricingCardProps {
 
 const PricingCard: React.FC<PricingCardProps> = ({ plan, price, description, features, isFeatured = false }) => {
   const cardClasses = `border rounded-lg p-6 sm:p-8 flex flex-col h-full ${isFeatured ? 'border-[#00AA00] border-2' : 'border-gray-200'}`;
-  const buttonClasses = `w-full mt-8 py-3 font-semibold rounded-md transition-colors ${isFeatured ? 'bg-[#00AA00] text-white hover:bg-opacity-90' : 'bg-black text-white hover:bg-gray-800'}`;
+  const buttonClasses = `w-full mt-8 py-3 font-semibold rounded-md transition-colors text-center ${isFeatured ? 'bg-[#00AA00] text-white hover:bg-opacity-90' : 'bg-black text-white hover:bg-gray-800'}`;
 
   return (
     <div className={cardClasses}>
@@ -68,6 +68,7 @@ const PricingPage: React.FC = () => {
                             'Personalización completa',
                             'Soporte por email'
                         ]}
+                        isFeatured={true}
                     />
                     <PricingCard 
                         plan="Pro"
@@ -79,7 +80,6 @@ const PricingPage: React.FC = () => {
                             'Personalización completa',
                             'Soporte prioritario'
                         ]}
-                        isFeatured={true}
                     />
                 </div>
             </div>
