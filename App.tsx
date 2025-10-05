@@ -14,6 +14,7 @@ import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import CardEditorPage from './pages/CardEditorPage';
 import StyleGuidePage from './pages/StyleGuidePage';
+import PublicCardPage from './pages/PublicCardPage';
 
 function App() {
   return (
@@ -28,6 +29,8 @@ function App() {
             <Route path="/style-guide" element={<StyleGuidePage />} />
           </Route>
           
+          <Route path="/card/view" element={<PublicCardPage />} />
+
           <Route 
             path="/app"
             element={

@@ -1,11 +1,17 @@
 
 import React, { useState } from 'react';
 import CardPreview from '../components/CardPreview';
+import QRCode from '../components/QRCode';
 import { updateCardSettings } from '../services/firebaseService';
 
 const lightColors = [
   '#FFFFFF', '#FEE2E2', '#FEF3C7', '#D1FAE5', '#DBEAFE', '#E0E7FF', '#F3E8FF',
 ];
+
+const CopyIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>;
+const CheckIconSuccess = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#00AA00]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>;
+const ExternalLinkIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>;
+
 
 const CardEditorPage: React.FC = () => {
   const [businessName, setBusinessName] = useState('Café del Sol');
@@ -14,6 +20,9 @@ const CardEditorPage: React.FC = () => {
   const [stamps, setStamps] = useState(4);
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const publicCardUrl = `${window.location.origin}${window.location.pathname}#/card/view`;
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -31,6 +40,13 @@ const CardEditorPage: React.FC = () => {
     } finally {
         setIsSaving(false);
     }
+  };
+
+  const handleCopyUrl = () => {
+    navigator.clipboard.writeText(publicCardUrl).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    });
   };
 
   return (
@@ -105,6 +121,45 @@ const CardEditorPage: React.FC = () => {
           >
             {isSaving ? 'Guardando...' : saveSuccess ? '¡Guardado!' : 'Guardar Cambios'}
           </button>
+        </div>
+
+        <div className="p-6 bg-white border border-gray-200 rounded-lg">
+          <h3 className="text-lg font-semibold text-black mb-4">Comparte tu Tarjeta</h3>
+          <div className="flex flex-col sm:flex-row items-center gap-6">
+              <div className="p-2 border border-gray-200 rounded-md">
+                  <QRCode url={publicCardUrl} />
+              </div>
+              <div className="flex-1 w-full">
+                  <p className="text-sm text-gray-600 mb-2">
+                      Tus clientes pueden escanear este QR o usar el enlace para unirse.
+                  </p>
+                  <div className="flex items-center">
+                      <input 
+                          type="text" 
+                          readOnly 
+                          value={publicCardUrl}
+                          className="flex-1 w-full px-3 py-2 border border-gray-300 rounded-l-md bg-gray-50 text-sm text-gray-700 focus:outline-none"
+                      />
+                      <button
+                          onClick={handleCopyUrl}
+                          className="px-3 py-2 bg-gray-200 text-gray-700 rounded-r-md hover:bg-gray-300 transition-colors flex items-center"
+                          title="Copiar URL"
+                      >
+                          {copied ? <CheckIconSuccess /> : <CopyIcon />}
+                      </button>
+                  </div>
+                  {copied && <p className="text-xs text-[#00AA00] mt-2 animate-pulse">¡Copiado!</p>}
+                   <a
+                        href={publicCardUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-4 w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                    >
+                        <ExternalLinkIcon />
+                        Ver Tarjeta
+                    </a>
+              </div>
+          </div>
         </div>
       </div>
       
