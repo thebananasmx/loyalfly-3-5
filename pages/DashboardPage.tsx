@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { getCustomers } from '../services/firebaseService';
 import type { Customer } from '../types';
@@ -22,8 +23,10 @@ const DashboardPage: React.FC = () => {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center h-full">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-black"></div>
+            <div className="flex items-center justify-center py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-2 border-gray-200 border-t-black" role="status">
+                  <span className="sr-only">Cargando...</span>
+                </div>
             </div>
         );
     }
