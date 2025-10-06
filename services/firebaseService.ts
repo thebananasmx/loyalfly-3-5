@@ -50,3 +50,22 @@ export const updateCardSettings = async (settings: { name: string; reward: strin
     // In a real app, this would update a document in Firestore
     return { success: true, settings };
 };
+
+export const getCustomerByPhone = async (phone: string): Promise<Customer | null> => {
+    console.log(`Searching for customer with phone: ${phone}`);
+    await new Promise(resolve => setTimeout(resolve, 500));
+    const customer = mockCustomers.find(c => c.phone === phone) || null;
+    return customer;
+};
+
+export const addStampToCustomer = async (customerId: string): Promise<Customer> => {
+    console.log(`Adding stamp to customer ID: ${customerId}`);
+    await new Promise(resolve => setTimeout(resolve, 500));
+    const customerIndex = mockCustomers.findIndex(c => c.id === customerId);
+    if (customerIndex !== -1) {
+        mockCustomers[customerIndex].stamps += 1;
+        return { ...mockCustomers[customerIndex] };
+    } else {
+        throw new Error("Customer not found");
+    }
+};

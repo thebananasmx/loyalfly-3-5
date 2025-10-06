@@ -15,6 +15,7 @@ import DashboardPage from './pages/DashboardPage';
 import CardEditorPage from './pages/CardEditorPage';
 import StyleGuidePage from './pages/StyleGuidePage';
 import PublicCardPage from './pages/PublicCardPage';
+import AddStampPage from './pages/AddStampPage';
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
           >
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="tarjeta" element={<CardEditorPage />} />
+            <Route path="agregar-sello" element={<AddStampPage />} />
           </Route>
         </Routes>
       </HashRouter>

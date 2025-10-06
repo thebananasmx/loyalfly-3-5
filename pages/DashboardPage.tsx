@@ -1,7 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { getCustomers } from '../services/firebaseService';
 import type { Customer } from '../types';
+
+const PlusIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>;
 
 const DashboardPage: React.FC = () => {
     const [customers, setCustomers] = useState<Customer[]>([]);
@@ -32,37 +35,48 @@ const DashboardPage: React.FC = () => {
     }
     
     return (
-        <div className="space-y-6">
-            <h1 className="text-3xl font-bold text-black tracking-tight">Dashboard de Clientes</h1>
-            
-            <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
-                 <div className="overflow-x-auto">
-                    <table className="w-full text-base text-left text-gray-600">
-                        <thead className="text-base text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
-                            <tr>
-                                <th scope="col" className="px-4 py-3 sm:px-6">Nombre</th>
-                                <th scope="col" className="px-4 py-3 sm:px-6">Email</th>
-                                <th scope="col" className="px-4 py-3 sm:px-6 hidden md:table-cell">Teléfono</th>
-                                <th scope="col" className="px-4 py-3 sm:px-6 hidden lg:table-cell">Fecha de Inscripción</th>
-                                <th scope="col" className="px-4 py-3 sm:px-6 text-center">Sellos</th>
-                                <th scope="col" className="px-4 py-3 sm:px-6 text-center">Recompensas</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {customers.map((customer) => (
-                                <tr key={customer.id} className="bg-white border-b border-gray-200 hover:bg-gray-50">
-                                    <td className="px-4 py-4 sm:px-6 font-medium text-gray-900 whitespace-nowrap">{customer.name}</td>
-                                    <td className="px-4 py-4 sm:px-6">{customer.email}</td>
-                                    <td className="px-4 py-4 sm:px-6 hidden md:table-cell">{customer.phone}</td>
-                                    <td className="px-4 py-4 sm:px-6 hidden lg:table-cell">{customer.enrollmentDate}</td>
-                                    <td className="px-4 py-4 sm:px-6 text-center">{customer.stamps}</td>
-                                    <td className="px-4 py-4 sm:px-6 text-center">{customer.rewardsRedeemed}</td>
+        <div>
+            <div className="space-y-6">
+                <h1 className="text-3xl font-bold text-black tracking-tight">Dashboard de Clientes</h1>
+                
+                <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
+                     <div className="overflow-x-auto">
+                        <table className="w-full text-base text-left text-gray-600">
+                            <thead className="text-base text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
+                                <tr>
+                                    <th scope="col" className="px-4 py-3 sm:px-6">Nombre</th>
+                                    <th scope="col" className="px-4 py-3 sm:px-6">Email</th>
+                                    <th scope="col" className="px-4 py-3 sm:px-6 hidden md:table-cell">Teléfono</th>
+                                    <th scope="col" className="px-4 py-3 sm:px-6 hidden lg:table-cell">Fecha de Inscripción</th>
+                                    <th scope="col" className="px-4 py-3 sm:px-6 text-center">Sellos</th>
+                                    <th scope="col" className="px-4 py-3 sm:px-6 text-center">Recompensas</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {customers.map((customer) => (
+                                    <tr key={customer.id} className="bg-white border-b border-gray-200 hover:bg-gray-50">
+                                        <td className="px-4 py-4 sm:px-6 font-medium text-gray-900 whitespace-nowrap">{customer.name}</td>
+                                        <td className="px-4 py-4 sm:px-6">{customer.email}</td>
+                                        <td className="px-4 py-4 sm:px-6 hidden md:table-cell">{customer.phone}</td>
+                                        <td className="px-4 py-4 sm:px-6 hidden lg:table-cell">{customer.enrollmentDate}</td>
+                                        <td className="px-4 py-4 sm:px-6 text-center">{customer.stamps}</td>
+                                        <td className="px-4 py-4 sm:px-6 text-center">{customer.rewardsRedeemed}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
+
+            <Link
+                to="/app/agregar-sello"
+                className="fixed bottom-6 right-6 bg-[#00AA00] text-white p-4 rounded-full shadow-lg hover:bg-opacity-90 transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#00AA00]"
+                title="Agregar Sello"
+            >
+                <span className="sr-only">Agregar Sello</span>
+                <PlusIcon />
+            </Link>
         </div>
     );
 };
