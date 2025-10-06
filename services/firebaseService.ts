@@ -1,4 +1,3 @@
-
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -43,16 +42,20 @@ export const registerBusiness = async (email: string, password: string, business
   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
   const user = userCredential.user;
   
+  // Create the main business document
   await setDoc(doc(db, "businesses", user.uid), {
     name: businessName,
     email: user.email,
     createdAt: serverTimestamp(),
-    cardSettings: {
-      name: businessName,
-      reward: 'Tu Recompensa',
-      color: '#FEF3C7',
-      textColorScheme: 'dark'
-    }
+  });
+
+  // Create the card configuration in a subcollection
+  const cardConfigRef = doc(db, "businesses", user.uid, "config", "card");
+  await setDoc(cardConfigRef, {
+    name: businessName,
+    reward: 'Tu Recompensa',
+    color: '#FEF3C7',
+    textColorScheme: 'dark'
   });
   
   return { uid: user.uid, email: user.email };
@@ -76,10 +79,22 @@ export const onAuthUserChanged = (callback: (user: any) => void) => onAuthStateC
 
 export const getBusinessData = async (businessId: string) => {
     const businessDocRef = doc(db, "businesses", businessId);
-    const businessSnap = await getDoc(businessDocRef);
+    const cardConfigRef = doc(db, "businesses", businessId, "config", "card");
+
+    const [businessSnap, cardConfigSnap] = await Promise.all([
+        getDoc(businessDocRef),
+        getDoc(cardConfigRef)
+    ]);
 
     if (businessSnap.exists()) {
-        return businessSnap.data();
+        const businessData = businessSnap.data();
+        const cardSettings = cardConfigSnap.exists() ? cardConfigSnap.data() : null;
+        
+        // Merge the data to maintain the same return structure for the frontend
+        return {
+            ...businessData,
+            cardSettings: cardSettings
+        };
     } else {
         console.log("No such business document!");
         return null;
@@ -97,10 +112,8 @@ export const getCustomers = async (businessId: string): Promise<Customer[]> => {
 };
 
 export const updateCardSettings = async (businessId: string, settings: { name: string; reward: string; color: string; textColorScheme: string }) => {
-    const businessDocRef = doc(db, "businesses", businessId);
-    await updateDoc(businessDocRef, {
-        cardSettings: settings
-    });
+    const cardConfigRef = doc(db, "businesses", businessId, "config", "card");
+    await updateDoc(cardConfigRef, settings);
     return { success: true, settings };
 };
 
