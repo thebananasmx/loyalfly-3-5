@@ -31,6 +31,8 @@ const PublicCardPage: React.FC = () => {
           rewardText={rewardText}
           cardColor={cardColor}
           stamps={userStamps}
+          // FIX: Added required `textColorScheme` prop.
+          textColorScheme="dark"
         />
         
         <div className="mt-6 bg-white p-6 border border-gray-200 rounded-lg shadow-sm">

@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 interface CardPreviewProps {
@@ -6,6 +5,7 @@ interface CardPreviewProps {
   rewardText: string;
   cardColor: string;
   stamps: number;
+  textColorScheme: 'dark' | 'light';
 }
 
 const CheckIcon: React.FC = () => (
@@ -15,9 +15,17 @@ const CheckIcon: React.FC = () => (
 );
 
 
-const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, cardColor, stamps }) => {
+const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, cardColor, stamps, textColorScheme }) => {
   const totalStamps = 10;
   const isRewardReady = stamps >= totalStamps;
+
+  const isLight = textColorScheme === 'light';
+  const primaryTextColor = isLight ? 'text-white' : 'text-black';
+  const secondaryTextColor = isLight ? 'text-white/80' : 'text-gray-700';
+  const logoTextColor = isLight ? 'text-white opacity-50' : 'text-black opacity-50';
+  const logoBgColor = isLight ? 'bg-white/20' : 'bg-black/10';
+  const filledStampBgColor = isLight ? 'bg-white' : 'bg-black';
+  const unfilledStampBgColor = isLight ? 'bg-white/30' : 'bg-gray-200';
 
   return (
     <div className="w-full max-w-sm mx-auto font-sans shadow-lg rounded-lg overflow-hidden">
@@ -26,11 +34,11 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
         style={{ backgroundColor: cardColor }}
       >
         <div className="text-center">
-            <div className="mx-auto w-16 h-16 bg-black bg-opacity-10 rounded-full flex items-center justify-center mb-4">
-                <span className="text-2xl font-bold text-black opacity-50">L</span>
+            <div className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4 ${logoBgColor} transition-colors`}>
+                <span className={`text-2xl font-bold ${logoTextColor} transition-colors`}>L</span>
             </div>
-            <h2 className="text-2xl font-bold text-black truncate">{businessName || 'Nombre del Negocio'}</h2>
-            <p className="text-base text-gray-700 mt-2">
+            <h2 className={`text-2xl font-bold truncate ${primaryTextColor} transition-colors`}>{businessName || 'Nombre del Negocio'}</h2>
+            <p className={`text-base mt-2 ${secondaryTextColor} transition-colors`}>
                 {stamps}/{totalStamps} Sellos para tu próxima recompensa
             </p>
         </div>
@@ -40,7 +48,7 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
                 <div
                     key={index}
                     className={`w-10 h-10 sm:w-12 sm:h-12 mx-auto rounded-full flex items-center justify-center transition-all duration-300 ${
-                        index < stamps ? 'bg-black' : 'bg-gray-200'
+                        index < stamps ? filledStampBgColor : unfilledStampBgColor
                     }`}
                 >
                     {index < stamps && <CheckIcon />}

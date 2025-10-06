@@ -107,6 +107,8 @@ const StyleGuidePage: React.FC = () => {
                   rewardText="Tu Recompensa"
                   cardColor="#FFFFFF"
                   stamps={3}
+                  // FIX: Added required `textColorScheme` prop.
+                  textColorScheme="dark"
                />
           </div>
       </section>

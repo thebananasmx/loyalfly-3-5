@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import CardPreview from '../components/CardPreview';
 import QRCode from '../components/QRCode';
@@ -13,6 +12,7 @@ const CardEditorPage: React.FC = () => {
   const [businessName, setBusinessName] = useState('Café del Sol');
   const [rewardText, setRewardText] = useState('Café gratis');
   const [cardColor, setCardColor] = useState('#FEF3C7');
+  const [textColorScheme, setTextColorScheme] = useState<'dark' | 'light'>('dark');
   const [stamps, setStamps] = useState(4);
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
@@ -104,6 +104,29 @@ const CardEditorPage: React.FC = () => {
             </div>
           </div>
            <div>
+            <label className="block text-base font-medium text-gray-700 mb-1">
+              Patrón de color del texto
+            </label>
+            <div className="mt-1 grid grid-cols-2 gap-2 p-1 bg-gray-100 rounded-md">
+                <button
+                    onClick={() => setTextColorScheme('dark')}
+                    className={`px-3 py-1.5 text-base font-medium rounded-md transition-colors ${
+                        textColorScheme === 'dark' ? 'bg-white shadow-sm text-black' : 'text-gray-600 hover:bg-white/50'
+                    }`}
+                >
+                    Oscuro
+                </button>
+                <button
+                    onClick={() => setTextColorScheme('light')}
+                    className={`px-3 py-1.5 text-base font-medium rounded-md transition-colors ${
+                        textColorScheme === 'light' ? 'bg-white shadow-sm text-black' : 'text-gray-600 hover:bg-white/50'
+                    }`}
+                >
+                    Claro
+                </button>
+            </div>
+          </div>
+           <div>
             <label htmlFor="stamps" className="block text-base font-medium text-gray-700 mb-1">
               Sellos de Muestra ({stamps})
             </label>
@@ -178,6 +201,7 @@ const CardEditorPage: React.FC = () => {
             rewardText={rewardText}
             cardColor={cardColor}
             stamps={stamps}
+            textColorScheme={textColorScheme}
          />
       </div>
     </div>

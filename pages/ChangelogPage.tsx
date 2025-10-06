@@ -24,7 +24,7 @@ const ChangelogPage: React.FC = () => {
       <section className="mb-12">
         <div className="pb-4 border-b border-gray-200">
           <h2 className="text-3xl font-bold text-black">Versión 3.5.0.1</h2>
-          <p className="text-base text-gray-500 mt-1">Lanzada el 6 de Octrubre de 2025</p>
+          <p className="text-base text-gray-500 mt-1">Lanzada el 6 de Octubre de 2025</p>
         </div>
         
         <ul className="mt-8 space-y-6">
