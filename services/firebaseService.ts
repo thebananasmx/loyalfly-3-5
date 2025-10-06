@@ -1,87 +1,159 @@
 
+import { initializeApp } from "firebase/app";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+} from "firebase/auth";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  addDoc,
+  getDocs,
+  collection,
+  query,
+  where,
+  updateDoc,
+  serverTimestamp,
+  Timestamp,
+} from "firebase/firestore";
 import type { Customer } from '../types';
 
-// --- PLACEHOLDER FOR FIREBASE AUTH ---
+const firebaseConfig = {
+  apiKey: "AIzaSyAnW9n-Ou53G1RmD0amMXJfQ_OadfefVug",
+  authDomain: "loyalflyapp-3-5.firebaseapp.com",
+  projectId: "loyalflyapp-3-5",
+  storageBucket: "loyalflyapp-3-5.appspot.com",
+  messagingSenderId: "110326324187",
+  appId: "1:110326324187:web:6516c54fab30370bf825fe",
+  measurementId: "G-Z4DE1F8NTK"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// --- AUTH FUNCTIONS ---
+
+export const registerBusiness = async (email: string, password: string, businessName: string) => {
+  const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+  const user = userCredential.user;
+  
+  await setDoc(doc(db, "businesses", user.uid), {
+    name: businessName,
+    email: user.email,
+    createdAt: serverTimestamp(),
+    cardSettings: {
+      name: businessName,
+      reward: 'Tu Recompensa',
+      color: '#FEF3C7',
+      textColorScheme: 'dark'
+    }
+  });
+  
+  return { uid: user.uid, email: user.email };
+};
 
 export const loginWithEmail = async (email: string, pass: string) => {
-  console.log(`Attempting login for ${email}`);
-  // Simulate network delay
-  await new Promise(resolve => setTimeout(resolve, 1000));
-
-  // In a real app, this would call Firebase Auth
-  if (email === "test@business.com" && pass === "password123") {
-    return {
-      uid: "xyz123",
-      email: email,
-    };
-  } else {
-    throw new Error("Invalid credentials");
-  }
+  const userCredential = await signInWithEmailAndPassword(auth, email, pass);
+  return {
+    uid: userCredential.user.uid,
+    email: userCredential.user.email,
+  };
 };
 
 export const logout = async () => {
-  console.log("Logging out");
-  await new Promise(resolve => setTimeout(resolve, 500));
-  // In a real app, this would call Firebase Auth signout
-  return;
+  await signOut(auth);
 };
 
+export const onAuthUserChanged = (callback: (user: any) => void) => onAuthStateChanged(auth, callback);
 
-// --- PLACEHOLDER FOR FIREBASE FIRESTORE ---
+// --- FIRESTORE FUNCTIONS ---
 
-const mockCustomers: Customer[] = [
-  { id: '1', name: 'Alice Johnson', email: 'alice@example.com', phone: '555-0101', enrollmentDate: '2023-01-15', stamps: 8, rewardsRedeemed: 2 },
-  { id: '2', name: 'Bob Williams', email: 'bob@example.com', phone: '555-0102', enrollmentDate: '2023-02-20', stamps: 3, rewardsRedeemed: 0 },
-  { id: '3', name: 'Charlie Brown', email: 'charlie@example.com', phone: '555-0103', enrollmentDate: '2023-03-10', stamps: 10, rewardsRedeemed: 5 },
-  { id: '4', name: 'Diana Prince', email: 'diana@example.com', phone: '555-0104', enrollmentDate: '2023-04-05', stamps: 5, rewardsRedeemed: 1 },
-  { id: '5', name: 'Ethan Hunt', email: 'ethan@example.com', phone: '555-0105', enrollmentDate: '2023-05-22', stamps: 7, rewardsRedeemed: 3 },
-];
+export const getBusinessData = async (businessId: string) => {
+    const businessDocRef = doc(db, "businesses", businessId);
+    const businessSnap = await getDoc(businessDocRef);
 
-export const getCustomers = async (): Promise<Customer[]> => {
-    console.log("Fetching customers...");
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    // In a real app, this would fetch from a Firestore collection
-    return [...mockCustomers];
+    if (businessSnap.exists()) {
+        return businessSnap.data();
+    } else {
+        console.log("No such business document!");
+        return null;
+    }
+}
+
+export const getCustomers = async (businessId: string): Promise<Customer[]> => {
+    const customersCol = collection(db, `businesses/${businessId}/customers`);
+    const customerSnapshot = await getDocs(customersCol);
+    return customerSnapshot.docs.map(doc => ({ 
+        id: doc.id, 
+        ...doc.data(),
+        enrollmentDate: (doc.data().enrollmentDate as Timestamp)?.toDate().toISOString().split('T')[0] || new Date().toISOString().split('T')[0]
+    } as Customer));
 };
 
-export const updateCardSettings = async (settings: { name: string; reward: string; color: string }) => {
-    console.log("Updating card settings:", settings);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    // In a real app, this would update a document in Firestore
+export const updateCardSettings = async (businessId: string, settings: { name: string; reward: string; color: string; textColorScheme: string }) => {
+    const businessDocRef = doc(db, "businesses", businessId);
+    await updateDoc(businessDocRef, {
+        cardSettings: settings
+    });
     return { success: true, settings };
 };
 
-export const getCustomerByPhone = async (phone: string): Promise<Customer | null> => {
-    console.log(`Searching for customer with phone: ${phone}`);
-    await new Promise(resolve => setTimeout(resolve, 500));
-    const customer = mockCustomers.find(c => c.phone === phone) || null;
-    return customer;
+export const getCustomerByPhone = async (businessId: string, phone: string): Promise<Customer | null> => {
+    const customersCol = collection(db, `businesses/${businessId}/customers`);
+    const q = query(customersCol, where("phone", "==", phone));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+        return null;
+    } else {
+        const docSnap = querySnapshot.docs[0];
+        return { 
+            id: docSnap.id, 
+            ...docSnap.data(),
+            enrollmentDate: (docSnap.data().enrollmentDate as Timestamp)?.toDate().toISOString().split('T')[0] || new Date().toISOString().split('T')[0]
+        } as Customer;
+    }
 };
 
-export const addStampToCustomer = async (customerId: string, quantity: number = 1): Promise<Customer> => {
-    console.log(`Adding ${quantity} stamp(s) to customer ID: ${customerId}`);
-    await new Promise(resolve => setTimeout(resolve, 500));
-    const customerIndex = mockCustomers.findIndex(c => c.id === customerId);
-    if (customerIndex !== -1) {
-        mockCustomers[customerIndex].stamps += quantity;
-        return { ...mockCustomers[customerIndex] };
+export const addStampToCustomer = async (businessId: string, customerId: string, quantity: number = 1): Promise<Customer> => {
+    const customerDocRef = doc(db, `businesses/${businessId}/customers`, customerId);
+    const customerSnap = await getDoc(customerDocRef);
+    if (customerSnap.exists()) {
+        const currentStamps = customerSnap.data().stamps || 0;
+        await updateDoc(customerDocRef, {
+            stamps: currentStamps + quantity
+        });
+        const updatedSnap = await getDoc(customerDocRef);
+        return { 
+            id: updatedSnap.id, 
+            ...updatedSnap.data(),
+            enrollmentDate: (updatedSnap.data().enrollmentDate as Timestamp)?.toDate().toISOString().split('T')[0] || new Date().toISOString().split('T')[0]
+        } as Customer;
     } else {
         throw new Error("Customer not found");
     }
 };
 
-export const createNewCustomer = async (data: { name: string, phone: string, email: string }): Promise<Customer> => {
-    console.log("Creating new customer:", data);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    const newCustomer: Customer = {
-        id: String(mockCustomers.length + 1),
-        name: data.name,
-        phone: data.phone,
-        email: data.email,
+export const createNewCustomer = async (businessId: string, data: { name: string, phone: string, email: string }): Promise<Customer> => {
+    const customersCol = collection(db, `businesses/${businessId}/customers`);
+    const newCustomerData = {
+        ...data,
+        enrollmentDate: serverTimestamp(),
+        stamps: 0,
+        rewardsRedeemed: 0,
+    };
+    const docRef = await addDoc(customersCol, newCustomerData);
+    return {
+        id: docRef.id,
+        ...data,
         enrollmentDate: new Date().toISOString().split('T')[0],
         stamps: 0,
         rewardsRedeemed: 0,
     };
-    mockCustomers.push(newCustomer);
-    return newCustomer;
 };

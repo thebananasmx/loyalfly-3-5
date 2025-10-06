@@ -58,28 +58,38 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
       </div>
       
       <div 
-          className="relative bg-white p-6 text-center"
+          className="relative bg-white p-6"
           style={{
-            maskImage: 'radial-gradient(circle at 0 0.5rem, transparent 0, transparent 0.35rem, black 0.35rem), radial-gradient(circle at 100% 0.5rem, transparent 0, transparent 0.35rem, black 0.35rem)',
-            maskSize: '50% 1rem',
+            maskImage: 'radial-gradient(circle at 0 0.75rem, transparent 0, transparent 0.5rem, black 0.5rem), radial-gradient(circle at 100% 0.75rem, transparent 0, transparent 0.5rem, black 0.5rem)',
+            maskSize: '51% 1.5rem',
             maskPosition: '0 0, 100% 0',
             maskRepeat: 'no-repeat',
           }}
       >
-        <div className="absolute -top-px left-0 right-0 h-px bg-transparent" style={{
-          backgroundImage: 'linear-gradient(to right, #ccc 33%, rgba(255,255,255,0) 0%)',
-          backgroundSize: '8px 1px',
+        <div className="absolute -top-[1.5px] left-0 right-0 h-[3px] bg-transparent" style={{
+          backgroundImage: 'linear-gradient(to right, #9ca3af 60%, rgba(255,255,255,0) 0%)',
+          backgroundSize: '10px 3px',
           backgroundRepeat: 'repeat-x'
         }}></div>
 
         {isRewardReady ? (
-            <p className="font-bold text-lg text-[#00AA00]">
-                ¡Tienes una recompensa activa! Canjear
-            </p>
+            <div>
+                <p className="text-center font-bold text-lg text-[#00AA00]">
+                    ¡Felicidades! ya tienes:
+                </p>
+                <p className="text-center font-semibold text-gray-800 mt-1">
+                    {rewardText || 'Tu Recompensa'}
+                </p>
+            </div>
         ) : (
-            <p className="font-medium text-gray-800">
-                {rewardText || 'Tu Recompensa'}
-            </p>
+             <div>
+                <p className="text-center text-base text-gray-600">
+                    Tu próxima Recompensa:
+                </p>
+                <p className="text-center font-semibold text-gray-800 mt-1">
+                    {rewardText || 'Tu Recompensa'}
+                </p>
+            </div>
         )}
       </div>
     </div>

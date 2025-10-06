@@ -3,8 +3,10 @@ import React, { useState } from 'react';
 import { getCustomerByPhone, addStampToCustomer } from '../services/firebaseService';
 import type { Customer } from '../types';
 import ConfirmationModal from '../components/ConfirmationModal';
+import { useAuth } from '../context/AuthContext';
 
 const AddStampPage: React.FC = () => {
+    const { user } = useAuth();
     const [phone, setPhone] = useState('');
     const [foundCustomer, setFoundCustomer] = useState<Customer | null>(null);
     const [loading, setLoading] = useState(false);
@@ -16,12 +18,13 @@ const AddStampPage: React.FC = () => {
 
     const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!user) return;
         setLoading(true);
         setError('');
         setFoundCustomer(null);
         setUpdateSuccess('');
         try {
-            const customer = await getCustomerByPhone(phone);
+            const customer = await getCustomerByPhone(user.uid, phone);
             if (customer) {
                 setFoundCustomer(customer);
             } else {
@@ -35,11 +38,11 @@ const AddStampPage: React.FC = () => {
     };
 
     const handleConfirmAddStamp = async () => {
-        if (!foundCustomer) return;
+        if (!foundCustomer || !user) return;
 
         setIsUpdating(true);
         try {
-            const updatedCustomer = await addStampToCustomer(foundCustomer.id, stampQuantity);
+            const updatedCustomer = await addStampToCustomer(user.uid, foundCustomer.id, stampQuantity);
             setFoundCustomer(updatedCustomer);
             const pluralStamps = stampQuantity > 1 ? 'sellos' : 'sello';
             const pluralAgregados = stampQuantity > 1 ? 'agregados' : 'agregado';

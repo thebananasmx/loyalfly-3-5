@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -28,7 +29,7 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan, price, description, fea
           </li>
         ))}
       </ul>
-      <Link to="/login" className={buttonClasses}>
+      <Link to="/register" className={buttonClasses}>
         Empezar
       </Link>
     </div>

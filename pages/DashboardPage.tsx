@@ -3,18 +3,21 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getCustomers } from '../services/firebaseService';
 import type { Customer } from '../types';
+import { useAuth } from '../context/AuthContext';
 
 const PlusIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>;
 const UserPlusIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 11a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1v-1z" /></svg>;
 
 const DashboardPage: React.FC = () => {
+    const { user } = useAuth();
     const [customers, setCustomers] = useState<Customer[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchCustomers = async () => {
+            if (!user) return;
             try {
-                const data = await getCustomers();
+                const data = await getCustomers(user.uid);
                 setCustomers(data);
             } catch (error) {
                 console.error("Failed to fetch customers:", error);
@@ -23,7 +26,7 @@ const DashboardPage: React.FC = () => {
             }
         };
         fetchCustomers();
-    }, []);
+    }, [user]);
 
     if (loading) {
         return (

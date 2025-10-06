@@ -1,16 +1,22 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { loginWithEmail, logout as firebaseLogout } from '../services/firebaseService';
+import {
+  loginWithEmail,
+  logout as firebaseLogout,
+  registerBusiness as firebaseRegister,
+  onAuthUserChanged,
+} from '../services/firebaseService';
 
 interface User {
   uid: string;
-  email: string;
+  email: string | null;
 }
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: (email: string, pass: string) => Promise<void>;
+  register: (email: string, pass: string, name: string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -21,36 +27,31 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Placeholder for checking existing session on component mount
-    // In a real app, this would check localStorage or a cookie
-    const storedUser = sessionStorage.getItem('loyalfly_user');
-    if (storedUser) {
-        setUser(JSON.parse(storedUser));
-    }
-    setLoading(false);
+    const unsubscribe = onAuthUserChanged((authUser: any) => {
+      if (authUser) {
+        setUser({ uid: authUser.uid, email: authUser.email });
+      } else {
+        setUser(null);
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const login = async (email: string, pass: string) => {
-    setLoading(true);
-    try {
-      const loggedInUser = await loginWithEmail(email, pass);
-      setUser(loggedInUser);
-      sessionStorage.setItem('loyalfly_user', JSON.stringify(loggedInUser));
-    } catch (error) {
-      console.error("Login failed:", error);
-      throw error;
-    } finally {
-      setLoading(false);
-    }
+    await loginWithEmail(email, pass);
+  };
+  
+  const register = async (email: string, pass: string, name: string) => {
+    await firebaseRegister(email, pass, name);
   };
 
   const logout = async () => {
     await firebaseLogout();
-    setUser(null);
-    sessionStorage.removeItem('loyalfly_user');
   };
 
-  const value = { user, loading, login, logout };
+  const value = { user, loading, login, register, logout };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

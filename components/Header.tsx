@@ -48,7 +48,7 @@ const Header: React.FC = () => {
                   Iniciar Sesión
                 </Link>
                 <Link 
-                  to="/pricing" 
+                  to="/register" 
                   className="px-4 py-2 text-base font-medium text-white bg-[#00AA00] rounded-md hover:bg-opacity-90 transition-colors"
                 >
                   Registrarse
@@ -80,7 +80,7 @@ const Header: React.FC = () => {
               Iniciar Sesión
             </Link>
             <Link 
-              to="/pricing"
+              to="/register"
               onClick={closeMenu} 
               className="px-4 py-2 text-center text-base font-medium text-white bg-[#00AA00] rounded-md hover:bg-opacity-90 transition-colors"
             >

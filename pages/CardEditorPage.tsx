@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import CardPreview from '../components/CardPreview';
 import QRCode from '../components/QRCode';
-import { updateCardSettings } from '../services/firebaseService';
+import { useAuth } from '../context/AuthContext';
+import { updateCardSettings, getBusinessData } from '../services/firebaseService';
 
 const CopyIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>;
 const CheckIconSuccess = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#00AA00]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>;
@@ -9,25 +11,53 @@ const ExternalLinkIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className
 
 
 const CardEditorPage: React.FC = () => {
-  const [businessName, setBusinessName] = useState('Café del Sol');
-  const [rewardText, setRewardText] = useState('Café gratis');
+  const { user } = useAuth();
+  const [businessName, setBusinessName] = useState('');
+  const [rewardText, setRewardText] = useState('');
   const [cardColor, setCardColor] = useState('#FEF3C7');
   const [textColorScheme, setTextColorScheme] = useState<'dark' | 'light'>('dark');
   const [stamps, setStamps] = useState(4);
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [isLoadingData, setIsLoadingData] = useState(true);
+
+  useEffect(() => {
+      const fetchBusinessData = async () => {
+          if (!user) return;
+          setIsLoadingData(true);
+          try {
+              const data: any = await getBusinessData(user.uid);
+              if (data && data.cardSettings) {
+                  setBusinessName(data.cardSettings.name || '');
+                  setRewardText(data.cardSettings.reward || '');
+                  setCardColor(data.cardSettings.color || '#FEF3C7');
+                  setTextColorScheme(data.cardSettings.textColorScheme || 'dark');
+              } else if (data) {
+                  setBusinessName(data.name || '');
+              }
+          } catch (error) {
+              console.error("Failed to fetch business data", error);
+          } finally {
+              setIsLoadingData(false);
+          }
+      };
+
+      fetchBusinessData();
+  }, [user]);
 
   const publicCardUrl = `${window.location.origin}${window.location.pathname}#/card/view`;
 
   const handleSave = async () => {
+    if (!user) return;
     setIsSaving(true);
     setSaveSuccess(false);
     try {
-        await updateCardSettings({
+        await updateCardSettings(user.uid, {
             name: businessName,
             reward: rewardText,
-            color: cardColor
+            color: cardColor,
+            textColorScheme: textColorScheme
         });
         setSaveSuccess(true);
         setTimeout(() => setSaveSuccess(false), 3000);
@@ -44,6 +74,16 @@ const CardEditorPage: React.FC = () => {
         setTimeout(() => setCopied(false), 2000);
     });
   };
+
+  if (isLoadingData) {
+      return (
+          <div className="flex items-center justify-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-2 border-gray-200 border-t-black" role="status">
+                <span className="sr-only">Cargando...</span>
+              </div>
+          </div>
+      );
+  }
 
   return (
     <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">

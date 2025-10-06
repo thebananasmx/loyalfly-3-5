@@ -2,8 +2,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createNewCustomer } from '../services/firebaseService';
+import { useAuth } from '../context/AuthContext';
 
 const NewCustomerPage: React.FC = () => {
+    const { user } = useAuth();
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
@@ -14,12 +16,16 @@ const NewCustomerPage: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!user) {
+            setError('Debes iniciar sesión para registrar un cliente.');
+            return;
+        }
         setError('');
         setSuccess('');
         setLoading(true);
 
         try {
-            const newCustomer = await createNewCustomer({ name, phone, email });
+            const newCustomer = await createNewCustomer(user.uid, { name, phone, email });
             setSuccess(`¡Cliente "${newCustomer.name}" registrado con éxito!`);
             setName('');
             setPhone('');

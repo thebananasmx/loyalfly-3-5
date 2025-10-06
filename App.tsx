@@ -12,6 +12,7 @@ import LandingPage from './pages/LandingPage';
 import PricingPage from './pages/PricingPage';
 import TermsPage from './pages/TermsPage';
 import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import CardEditorPage from './pages/CardEditorPage';
 import StyleGuidePage from './pages/StyleGuidePage';
@@ -30,6 +31,7 @@ function App() {
             <Route path="/pricing" element={<PricingPage />} />
             <Route path="/terminos" element={<TermsPage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
             
             <Route path="/docs" element={<DocsLayout />}>
               <Route index element={<Navigate to="/docs/style-guide" replace />} />
