@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -26,7 +27,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         navigate('/login');
     };
 
-    const navLinkClasses = "flex items-center space-x-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors";
+    const navLinkClasses = "flex items-center space-x-3 px-3 py-2.5 rounded-md text-base font-medium transition-colors";
     const activeClass = "bg-black text-white";
     const inactiveClass = "text-gray-600 hover:bg-gray-200 hover:text-black";
     

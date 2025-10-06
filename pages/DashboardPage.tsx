@@ -33,12 +33,12 @@ const DashboardPage: React.FC = () => {
     
     return (
         <div className="space-y-6">
-            <h1 className="text-3xl font-bold text-black">Dashboard de Clientes</h1>
+            <h1 className="text-3xl font-bold text-black tracking-tight">Dashboard de Clientes</h1>
             
             <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
                  <div className="overflow-x-auto">
-                    <table className="w-full text-sm text-left text-gray-600">
-                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
+                    <table className="w-full text-base text-left text-gray-600">
+                        <thead className="text-base text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
                             <tr>
                                 <th scope="col" className="px-4 py-3 sm:px-6">Nombre</th>
                                 <th scope="col" className="px-4 py-3 sm:px-6">Email</th>

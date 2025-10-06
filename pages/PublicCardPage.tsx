@@ -49,7 +49,7 @@ const PublicCardPage: React.FC = () => {
               <h2 className="text-xl font-bold text-black text-center mb-4">Únete al programa de lealtad</h2>
               <form onSubmit={handleRegister} className="space-y-4">
                 <div>
-                  <label htmlFor="userName" className="block text-sm font-medium text-gray-700">Nombre</label>
+                  <label htmlFor="userName" className="block text-base font-medium text-gray-700">Nombre</label>
                   <input
                     id="userName"
                     type="text"
@@ -61,7 +61,7 @@ const PublicCardPage: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label htmlFor="userPhone" className="block text-sm font-medium text-gray-700">Teléfono</label>
+                  <label htmlFor="userPhone" className="block text-base font-medium text-gray-700">Teléfono</label>
                   <input
                     id="userPhone"
                     type="tel"

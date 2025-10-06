@@ -5,7 +5,7 @@ const TermsPage: React.FC = () => {
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold text-black mb-6">Términos y Condiciones</h1>
+        <h1 className="text-3xl font-bold text-black mb-6 tracking-tight">Términos y Condiciones</h1>
         <div className="prose prose-lg text-gray-700 space-y-4">
           <p>
             Bienvenido a Loyalfly. Estos términos y condiciones describen las reglas y regulaciones para el uso del sitio web de Loyalfly, ubicado en loyalfly.app.

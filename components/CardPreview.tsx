@@ -1,3 +1,4 @@
+
 import React from 'react';
 
 interface CardPreviewProps {
@@ -29,7 +30,7 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
                 <span className="text-2xl font-bold text-black opacity-50">L</span>
             </div>
             <h2 className="text-2xl font-bold text-black truncate">{businessName || 'Nombre del Negocio'}</h2>
-            <p className="text-sm text-gray-700 mt-2">
+            <p className="text-base text-gray-700 mt-2">
                 {stamps}/{totalStamps} Sellos para tu próxima recompensa
             </p>
         </div>

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
@@ -10,7 +11,7 @@ const NavItem: React.FC<{ to: string; children: React.ReactNode; onClick?: () =>
       to={to}
       onClick={onClick}
       className={({ isActive }) =>
-        `text-sm font-medium transition-colors ${
+        `text-base font-medium transition-colors ${
           isActive ? 'text-black' : 'text-gray-500 hover:text-black'
         }`
       }
@@ -42,13 +43,13 @@ const Header: React.FC = () => {
             <div className="flex items-center space-x-4 ml-6">
                 <Link 
                   to="/login" 
-                  className="text-sm font-medium text-gray-600 hover:text-black transition-colors"
+                  className="text-base font-medium text-gray-600 hover:text-black transition-colors"
                 >
                   Iniciar Sesión
                 </Link>
                 <Link 
                   to="/pricing" 
-                  className="px-4 py-2 text-sm font-medium text-white bg-[#00AA00] rounded-md hover:bg-opacity-90 transition-colors"
+                  className="px-4 py-2 text-base font-medium text-white bg-[#00AA00] rounded-md hover:bg-opacity-90 transition-colors"
                 >
                   Registrarse
                 </Link>
@@ -74,14 +75,14 @@ const Header: React.FC = () => {
             <Link 
               to="/login"
               onClick={closeMenu}
-              className="px-4 py-2 text-center text-sm font-medium text-gray-600 bg-gray-100 rounded-md hover:text-black hover:bg-gray-200 transition-colors"
+              className="px-4 py-2 text-center text-base font-medium text-gray-600 bg-gray-100 rounded-md hover:text-black hover:bg-gray-200 transition-colors"
             >
               Iniciar Sesión
             </Link>
             <Link 
               to="/pricing"
               onClick={closeMenu} 
-              className="px-4 py-2 text-center text-sm font-medium text-white bg-[#00AA00] rounded-md hover:bg-opacity-90 transition-colors"
+              className="px-4 py-2 text-center text-base font-medium text-white bg-[#00AA00] rounded-md hover:bg-opacity-90 transition-colors"
             >
               Registrarse
             </Link>

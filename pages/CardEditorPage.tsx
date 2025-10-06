@@ -53,10 +53,10 @@ const CardEditorPage: React.FC = () => {
     <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
       {/* Editor Controls */}
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold text-black">Editor de Tarjeta</h1>
+        <h1 className="text-3xl font-bold text-black tracking-tight">Editor de Tarjeta</h1>
         <div className="p-6 bg-white border border-gray-200 rounded-lg space-y-6">
           <div>
-            <label htmlFor="businessName" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="businessName" className="block text-base font-medium text-gray-700 mb-1">
               Nombre del Negocio
             </label>
             <input
@@ -68,7 +68,7 @@ const CardEditorPage: React.FC = () => {
             />
           </div>
           <div>
-            <label htmlFor="rewardText" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="rewardText" className="block text-base font-medium text-gray-700 mb-1">
               Texto de la Recompensa
             </label>
             <input
@@ -80,7 +80,7 @@ const CardEditorPage: React.FC = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-base font-medium text-gray-700 mb-2">
               Color de Fondo
             </label>
             <div className="flex flex-wrap gap-2">
@@ -97,7 +97,7 @@ const CardEditorPage: React.FC = () => {
             </div>
           </div>
            <div>
-            <label htmlFor="stamps" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="stamps" className="block text-base font-medium text-gray-700 mb-1">
               Sellos de Muestra ({stamps})
             </label>
             <input
@@ -130,7 +130,7 @@ const CardEditorPage: React.FC = () => {
                   <QRCode url={publicCardUrl} />
               </div>
               <div className="flex-1 w-full">
-                  <p className="text-sm text-gray-600 mb-2">
+                  <p className="text-base text-gray-600 mb-2">
                       Tus clientes pueden escanear este QR o usar el enlace para unirse.
                   </p>
                   <div className="flex items-center">
@@ -138,7 +138,7 @@ const CardEditorPage: React.FC = () => {
                           type="text" 
                           readOnly 
                           value={publicCardUrl}
-                          className="flex-1 w-full px-3 py-2 border border-gray-300 rounded-l-md bg-gray-50 text-sm text-gray-700 focus:outline-none"
+                          className="flex-1 w-full px-3 py-2 border border-gray-300 rounded-l-md bg-gray-50 text-base text-gray-700 focus:outline-none"
                       />
                       <button
                           onClick={handleCopyUrl}
@@ -148,12 +148,12 @@ const CardEditorPage: React.FC = () => {
                           {copied ? <CheckIconSuccess /> : <CopyIcon />}
                       </button>
                   </div>
-                  {copied && <p className="text-xs text-[#00AA00] mt-2 animate-pulse">¡Copiado!</p>}
+                  {copied && <p className="text-base text-[#00AA00] mt-2 animate-pulse">¡Copiado!</p>}
                    <a
                         href={publicCardUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="mt-4 w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                        className="mt-4 w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
                     >
                         <ExternalLinkIcon />
                         Ver Tarjeta
