@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 const FeatureTag: React.FC<{ type: 'new' | 'improvement' }> = ({ type }) => {
@@ -19,6 +18,35 @@ const ChangelogPage: React.FC = () => {
       <p className="text-lg text-gray-600 mb-12">
         Un historial de todas las mejoras y nuevas funcionalidades que hemos agregado a Loyalfly para ayudarte a crecer.
       </p>
+
+      {/* --- VERSION v3.5.0.2 --- */}
+      <section className="mb-12">
+        <div className="pb-4 border-b border-gray-200">
+          <h2 className="text-3xl font-bold text-black">Versión 3.5.0.2</h2>
+          <p className="text-base text-gray-500 mt-1">Lanzada el 7 de Octubre de 2025</p>
+        </div>
+        
+        <ul className="mt-8 space-y-6">
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Implementación de Autenticación Real con Firebase</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha reemplazado el sistema de inicio de sesión simulado por una integración completa con Firebase Authentication. Ahora los negocios pueden registrarse, iniciar sesión y mantener su sesión de forma segura y persistente, utilizando email y contraseña.
+                  </p>
+              </div>
+          </li>
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Estructura de Base de Datos Escalable con Firestore</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha implementado una arquitectura de datos en Firestore. Cada negocio tiene su propio documento (identificado por su ID de usuario) que contiene la configuración de la tarjeta y una subcolección dedicada para sus clientes. Este modelo asegura que los datos estén organizados, seguros y sean eficientes de consultar.
+                  </p>
+              </div>
+          </li>
+        </ul>
+      </section>
 
       {/* --- VERSION v3.5.0.1 --- */}
       <section className="mb-12">
