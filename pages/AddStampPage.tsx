@@ -1,9 +1,11 @@
-
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { getCustomerByPhone, addStampToCustomer } from '../services/firebaseService';
 import type { Customer } from '../types';
 import ConfirmationModal from '../components/ConfirmationModal';
 import { useAuth } from '../context/AuthContext';
+
+const ArrowLeftIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>;
 
 const AddStampPage: React.FC = () => {
     const { user } = useAuth();
@@ -66,7 +68,17 @@ const AddStampPage: React.FC = () => {
 
     return (
         <div className="max-w-2xl mx-auto">
-            <h1 className="text-3xl font-bold text-black tracking-tight mb-6">Agregar Sello a Cliente</h1>
+            <div className="flex items-center gap-4 mb-6">
+                <Link
+                    to="/app/dashboard"
+                    className="inline-flex items-center justify-center p-2 text-gray-600 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
+                    title="Volver al Dashboard"
+                >
+                    <ArrowLeftIcon />
+                </Link>
+                <h1 className="text-3xl font-bold text-black tracking-tight">Agregar Sello a Cliente</h1>
+            </div>
+
 
             <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
                 <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-4">

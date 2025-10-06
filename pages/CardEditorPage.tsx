@@ -1,5 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import CardPreview from '../components/CardPreview';
 import QRCode from '../components/QRCode';
 import { useAuth } from '../context/AuthContext';
@@ -8,6 +8,7 @@ import { updateCardSettings, getBusinessData } from '../services/firebaseService
 const CopyIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>;
 const CheckIconSuccess = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#00AA00]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>;
 const ExternalLinkIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>;
+const ArrowLeftIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>;
 
 
 const CardEditorPage: React.FC = () => {
@@ -89,7 +90,16 @@ const CardEditorPage: React.FC = () => {
     <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
       {/* Editor Controls */}
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold text-black tracking-tight">Editor de Tarjeta</h1>
+        <div className="flex items-center gap-4">
+            <Link
+                to="/app/dashboard"
+                className="inline-flex items-center justify-center p-2 text-gray-600 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
+                title="Volver al Dashboard"
+            >
+                <ArrowLeftIcon />
+            </Link>
+            <h1 className="text-3xl font-bold text-black tracking-tight">Editor de Tarjeta</h1>
+        </div>
         <div className="p-6 bg-white border border-gray-200 rounded-lg space-y-6">
           <div>
             <label htmlFor="businessName" className="block text-base font-medium text-gray-700 mb-1">
