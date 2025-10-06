@@ -1,11 +1,12 @@
 
 import React from 'react';
-import { HashRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 
 import MainLayout from './components/MainLayout';
 import AppLayout from './components/AppLayout';
 import ProtectedRoute from './components/ProtectedRoute';
+import DocsLayout from './components/DocsLayout';
 
 import LandingPage from './pages/LandingPage';
 import PricingPage from './pages/PricingPage';
@@ -29,8 +30,12 @@ function App() {
             <Route path="/pricing" element={<PricingPage />} />
             <Route path="/terminos" element={<TermsPage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/style-guide" element={<StyleGuidePage />} />
-            <Route path="/changelog" element={<ChangelogPage />} />
+            
+            <Route path="/docs" element={<DocsLayout />}>
+              <Route index element={<Navigate to="/docs/style-guide" replace />} />
+              <Route path="style-guide" element={<StyleGuidePage />} />
+              <Route path="changelog" element={<ChangelogPage />} />
+            </Route>
           </Route>
           
           <Route path="/card/view" element={<PublicCardPage />} />
