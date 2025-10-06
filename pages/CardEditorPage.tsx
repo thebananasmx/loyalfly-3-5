@@ -4,10 +4,6 @@ import CardPreview from '../components/CardPreview';
 import QRCode from '../components/QRCode';
 import { updateCardSettings } from '../services/firebaseService';
 
-const lightColors = [
-  '#FFFFFF', '#FEE2E2', '#FEF3C7', '#D1FAE5', '#DBEAFE', '#E0E7FF', '#F3E8FF',
-];
-
 const CopyIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>;
 const CheckIconSuccess = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#00AA00]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>;
 const ExternalLinkIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>;
@@ -80,20 +76,31 @@ const CardEditorPage: React.FC = () => {
             />
           </div>
           <div>
-            <label className="block text-base font-medium text-gray-700 mb-2">
-              Color de Fondo
+            <label htmlFor="cardColorHex" className="block text-base font-medium text-gray-700 mb-1">
+                Color de Fondo
             </label>
-            <div className="flex flex-wrap gap-2">
-              {lightColors.map(color => (
-                <button
-                  key={color}
-                  onClick={() => setCardColor(color)}
-                  className={`w-10 h-10 rounded-full border-2 transition-transform hover:scale-110 ${
-                    cardColor === color ? 'border-black' : 'border-transparent'
-                  }`}
-                  style={{ backgroundColor: color }}
+            <div className="mt-1 flex items-center gap-3">
+                <div className="relative w-12 h-10">
+                    <div 
+                        className="w-full h-full rounded-md border border-gray-300"
+                        style={{ backgroundColor: cardColor }}
+                    ></div>
+                    <input
+                        type="color"
+                        value={cardColor}
+                        onChange={(e) => setCardColor(e.target.value)}
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                        title="Seleccionar un color"
+                    />
+                </div>
+                <input
+                    id="cardColorHex"
+                    type="text"
+                    value={cardColor.toUpperCase()}
+                    onChange={(e) => setCardColor(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black"
+                    aria-label="Código de color hexadecimal"
                 />
-              ))}
             </div>
           </div>
            <div>

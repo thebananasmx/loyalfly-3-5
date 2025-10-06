@@ -55,8 +55,8 @@ const DashboardPage: React.FC = () => {
                             <thead className="text-base text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
                                 <tr>
                                     <th scope="col" className="px-4 py-3 sm:px-6">Nombre</th>
-                                    <th scope="col" className="px-4 py-3 sm:px-6">Email</th>
-                                    <th scope="col" className="px-4 py-3 sm:px-6 hidden md:table-cell">Teléfono</th>
+                                    <th scope="col" className="px-4 py-3 sm:px-6">Teléfono</th>
+                                    <th scope="col" className="px-4 py-3 sm:px-6 hidden md:table-cell">Email</th>
                                     <th scope="col" className="px-4 py-3 sm:px-6 hidden lg:table-cell">Fecha de Inscripción</th>
                                     <th scope="col" className="px-4 py-3 sm:px-6 text-center">Sellos</th>
                                     <th scope="col" className="px-4 py-3 sm:px-6 text-center">Recompensas</th>
@@ -66,8 +66,8 @@ const DashboardPage: React.FC = () => {
                                 {customers.map((customer) => (
                                     <tr key={customer.id} className="bg-white border-b border-gray-200 hover:bg-gray-50">
                                         <td className="px-4 py-4 sm:px-6 font-medium text-gray-900 whitespace-nowrap">{customer.name}</td>
-                                        <td className="px-4 py-4 sm:px-6">{customer.email}</td>
-                                        <td className="px-4 py-4 sm:px-6 hidden md:table-cell">{customer.phone}</td>
+                                        <td className="px-4 py-4 sm:px-6">{customer.phone}</td>
+                                        <td className="px-4 py-4 sm:px-6 hidden md:table-cell">{customer.email}</td>
                                         <td className="px-4 py-4 sm:px-6 hidden lg:table-cell">{customer.enrollmentDate}</td>
                                         <td className="px-4 py-4 sm:px-6 text-center">{customer.stamps}</td>
                                         <td className="px-4 py-4 sm:px-6 text-center">{customer.rewardsRedeemed}</td>

@@ -20,11 +20,49 @@ const ChangelogPage: React.FC = () => {
         Un historial de todas las mejoras y nuevas funcionalidades que hemos agregado a Loyalfly para ayudarte a crecer.
       </p>
 
+      {/* --- VERSION v3.5.0.1 --- */}
+      <section className="mb-12">
+        <div className="pb-4 border-b border-gray-200">
+          <h2 className="text-3xl font-bold text-black">Versión 3.5.0.1</h2>
+          <p className="text-base text-gray-500 mt-1">Lanzada el 6 de Octrubre de 2025</p>
+        </div>
+        
+        <ul className="mt-8 space-y-6">
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Selector de Color RGB en Editor de Tarjeta</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha reemplazado el selector de colores predefinidos por un selector RGB interactivo y optimizado para móviles, ofreciendo control total sobre el color de la tarjeta.
+                  </p>
+              </div>
+          </li>
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Dashboard Optimizado para Móviles</h3>
+                  <p className="text-gray-600 mt-1">
+                      La columna 'Teléfono' ahora es visible en la vista móvil del dashboard de clientes para un acceso rápido a la información de contacto clave, ocultando la columna 'Email' en pantallas pequeñas.
+                  </p>
+              </div>
+          </li>
+          <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Sección de Documentación Unificada</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha creado una nueva sección 'Docs' con navegación lateral para centralizar la 'Guía de Estilo', el 'Log de Versiones' y futura documentación del negocio, mejorando la organización.
+                  </p>
+              </div>
+          </li>
+        </ul>
+      </section>
+
       {/* --- VERSION v3.5 --- */}
       <section>
         <div className="pb-4 border-b border-gray-200">
           <h2 className="text-3xl font-bold text-black">Versión 3.5</h2>
-          <p className="text-base text-gray-500 mt-1">Lanzada en Octubre 2023</p>
+          <p className="text-base text-gray-500 mt-1">Lanzada el 6 de Octubre de 2025</p>
         </div>
         
         <ul className="mt-8 space-y-6">
