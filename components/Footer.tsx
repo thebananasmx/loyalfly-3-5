@@ -12,6 +12,7 @@ const Footer: React.FC = () => {
             <Link to="/terminos" className="text-base text-gray-500 hover:text-black transition-colors">Términos de Servicio</Link>
             <Link to="/pricing" className="text-base text-gray-500 hover:text-black transition-colors">Precios</Link>
             <Link to="/style-guide" className="text-base text-gray-500 hover:text-black transition-colors">Guía de Estilo</Link>
+            <Link to="/changelog" className="text-base text-gray-500 hover:text-black transition-colors">Log de Versiones</Link>
           </div>
         </div>
       </div>

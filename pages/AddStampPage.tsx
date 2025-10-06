@@ -12,6 +12,7 @@ const AddStampPage: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
     const [updateSuccess, setUpdateSuccess] = useState('');
+    const [stampQuantity, setStampQuantity] = useState(1);
 
     const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -38,15 +39,26 @@ const AddStampPage: React.FC = () => {
 
         setIsUpdating(true);
         try {
-            const updatedCustomer = await addStampToCustomer(foundCustomer.id);
+            const updatedCustomer = await addStampToCustomer(foundCustomer.id, stampQuantity);
             setFoundCustomer(updatedCustomer);
-            setUpdateSuccess(`¡Sello agregado! ${updatedCustomer.name} ahora tiene ${updatedCustomer.stamps} sellos.`);
+            const pluralStamps = stampQuantity > 1 ? 'sellos' : 'sello';
+            const pluralAgregados = stampQuantity > 1 ? 'agregados' : 'agregado';
+            setUpdateSuccess(`¡${stampQuantity} ${pluralStamps} ${pluralAgregados}! ${updatedCustomer.name} ahora tiene ${updatedCustomer.stamps} sellos.`);
         } catch (err) {
              setError('No se pudo agregar el sello. Inténtalo de nuevo.');
         } finally {
             setIsUpdating(false);
             setIsModalOpen(false);
         }
+    };
+    
+    const openModal = () => {
+        setStampQuantity(1); // Reset quantity when opening modal
+        setIsModalOpen(true);
+    };
+
+    const handleQuantityChange = (newQuantity: number) => {
+        setStampQuantity(Math.max(1, newQuantity));
     };
 
     return (
@@ -88,8 +100,9 @@ const AddStampPage: React.FC = () => {
                         <p><span className="font-medium text-gray-600">Teléfono:</span> {foundCustomer.phone}</p>
                         <p><span className="font-medium text-gray-600">Sellos Actuales:</span> {foundCustomer.stamps}</p>
                     </div>
+
                     <button
-                        onClick={() => setIsModalOpen(true)}
+                        onClick={openModal}
                         disabled={isUpdating}
                         className="mt-6 w-full py-2.5 px-4 font-semibold text-white bg-[#00AA00] rounded-md hover:bg-opacity-90 transition-colors disabled:bg-green-300"
                     >
@@ -103,11 +116,39 @@ const AddStampPage: React.FC = () => {
                     isOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
                     onConfirm={handleConfirmAddStamp}
-                    title="Confirmar Sello"
+                    title="Agregar Sellos"
+                    confirmText={`Agregar ${stampQuantity} Sello${stampQuantity > 1 ? 's' : ''}`}
                 >
-                    <p>¿Seguro que quieres agregar un sello al cliente?</p>
-                    <p className="font-semibold">{foundCustomer.name}</p>
-                    <p className="text-gray-500">{foundCustomer.phone}</p>
+                    <p className="mb-4 text-center">Selecciona la cantidad de sellos a agregar:</p>
+                    <div className="flex items-center justify-center gap-3">
+                        <button 
+                            onClick={() => handleQuantityChange(stampQuantity - 1)}
+                            className="w-10 h-10 flex items-center justify-center text-xl font-bold text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors disabled:opacity-50"
+                            disabled={stampQuantity <= 1}
+                            aria-label="Disminuir cantidad"
+                        >
+                            -
+                        </button>
+                        <input
+                            type="number"
+                            min="1"
+                            value={stampQuantity}
+                            onChange={(e) => handleQuantityChange(parseInt(e.target.value, 10) || 1)}
+                            className="w-20 h-10 text-center font-bold text-lg border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black"
+                            aria-label="Cantidad de sellos"
+                        />
+                        <button 
+                            onClick={() => handleQuantityChange(stampQuantity + 1)}
+                            className="w-10 h-10 flex items-center justify-center text-xl font-bold text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors"
+                            aria-label="Aumentar cantidad"
+                        >
+                            +
+                        </button>
+                    </div>
+                    <div className="mt-4 text-center bg-gray-50 p-3 rounded-md border border-gray-200">
+                        <p className="font-semibold">{foundCustomer.name}</p>
+                        <p className="text-base text-gray-500">{foundCustomer.phone}</p>
+                    </div>
                 </ConfirmationModal>
             )}
 

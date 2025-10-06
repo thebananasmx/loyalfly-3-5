@@ -7,9 +7,10 @@ interface ConfirmationModalProps {
   onConfirm: () => void;
   title: string;
   children: ReactNode;
+  confirmText?: string;
 }
 
-const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onClose, onConfirm, title, children }) => {
+const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onClose, onConfirm, title, children, confirmText = 'Confirmar' }) => {
   if (!isOpen) return null;
 
   return (
@@ -30,7 +31,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onClose, 
             onClick={onConfirm}
             className="px-4 py-2 text-base font-medium text-white bg-black rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-colors"
           >
-            Confirmar
+            {confirmText}
           </button>
         </div>
       </div>

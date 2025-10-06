@@ -41,7 +41,7 @@ export const getCustomers = async (): Promise<Customer[]> => {
     console.log("Fetching customers...");
     await new Promise(resolve => setTimeout(resolve, 1000));
     // In a real app, this would fetch from a Firestore collection
-    return mockCustomers;
+    return [...mockCustomers];
 };
 
 export const updateCardSettings = async (settings: { name: string; reward: string; color: string }) => {
@@ -58,14 +58,30 @@ export const getCustomerByPhone = async (phone: string): Promise<Customer | null
     return customer;
 };
 
-export const addStampToCustomer = async (customerId: string): Promise<Customer> => {
-    console.log(`Adding stamp to customer ID: ${customerId}`);
+export const addStampToCustomer = async (customerId: string, quantity: number = 1): Promise<Customer> => {
+    console.log(`Adding ${quantity} stamp(s) to customer ID: ${customerId}`);
     await new Promise(resolve => setTimeout(resolve, 500));
     const customerIndex = mockCustomers.findIndex(c => c.id === customerId);
     if (customerIndex !== -1) {
-        mockCustomers[customerIndex].stamps += 1;
+        mockCustomers[customerIndex].stamps += quantity;
         return { ...mockCustomers[customerIndex] };
     } else {
         throw new Error("Customer not found");
     }
+};
+
+export const createNewCustomer = async (data: { name: string, phone: string, email: string }): Promise<Customer> => {
+    console.log("Creating new customer:", data);
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    const newCustomer: Customer = {
+        id: String(mockCustomers.length + 1),
+        name: data.name,
+        phone: data.phone,
+        email: data.email,
+        enrollmentDate: new Date().toISOString().split('T')[0],
+        stamps: 0,
+        rewardsRedeemed: 0,
+    };
+    mockCustomers.push(newCustomer);
+    return newCustomer;
 };
