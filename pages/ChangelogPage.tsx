@@ -33,7 +33,8 @@ const ChangelogPage: React.FC = () => {
                   <h3 className="font-semibold text-black">Reestructuración de Datos en Firestore para Mejor Escalabilidad</h3>
                   <p className="text-gray-600 mt-1">
                       {/* FIX: Replaced `{id}` with `{businessId}` to avoid a variable naming conflict. */}
-                      Se ha refactorizado la estructura de la base de datos en Firestore. La configuración de la tarjeta de lealtad ahora se almacena en una subcolección dedicada (`/businesses/{businessId}/config/card`). Este cambio mejora la organización, aísla la configuración de la información principal del negocio y prepara la plataforma para futuras funcionalidades avanzadas sin impactar la experiencia del usuario.
+                      {/* FIX: Escaped curly braces in `{businessId}` to prevent JSX from treating it as a variable. */}
+                      Se ha refactorizado la estructura de la base de datos en Firestore. La configuración de la tarjeta de lealtad ahora se almacena en una subcolección dedicada (`/businesses/{'{'}businessId{'}'}/config/card`). Este cambio mejora la organización, aísla la configuración de la información principal del negocio y prepara la plataforma para futuras funcionalidades avanzadas sin impactar la experiencia del usuario.
                   </p>
               </div>
           </li>

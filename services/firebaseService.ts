@@ -113,7 +113,9 @@ export const getCustomers = async (businessId: string): Promise<Customer[]> => {
 
 export const updateCardSettings = async (businessId: string, settings: { name: string; reward: string; color: string; textColorScheme: string }) => {
     const cardConfigRef = doc(db, "businesses", businessId, "config", "card");
-    await updateDoc(cardConfigRef, settings);
+    // Use setDoc with merge: true to create the document if it doesn't exist,
+    // or update it if it does. This is more robust than updateDoc.
+    await setDoc(cardConfigRef, settings, { merge: true });
     return { success: true, settings };
 };
 
