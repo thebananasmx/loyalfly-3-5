@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import CardPreview from '../components/CardPreview';
-import { getPublicCardSettings, createNewCustomer, getBusinessIdBySlug } from '../services/firebaseService';
+import { getPublicCardSettings, createNewCustomer, getBusinessIdBySlug, getCustomerByPhone } from '../services/firebaseService';
+import type { Customer } from '../types';
+
+type ViewState = 'lookup' | 'register' | 'display';
 
 interface CardSettings {
     name: string;
@@ -14,16 +17,22 @@ interface CardSettings {
 const PublicCardPage: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
 
+    // Business & UI State
     const [settings, setSettings] = useState<CardSettings | null>(null);
     const [businessId, setBusinessId] = useState<string | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true); // Initial page load
+    const [isSubmitting, setIsSubmitting] = useState(false); // For form submissions
     const [error, setError] = useState<string | null>(null);
 
-    const [isRegistered, setIsRegistered] = useState(false);
+    // View & Customer State
+    const [view, setView] = useState<ViewState>('lookup');
+    const [customer, setCustomer] = useState<Customer | null>(null);
+    
+    // Form Inputs State
+    const [phoneLookup, setPhoneLookup] = useState(''); // For the lookup form
     const [userName, setUserName] = useState('');
     const [userPhone, setUserPhone] = useState('');
     const [userEmail, setUserEmail] = useState('');
-    const [userStamps, setUserStamps] = useState(0);
 
     useEffect(() => {
         const fetchSettings = async () => {
@@ -56,17 +65,179 @@ const PublicCardPage: React.FC = () => {
 
         fetchSettings();
     }, [slug]);
+
+    const handleLookup = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!businessId || !phoneLookup) return;
+        setIsSubmitting(true);
+        setError(null);
+        try {
+            const foundCustomer = await getCustomerByPhone(businessId, phoneLookup);
+            if (foundCustomer) {
+                setCustomer(foundCustomer);
+                setView('display');
+            } else {
+                setUserPhone(phoneLookup); // Pre-fill phone for registration
+                setView('register');
+            }
+        } catch (err) {
+            setError('Ocurrió un error al buscar. Inténtalo de nuevo.');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
     
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (userName && userPhone && businessId) {
-            try {
-                await createNewCustomer(businessId, { name: userName, phone: userPhone, email: userEmail });
-                setIsRegistered(true);
-            } catch (err) {
-                console.error("Registration failed", err);
-                setError("No se pudo completar el registro. Inténtalo de nuevo.");
+        if (!userName || !userPhone || !businessId) return;
+        setIsSubmitting(true);
+        setError(null);
+
+        try {
+            const existingCustomer = await getCustomerByPhone(businessId, userPhone);
+            if (existingCustomer) {
+                setError('Este número de teléfono ya está registrado.');
+                setIsSubmitting(false);
+                return;
             }
+
+            const newCustomer = await createNewCustomer(businessId, { name: userName, phone: userPhone, email: userEmail });
+            setCustomer(newCustomer);
+            setView('display');
+        } catch (err) {
+            console.error("Registration failed", err);
+            setError("No se pudo completar el registro. Inténtalo de nuevo.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const renderContent = () => {
+        switch(view) {
+            case 'lookup':
+                return (
+                    <div>
+                        <h1 className="text-3xl font-bold text-black tracking-tight text-center mb-2">Consulta tu Tarjeta</h1>
+                        <p className="text-gray-600 text-center mb-6">Ingresa tu número de teléfono para ver tus sellos.</p>
+                        <div className="mt-6 bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
+                            <form onSubmit={handleLookup} className="space-y-4">
+                                <div>
+                                    <label htmlFor="phoneLookup" className="block text-base font-medium text-gray-700">Número de Teléfono</label>
+                                    <input
+                                        id="phoneLookup"
+                                        type="tel"
+                                        value={phoneLookup}
+                                        onChange={(e) => setPhoneLookup(e.target.value)}
+                                        required
+                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black"
+                                        placeholder="Tu número de teléfono"
+                                    />
+                                </div>
+                                {error && <p className="text-sm text-red-600">{error}</p>}
+                                <button
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    className="w-full py-2.5 px-4 font-semibold text-white bg-black hover:bg-gray-800 rounded-md transition-colors disabled:bg-gray-400"
+                                >
+                                    {isSubmitting ? 'Consultando...' : 'Consultar'}
+                                </button>
+                            </form>
+                            <p className="text-center text-sm text-gray-500 mt-4">
+                                ¿Eres nuevo?{' '}
+                                <button onClick={() => setView('register')} className="font-medium text-[#00AA00] hover:underline focus:outline-none">
+                                    Regístrate aquí
+                                </button>
+                            </p>
+                        </div>
+                    </div>
+                );
+            
+            case 'register':
+                return (
+                    <div>
+                         <h1 className="text-3xl font-bold text-black tracking-tight text-center mb-2">Registro de Cliente</h1>
+                         <p className="text-gray-600 text-center mb-6">Únete al programa de lealtad de <span className="font-semibold">{settings?.name}</span>.</p>
+                         <div className="mt-6 bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
+                            <h2 className="text-xl font-bold text-black text-center mb-4">Completa tus datos</h2>
+                            <form onSubmit={handleRegister} className="space-y-4">
+                                <div>
+                                    <label htmlFor="userName" className="block text-base font-medium text-gray-700">Nombre</label>
+                                    <input
+                                        id="userName"
+                                        type="text"
+                                        value={userName}
+                                        onChange={(e) => setUserName(e.target.value)}
+                                        required
+                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black"
+                                        placeholder="Tu nombre completo"
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="userPhone" className="block text-base font-medium text-gray-700">Teléfono</label>
+                                    <input
+                                        id="userPhone"
+                                        type="tel"
+                                        value={userPhone}
+                                        onChange={(e) => setUserPhone(e.target.value)}
+                                        required
+                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black"
+                                        placeholder="Tu número de teléfono"
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="userEmail" className="block text-base font-medium text-gray-700">
+                                        Email <span className="text-gray-500">(Opcional)</span>
+                                    </label>
+                                    <input
+                                        id="userEmail"
+                                        type="email"
+                                        value={userEmail}
+                                        onChange={(e) => setUserEmail(e.target.value)}
+                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black"
+                                        placeholder="tu@email.com"
+                                    />
+                                </div>
+                                {error && <p className="text-sm text-red-600 text-center">{error}</p>}
+                                <button
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    className="w-full py-2.5 px-4 font-semibold text-white bg-black hover:bg-gray-800 rounded-md transition-colors disabled:bg-gray-400"
+                                >
+                                    {isSubmitting ? 'Registrando...' : 'Registrarme'}
+                                </button>
+                                <p className="text-center text-sm text-gray-500 mt-2">
+                                    ¿Ya tienes cuenta?{' '}
+                                    <button onClick={() => { setView('lookup'); setError(null); }} className="font-medium text-[#00AA00] hover:underline focus:outline-none">
+                                        Consulta tus sellos
+                                    </button>
+                                </p>
+                            </form>
+                         </div>
+                    </div>
+                );
+            
+            case 'display':
+                return (
+                    <div>
+                        <div className="mt-6 bg-white p-6 border border-gray-200 rounded-lg shadow-sm text-center">
+                            <h2 className="text-2xl font-bold text-black">¡Hola de nuevo, {customer?.name}!</h2>
+                            <p className="text-gray-600 mt-2 text-lg">
+                                Este es el estado actual de tu tarjeta de lealtad.
+                            </p>
+                             <button
+                                onClick={() => {
+                                    setView('lookup');
+                                    setCustomer(null);
+                                    setPhoneLookup('');
+                                    setError(null);
+                                }}
+                                className="mt-4 w-full py-2 px-4 text-base font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
+                            >
+                                Consultar otro número
+                            </button>
+                        </div>
+                    </div>
+                );
         }
     };
 
@@ -80,7 +251,7 @@ const PublicCardPage: React.FC = () => {
         );
     }
 
-    if (error || !settings) {
+    if (error && !settings) { // Show fatal error if settings couldn't load
         return (
             <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4 text-center">
                 <h1 className="text-2xl font-bold text-red-600">Error</h1>
@@ -89,86 +260,29 @@ const PublicCardPage: React.FC = () => {
         )
     }
   
-  return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4 font-sans">
-      <div className="w-full max-w-sm mx-auto">
-        <h1 className="text-3xl font-bold text-black tracking-tight text-center mb-2">Registro de Cliente</h1>
-        <p className="text-gray-600 text-center mb-6">Únete al programa de lealtad de <span className="font-semibold">{settings.name}</span>.</p>
-
-        <CardPreview
-          businessName={settings.name}
-          rewardText={settings.reward}
-          cardColor={settings.color}
-          stamps={userStamps}
-          textColorScheme={settings.textColorScheme}
-          logoUrl={settings.logoUrl}
-        />
-        
-        <div className="mt-6 bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
-          {isRegistered ? (
-            <div className="text-center">
-              <h2 className="text-xl font-bold text-black">¡Bienvenido, {userName}!</h2>
-              <p className="text-gray-600 mt-2">
-                Ya eres parte de nuestro programa de lealtad.
-              </p>
-              <p className="mt-4 font-semibold text-lg">
-                Tienes <span className="text-[#00AA00]">{userStamps}</span> sellos.
-              </p>
+    return (
+        <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4 font-sans">
+          <div className="w-full max-w-sm mx-auto">
+            {settings && (
+                <div className="mb-6 animate-fade-in-up">
+                     <CardPreview
+                      businessName={settings.name}
+                      rewardText={settings.reward}
+                      cardColor={settings.color}
+                      stamps={customer?.stamps || 0}
+                      textColorScheme={settings.textColorScheme}
+                      logoUrl={settings.logoUrl}
+                    />
+                </div>
+            )}
+            
+            <div className="w-full animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+                {settings && renderContent()}
             </div>
-          ) : (
-            <div>
-              <h2 className="text-xl font-bold text-black text-center mb-4">Completa tus datos</h2>
-              <form onSubmit={handleRegister} className="space-y-4">
-                <div>
-                  <label htmlFor="userName" className="block text-base font-medium text-gray-700">Nombre</label>
-                  <input
-                    id="userName"
-                    type="text"
-                    value={userName}
-                    onChange={(e) => setUserName(e.target.value)}
-                    required
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black"
-                    placeholder="Tu nombre completo"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="userPhone" className="block text-base font-medium text-gray-700">Teléfono</label>
-                  <input
-                    id="userPhone"
-                    type="tel"
-                    value={userPhone}
-                    onChange={(e) => setUserPhone(e.target.value)}
-                    required
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black"
-                    placeholder="Tu número de teléfono"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="userEmail" className="block text-base font-medium text-gray-700">
-                    Email <span className="text-gray-500">(Opcional)</span>
-                  </label>
-                  <input
-                    id="userEmail"
-                    type="email"
-                    value={userEmail}
-                    onChange={(e) => setUserEmail(e.target.value)}
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black"
-                    placeholder="tu@email.com"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full py-2.5 px-4 font-semibold text-white bg-black hover:bg-gray-800 rounded-md transition-colors"
-                >
-                  Registrarme
-                </button>
-              </form>
-            </div>
-          )}
+          </div>
+          <p className="text-center text-sm text-gray-500 mt-8">Powered by Loyalfly</p>
         </div>
-      </div>
-    </div>
-  );
+      );
 };
 
 export default PublicCardPage;

@@ -19,6 +19,35 @@ const ChangelogPage: React.FC = () => {
         Un historial de todas las mejoras y nuevas funcionalidades que hemos agregado a Loyalfly para ayudarte a crecer.
       </p>
 
+      {/* --- VERSION v3.5.0.4 --- */}
+      <section className="mb-12">
+        <div className="pb-4 border-b border-gray-200">
+          <h2 className="text-3xl font-bold text-black">Versión 3.5.0.4</h2>
+          <p className="text-base text-gray-500 mt-1">Lanzada el 9 de Octubre de 2025</p>
+        </div>
+        
+        <ul className="mt-8 space-y-6">
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Mejora de Legibilidad en la Recompensa</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se eliminó un efecto visual que cubría el texto de la recompensa en la previsualización de la tarjeta. Ahora el texto es siempre claro y legible sobre un fondo blanco limpio.
+                  </p>
+              </div>
+          </li>
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Estilo Actualizado para Sellos Vacíos</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ajustó el color de fondo de los sellos no marcados en la tarjeta. En lugar de un gris sólido, ahora utilizan un blanco semi-transparente que permite ver el color de fondo de la tarjeta a través de ellos.
+                  </p>
+              </div>
+          </li>
+        </ul>
+      </section>
+
       {/* --- VERSION v3.5.0.3 --- */}
       <section className="mb-12">
         <div className="pb-4 border-b border-gray-200">
