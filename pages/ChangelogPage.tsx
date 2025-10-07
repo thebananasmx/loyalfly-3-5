@@ -19,6 +19,35 @@ const ChangelogPage: React.FC = () => {
         Un historial de todas las mejoras y nuevas funcionalidades que hemos agregado a Loyalfly para ayudarte a crecer.
       </p>
 
+      {/* --- VERSION v3.5.0.5 --- */}
+      <section className="mb-12">
+        <div className="pb-4 border-b border-gray-200">
+          <h2 className="text-3xl font-bold text-black">Versión 3.5.0.5</h2>
+          <p className="text-base text-gray-500 mt-1">Lanzada el 10 de Octubre de 2025</p>
+        </div>
+        
+        <ul className="mt-8 space-y-6">
+          <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Flujo de Consulta y Registro Unificado para Clientes</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha rediseñado la página pública de la tarjeta para agilizar la experiencia del cliente. Ahora, se presenta un único campo para el número de teléfono. El sistema detecta automáticamente si el cliente ya está registrado para mostrarle su tarjeta o lo guía al formulario de registro si es nuevo.
+                  </p>
+              </div>
+          </li>
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Términos y Condiciones Actualizados y Visibles</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha reescrito por completo la página de Términos y Condiciones para alinearla con la legislación mexicana, delimitando claramente la responsabilidad de Loyalfly como intermediario. Además, se ha añadido un enlace directo a esta página en la vista pública de la tarjeta para garantizar la transparencia con el cliente final.
+                  </p>
+              </div>
+          </li>
+        </ul>
+      </section>
+
       {/* --- VERSION v3.5.0.4 --- */}
       <section className="mb-12">
         <div className="pb-4 border-b border-gray-200">
@@ -115,8 +144,6 @@ const ChangelogPage: React.FC = () => {
               <div>
                   <h3 className="font-semibold text-black">Reestructuración de Datos en Firestore para Mejor Escalabilidad</h3>
                   <p className="text-gray-600 mt-1">
-                      {/* FIX: Replaced `{id}` with `{businessId}` to avoid a variable naming conflict. */}
-                      {/* FIX: Escaped curly braces in `{businessId}` to prevent JSX from treating it as a variable. */}
                       Se ha refactorizado la estructura de la base de datos en Firestore. La configuración de la tarjeta de lealtad ahora se almacena en una subcolección dedicada (`/businesses/{'{'}businessId{'}'}/config/card`). Este cambio mejora la organización, aísla la configuración de la información principal del negocio y prepara la plataforma para futuras funcionalidades avanzadas sin impactar la experiencia del usuario.
                   </p>
               </div>
