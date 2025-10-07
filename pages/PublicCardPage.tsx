@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import CardPreview from '../components/CardPreview';
 import { getPublicCardSettings, createNewCustomer, getBusinessIdBySlug, getCustomerByPhone } from '../services/firebaseService';
 import type { Customer } from '../types';
@@ -280,7 +280,10 @@ const PublicCardPage: React.FC = () => {
                 {settings && renderContent()}
             </div>
           </div>
-          <p className="text-center text-sm text-gray-500 mt-8">Powered by Loyalfly</p>
+          <div className="text-center text-sm text-gray-500 mt-8 space-y-1">
+              <p>Powered by Loyalfly</p>
+              <Link to="/terminos" className="hover:underline">Términos y Condiciones</Link>
+          </div>
         </div>
       );
 };
