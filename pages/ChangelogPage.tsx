@@ -28,6 +28,15 @@ const ChangelogPage: React.FC = () => {
         
         <ul className="mt-8 space-y-6">
           <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Personalización del Logo de la Tarjeta</h3>
+                  <p className="text-gray-600 mt-1">
+                      Ahora los negocios pueden personalizar completamente su tarjeta de lealtad agregando un logo propio. Se ha añadido un nuevo campo en el editor de la tarjeta que permite ingresar una URL pública de una imagen (JPG o PNG), la cual se mostrará en la previsualización y en la tarjeta pública del cliente.
+                  </p>
+              </div>
+          </li>
+          <li className="flex items-start gap-4">
               <FeatureTag type="improvement" />
               <div>
                   <h3 className="font-semibold text-black">Reestructuración de Datos en Firestore para Mejor Escalabilidad</h3>
