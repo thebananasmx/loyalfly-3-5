@@ -86,19 +86,29 @@ export const getBusinessData = async (businessId: string) => {
         getDoc(cardConfigRef)
     ]);
 
-    if (businessSnap.exists()) {
-        const businessData = businessSnap.data();
-        const cardSettings = cardConfigSnap.exists() ? cardConfigSnap.data() : null;
-        
-        // Merge the data to maintain the same return structure for the frontend
-        return {
-            ...businessData,
-            cardSettings: cardSettings
-        };
-    } else {
+    if (!businessSnap.exists()) {
         console.log("No such business document!");
         return null;
     }
+
+    const businessData = businessSnap.data();
+    const savedCardSettings = cardConfigSnap.exists() ? cardConfigSnap.data() : {};
+    
+    // Create a complete cardSettings object, using root business name as a fallback
+    // for the card name, and then overwriting with any saved settings.
+    const cardSettings = {
+        name: businessData.name || 'Nombre del Negocio',
+        reward: 'Tu Recompensa',
+        color: '#FEF3C7',
+        textColorScheme: 'dark',
+        ...savedCardSettings
+    };
+
+    // Return the root business data along with the consolidated cardSettings
+    return {
+        ...businessData,
+        cardSettings: cardSettings
+    };
 }
 
 export const getCustomers = async (businessId: string): Promise<Customer[]> => {
