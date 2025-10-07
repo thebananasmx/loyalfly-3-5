@@ -30,9 +30,36 @@ const ChangelogPage: React.FC = () => {
           <li className="flex items-start gap-4">
               <FeatureTag type="new" />
               <div>
+                  <h3 className="font-semibold text-black">URL Amigables para Registro de Clientes</h3>
+                  <p className="text-gray-600 mt-1">
+                      Cada negocio ahora tiene una URL pública única y fácil de compartir (ej: `loyalfly.app/#/view/nombre-negocio`). Este enlace dirige a los nuevos clientes a una página de registro personalizada con el logo y diseño de la tarjeta del negocio, simplificando la inscripción al programa de lealtad.
+                  </p>
+              </div>
+          </li>
+          <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Flujo de Registro para Nuevos Clientes</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha implementado un formulario de registro público que permite a los clientes inscribirse con su nombre, teléfono y correo (opcional). Al completarlo, ven su nueva tarjeta digital al instante, mejorando la experiencia de incorporación.
+                  </p>
+              </div>
+          </li>
+          <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
                   <h3 className="font-semibold text-black">Personalización del Logo de la Tarjeta</h3>
                   <p className="text-gray-600 mt-1">
                       Ahora los negocios pueden personalizar completamente su tarjeta de lealtad agregando un logo propio. Se ha añadido un nuevo campo en el editor de la tarjeta que permite ingresar una URL pública de una imagen (JPG o PNG), la cual se mostrará en la previsualización y en la tarjeta pública del cliente.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Generación Automática de Slugs</h3>
+                  <p className="text-gray-600 mt-1">
+                     El sistema ahora crea automáticamente un "slug" (una versión del nombre del negocio amigable para URLs) al registrar un nuevo negocio. Esto asegura que los enlaces públicos sean limpios, legibles y profesionales.
                   </p>
               </div>
           </li>
