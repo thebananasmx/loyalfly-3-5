@@ -40,7 +40,7 @@ function App() {
             </Route>
           </Route>
           
-          <Route path="/card/view" element={<PublicCardPage />} />
+          <Route path="/view/:slug" element={<PublicCardPage />} />
 
           <Route 
             path="/app"

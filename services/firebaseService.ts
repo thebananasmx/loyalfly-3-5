@@ -36,16 +36,50 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// --- HELPERS ---
+
+const slugify = (str: string) => {
+  str = str.replace(/^\s+|\s+$/g, ''); // trim
+  str = str.toLowerCase();
+
+  // remove accents, swap ñ for n, etc
+  const from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;";
+  const to   = "aaaaeeeeiiiioooouuuunc------";
+  for (let i = 0, l = from.length; i < l; i++) {
+    str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+  }
+
+  str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+    .replace(/\s+/g, '-') // collapse whitespace and replace by -
+    .replace(/-+/g, '-'); // collapse dashes
+
+  return str;
+};
+
+
 // --- AUTH FUNCTIONS ---
 
 export const registerBusiness = async (email: string, password: string, businessName: string) => {
   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
   const user = userCredential.user;
+
+  // Generate a unique slug
+  let slug = slugify(businessName);
+  let slugDoc = await getDoc(doc(db, "slugs", slug));
+  let counter = 1;
+  while(slugDoc.exists()) {
+    slug = `${slugify(businessName)}-${counter}`;
+    slugDoc = await getDoc(doc(db, "slugs", slug));
+    counter++;
+  }
+
+  await setDoc(doc(db, "slugs", slug), { businessId: user.uid });
   
   // Create the main business document
   await setDoc(doc(db, "businesses", user.uid), {
     name: businessName,
     email: user.email,
+    slug: slug,
     createdAt: serverTimestamp(),
   });
 
@@ -100,6 +134,15 @@ export const getBusinessData = async (businessId: string) => {
         console.log("No such business document!");
         return null;
     }
+}
+
+export const getBusinessIdBySlug = async (slug: string): Promise<string | null> => {
+    const slugDocRef = doc(db, "slugs", slug);
+    const slugDocSnap = await getDoc(slugDocRef);
+    if (slugDocSnap.exists()) {
+        return slugDocSnap.data().businessId;
+    }
+    return null;
 }
 
 export const getPublicCardSettings = async (businessId: string) => {

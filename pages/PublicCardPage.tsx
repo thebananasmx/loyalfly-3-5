@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import CardPreview from '../components/CardPreview';
-import { getPublicCardSettings, createNewCustomer } from '../services/firebaseService';
+import { getPublicCardSettings, createNewCustomer, getBusinessIdBySlug } from '../services/firebaseService';
 
 interface CardSettings {
     name: string;
@@ -12,10 +12,10 @@ interface CardSettings {
 }
 
 const PublicCardPage: React.FC = () => {
-    const [searchParams] = useSearchParams();
-    const businessId = searchParams.get('businessId');
+    const { slug } = useParams<{ slug: string }>();
 
     const [settings, setSettings] = useState<CardSettings | null>(null);
+    const [businessId, setBusinessId] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -27,13 +27,20 @@ const PublicCardPage: React.FC = () => {
 
     useEffect(() => {
         const fetchSettings = async () => {
-            if (!businessId) {
+            if (!slug) {
                 setError('No se ha especificado un negocio.');
                 setLoading(false);
                 return;
             }
             try {
-                const data = await getPublicCardSettings(businessId);
+                const id = await getBusinessIdBySlug(slug);
+                if (!id) {
+                    setError('No se pudo encontrar el negocio.');
+                    setLoading(false);
+                    return;
+                }
+                setBusinessId(id);
+                const data = await getPublicCardSettings(id);
                 if (data) {
                     setSettings(data as CardSettings);
                 } else {
@@ -48,7 +55,7 @@ const PublicCardPage: React.FC = () => {
         };
 
         fetchSettings();
-    }, [businessId]);
+    }, [slug]);
     
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();

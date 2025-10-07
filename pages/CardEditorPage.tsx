@@ -21,6 +21,7 @@ const CardEditorPage: React.FC = () => {
   const [cardColor, setCardColor] = useState('#FEF3C7');
   const [textColorScheme, setTextColorScheme] = useState<'dark' | 'light'>('dark');
   const [stamps, setStamps] = useState(4);
+  const [slug, setSlug] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [copied, setCopied] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(true);
@@ -31,14 +32,17 @@ const CardEditorPage: React.FC = () => {
           setIsLoadingData(true);
           try {
               const data: any = await getBusinessData(user.uid);
-              if (data && data.cardSettings) {
-                  setBusinessName(data.cardSettings.name || '');
-                  setRewardText(data.cardSettings.reward || '');
-                  setCardColor(data.cardSettings.color || '#FEF3C7');
-                  setTextColorScheme(data.cardSettings.textColorScheme || 'dark');
-                  setLogoUrl(data.cardSettings.logoUrl || '');
-              } else if (data) {
-                  setBusinessName(data.name || '');
+              if (data) {
+                  setSlug(data.slug || '');
+                  if (data.cardSettings) {
+                      setBusinessName(data.cardSettings.name || '');
+                      setRewardText(data.cardSettings.reward || '');
+                      setCardColor(data.cardSettings.color || '#FEF3C7');
+                      setTextColorScheme(data.cardSettings.textColorScheme || 'dark');
+                      setLogoUrl(data.cardSettings.logoUrl || '');
+                  } else {
+                      setBusinessName(data.name || '');
+                  }
               }
           } catch (error) {
               console.error("Failed to fetch business data", error);
@@ -51,7 +55,7 @@ const CardEditorPage: React.FC = () => {
       fetchBusinessData();
   }, [user]);
 
-  const publicCardUrl = user ? `${window.location.origin}${window.location.pathname}#/card/view?businessId=${user.uid}` : '';
+  const publicCardUrl = slug ? `${window.location.origin}${window.location.pathname}#/view/${slug}` : '';
 
   const handleSave = async () => {
     if (!user) return;
