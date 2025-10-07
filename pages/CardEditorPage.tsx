@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import CardPreview from '../components/CardPreview';
-import QRCode from '../components/QRCode';
 import { useAuth } from '../context/AuthContext';
 import { updateCardSettings, getBusinessData } from '../services/firebaseService';
 import { useToast } from '../context/ToastContext';

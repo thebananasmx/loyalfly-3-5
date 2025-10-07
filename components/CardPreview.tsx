@@ -83,7 +83,7 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
                     ¡Felicidades! ya tienes:
                 </p>
                 <p className="text-center font-semibold text-gray-800 mt-1">
-                    {rewardText || 'Tu Recompensa'}
+                    {rewardText}
                 </p>
             </div>
         ) : (
@@ -92,7 +92,7 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
                     Tu próxima Recompensa:
                 </p>
                 <p className="text-center font-semibold text-gray-800 mt-1">
-                    {rewardText || 'Tu Recompensa'}
+                    {rewardText}
                 </p>
             </div>
         )}
