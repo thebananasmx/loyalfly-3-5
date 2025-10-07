@@ -38,6 +38,15 @@ const ChangelogPage: React.FC = () => {
                   </p>
               </div>
           </li>
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Validación de la Implementación y Reglas de Firebase</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se realizó una auditoría completa de la integración con Firebase Auth y Firestore, confirmando que la implementación del lado del cliente sigue las mejores prácticas. Adicionalmente, se han configurado las reglas de seguridad del lado del servidor para el entorno de desarrollo y pruebas, permitiendo un acceso flexible para la depuración y manteniendo la seguridad como una prioridad para la producción.
+                  </p>
+              </div>
+          </li>
         </ul>
       </section>
 
