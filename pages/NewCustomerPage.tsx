@@ -1,32 +1,29 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createNewCustomer } from '../services/firebaseService';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 
 const NewCustomerPage: React.FC = () => {
     const { user } = useAuth();
+    const { showToast } = useToast();
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!user) {
-            setError('Debes iniciar sesión para registrar un cliente.');
+            showToast('Debes iniciar sesión para registrar un cliente.', 'error');
             return;
         }
-        setError('');
-        setSuccess('');
         setLoading(true);
 
         try {
             const newCustomer = await createNewCustomer(user.uid, { name, phone, email });
-            setSuccess(`¡Cliente "${newCustomer.name}" registrado con éxito!`);
+            showToast(`¡Cliente "${newCustomer.name}" registrado con éxito!`, 'success');
             setName('');
             setPhone('');
             setEmail('');
@@ -34,7 +31,7 @@ const NewCustomerPage: React.FC = () => {
                 navigate('/app/dashboard');
             }, 2000);
         } catch (err) {
-            setError('Ocurrió un error al registrar el cliente. Inténtalo de nuevo.');
+            showToast('Ocurrió un error al registrar el cliente. Inténtalo de nuevo.', 'error');
             console.error(err);
         } finally {
             setLoading(false);
@@ -85,9 +82,6 @@ const NewCustomerPage: React.FC = () => {
                         placeholder="cliente@email.com"
                     />
                 </div>
-
-                {error && <p className="text-base text-red-600">{error}</p>}
-                {success && <p className="text-base text-[#00AA00]">{success}</p>}
 
                 <div className="flex items-center justify-end gap-4">
                      <button

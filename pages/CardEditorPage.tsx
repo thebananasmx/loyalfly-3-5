@@ -4,6 +4,7 @@ import CardPreview from '../components/CardPreview';
 import QRCode from '../components/QRCode';
 import { useAuth } from '../context/AuthContext';
 import { updateCardSettings, getBusinessData } from '../services/firebaseService';
+import { useToast } from '../context/ToastContext';
 
 const CopyIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>;
 const CheckIconSuccess = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#00AA00]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>;
@@ -13,13 +14,13 @@ const ArrowLeftIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h
 
 const CardEditorPage: React.FC = () => {
   const { user } = useAuth();
+  const { showToast } = useToast();
   const [businessName, setBusinessName] = useState('');
   const [rewardText, setRewardText] = useState('');
   const [cardColor, setCardColor] = useState('#FEF3C7');
   const [textColorScheme, setTextColorScheme] = useState<'dark' | 'light'>('dark');
   const [stamps, setStamps] = useState(4);
   const [isSaving, setIsSaving] = useState(false);
-  const [saveSuccess, setSaveSuccess] = useState(false);
   const [copied, setCopied] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(true);
 
@@ -39,6 +40,7 @@ const CardEditorPage: React.FC = () => {
               }
           } catch (error) {
               console.error("Failed to fetch business data", error);
+              showToast('Error al cargar los datos de la tarjeta.', 'error');
           } finally {
               setIsLoadingData(false);
           }
@@ -52,7 +54,6 @@ const CardEditorPage: React.FC = () => {
   const handleSave = async () => {
     if (!user) return;
     setIsSaving(true);
-    setSaveSuccess(false);
     try {
         await updateCardSettings(user.uid, {
             name: businessName,
@@ -60,10 +61,10 @@ const CardEditorPage: React.FC = () => {
             color: cardColor,
             textColorScheme: textColorScheme
         });
-        setSaveSuccess(true);
-        setTimeout(() => setSaveSuccess(false), 3000);
+        showToast('¡Cambios guardados con éxito!', 'success');
     } catch (error) {
         console.error("Failed to save settings", error);
+        showToast('No se pudieron guardar los cambios.', 'error');
     } finally {
         setIsSaving(false);
     }
@@ -72,6 +73,7 @@ const CardEditorPage: React.FC = () => {
   const handleCopyUrl = () => {
     navigator.clipboard.writeText(publicCardUrl).then(() => {
         setCopied(true);
+        showToast('¡URL copiada al portapapeles!', 'success');
         setTimeout(() => setCopied(false), 2000);
     });
   };
@@ -193,13 +195,9 @@ const CardEditorPage: React.FC = () => {
           <button
             onClick={handleSave}
             disabled={isSaving}
-            className={`w-full py-2.5 px-4 font-semibold text-white rounded-md transition-colors ${
-              saveSuccess 
-              ? 'bg-[#00AA00]' 
-              : 'bg-black hover:bg-gray-800 disabled:bg-gray-400'
-            }`}
+            className="w-full py-2.5 px-4 font-semibold text-white rounded-md transition-colors bg-black hover:bg-gray-800 disabled:bg-gray-400"
           >
-            {isSaving ? 'Guardando...' : saveSuccess ? '¡Guardado!' : 'Guardar Cambios'}
+            {isSaving ? 'Guardando...' : 'Guardar Cambios'}
           </button>
         </div>
 
@@ -228,7 +226,6 @@ const CardEditorPage: React.FC = () => {
                           {copied ? <CheckIconSuccess /> : <CopyIcon />}
                       </button>
                   </div>
-                  {copied && <p className="text-base text-[#00AA00] mt-2 animate-pulse">¡Copiado!</p>}
                    <a
                         href={publicCardUrl}
                         target="_blank"

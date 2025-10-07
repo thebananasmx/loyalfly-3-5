@@ -4,36 +4,34 @@ import { getCustomerByPhone, addStampToCustomer } from '../services/firebaseServ
 import type { Customer } from '../types';
 import ConfirmationModal from '../components/ConfirmationModal';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 
 const ArrowLeftIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>;
 
 const AddStampPage: React.FC = () => {
     const { user } = useAuth();
+    const { showToast } = useToast();
     const [phone, setPhone] = useState('');
     const [foundCustomer, setFoundCustomer] = useState<Customer | null>(null);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
-    const [updateSuccess, setUpdateSuccess] = useState('');
     const [stampQuantity, setStampQuantity] = useState(1);
 
     const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!user) return;
         setLoading(true);
-        setError('');
         setFoundCustomer(null);
-        setUpdateSuccess('');
         try {
             const customer = await getCustomerByPhone(user.uid, phone);
             if (customer) {
                 setFoundCustomer(customer);
             } else {
-                setError('Cliente no encontrado. Verifica el número de teléfono.');
+                showToast('Cliente no encontrado. Verifica el número de teléfono.', 'alert');
             }
         } catch (err) {
-            setError('Ocurrió un error al buscar el cliente.');
+            showToast('Ocurrió un error al buscar el cliente.', 'error');
         } finally {
             setLoading(false);
         }
@@ -48,9 +46,10 @@ const AddStampPage: React.FC = () => {
             setFoundCustomer(updatedCustomer);
             const pluralStamps = stampQuantity > 1 ? 'sellos' : 'sello';
             const pluralAgregados = stampQuantity > 1 ? 'agregados' : 'agregado';
-            setUpdateSuccess(`¡${stampQuantity} ${pluralStamps} ${pluralAgregados}! ${updatedCustomer.name} ahora tiene ${updatedCustomer.stamps} sellos.`);
+            const successMessage = `¡${stampQuantity} ${pluralStamps} ${pluralAgregados}! ${updatedCustomer.name} ahora tiene ${updatedCustomer.stamps} sellos.`;
+            showToast(successMessage, 'success');
         } catch (err) {
-             setError('No se pudo agregar el sello. Inténtalo de nuevo.');
+             showToast('No se pudo agregar el sello. Inténtalo de nuevo.', 'error');
         } finally {
             setIsUpdating(false);
             setIsModalOpen(false);
@@ -103,9 +102,6 @@ const AddStampPage: React.FC = () => {
                     </button>
                 </form>
             </div>
-            
-            {error && <p className="mt-4 text-base text-red-600">{error}</p>}
-            {updateSuccess && <p className="mt-4 text-base text-[#00AA00]">{updateSuccess}</p>}
 
             {foundCustomer && (
                 <div className="mt-6 p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
