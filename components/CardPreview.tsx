@@ -62,21 +62,7 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
         </div>
       </div>
       
-      <div 
-          className="relative bg-white p-6"
-          style={{
-            maskImage: 'radial-gradient(circle at 0 0.75rem, transparent 0, transparent 0.5rem, black 0.5rem), radial-gradient(circle at 100% 0.75rem, transparent 0, transparent 0.5rem, black 0.5rem)',
-            maskSize: '51% 1.5rem',
-            maskPosition: '0 0, 100% 0',
-            maskRepeat: 'no-repeat',
-          }}
-      >
-        <div className="absolute -top-[1.5px] left-0 right-0 h-[3px] bg-transparent" style={{
-          backgroundImage: 'linear-gradient(to right, #9ca3af 60%, rgba(255,255,255,0) 0%)',
-          backgroundSize: '10px 3px',
-          backgroundRepeat: 'repeat-x'
-        }}></div>
-
+      <div className="bg-white p-6 border-t border-gray-200">
         {isRewardReady ? (
             <div>
                 <p className="text-center font-bold text-lg text-[#00AA00]">
