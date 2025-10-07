@@ -222,40 +222,35 @@ const CardEditorPage: React.FC = () => {
         </div>
 
         <div className="p-6 bg-white border border-gray-200 rounded-lg">
-          <h3 className="text-lg font-semibold text-black mb-4">Comparte tu Tarjeta</h3>
-          <div className="flex flex-col sm:flex-row items-center gap-6">
-              <div className="p-2 border border-gray-200 rounded-md">
-                  <QRCode url={publicCardUrl} />
+          <h3 className="text-lg font-semibold text-black mb-4">Comparte con tus clientes</h3>
+          <div>
+              <p className="text-base text-gray-600 mb-2">
+                  Tus clientes pueden usar el siguiente enlace para unirse.
+              </p>
+              <div className="flex items-center">
+                  <input 
+                      type="text" 
+                      readOnly 
+                      value={publicCardUrl}
+                      className="flex-1 w-full px-3 py-2 border border-gray-300 rounded-l-md bg-gray-50 text-base text-gray-700 focus:outline-none"
+                  />
+                  <button
+                      onClick={handleCopyUrl}
+                      className="px-3 py-2 bg-gray-200 text-gray-700 rounded-r-md hover:bg-gray-300 transition-colors flex items-center"
+                      title="Copiar URL"
+                  >
+                      {copied ? <CheckIconSuccess /> : <CopyIcon />}
+                  </button>
               </div>
-              <div className="flex-1 w-full">
-                  <p className="text-base text-gray-600 mb-2">
-                      Tus clientes pueden escanear este QR o usar el enlace para unirse.
-                  </p>
-                  <div className="flex items-center">
-                      <input 
-                          type="text" 
-                          readOnly 
-                          value={publicCardUrl}
-                          className="flex-1 w-full px-3 py-2 border border-gray-300 rounded-l-md bg-gray-50 text-base text-gray-700 focus:outline-none"
-                      />
-                      <button
-                          onClick={handleCopyUrl}
-                          className="px-3 py-2 bg-gray-200 text-gray-700 rounded-r-md hover:bg-gray-300 transition-colors flex items-center"
-                          title="Copiar URL"
-                      >
-                          {copied ? <CheckIconSuccess /> : <CopyIcon />}
-                      </button>
-                  </div>
-                   <a
-                        href={publicCardUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-4 w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
-                    >
-                        <ExternalLinkIcon />
-                        Ver Tarjeta
-                    </a>
-              </div>
+               <a
+                    href={publicCardUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-4 w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                >
+                    <ExternalLinkIcon />
+                    Ver Registro
+                </a>
           </div>
         </div>
       </div>
