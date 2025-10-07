@@ -28,6 +28,24 @@ const ChangelogPage: React.FC = () => {
         
         <ul className="mt-8 space-y-6">
           <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Simplificación de la Sección "Comparte con tus Clientes"</h3>
+                  <p className="text-gray-600 mt-1">
+                      Para enfocar la funcionalidad del MVP, se ha rediseñado la sección para compartir en el editor de tarjetas. Se eliminó el código QR y se ajustó el texto para mayor claridad, cambiando el botón de "Ver Tarjeta" a "Ver Registro" para reflejar mejor la acción actual.
+                  </p>
+              </div>
+          </li>
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Previsualización Dinámica del Texto de Recompensa</h3>
+                  <p className="text-gray-600 mt-1">
+                      La previsualización de la tarjeta ahora muestra en tiempo real el texto ingresado en el campo "Texto de la Recompensa". Esto proporciona una experiencia de edición más intuitiva y directa, eliminando el texto de ejemplo y mostrando el contenido final exacto.
+                  </p>
+              </div>
+          </li>
+          <li className="flex items-start gap-4">
               <FeatureTag type="new" />
               <div>
                   <h3 className="font-semibold text-black">URL Amigables para Registro de Clientes</h3>
