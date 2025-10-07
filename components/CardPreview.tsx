@@ -26,7 +26,7 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
   const logoTextColor = isLight ? 'text-white opacity-50' : 'text-black opacity-50';
   const logoBgColor = isLight ? 'bg-white/20' : 'bg-black/10';
   const filledStampBgColor = isLight ? 'bg-white' : 'bg-black';
-  const unfilledStampBgColor = isLight ? 'bg-white/30' : 'bg-gray-200';
+  const unfilledStampBgColor = 'bg-white/30';
 
   return (
     <div className="w-full max-w-sm mx-auto font-sans shadow-lg rounded-lg overflow-hidden">
