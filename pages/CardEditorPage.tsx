@@ -17,6 +17,7 @@ const CardEditorPage: React.FC = () => {
   const { showToast } = useToast();
   const [businessName, setBusinessName] = useState('');
   const [rewardText, setRewardText] = useState('');
+  const [logoUrl, setLogoUrl] = useState('');
   const [cardColor, setCardColor] = useState('#FEF3C7');
   const [textColorScheme, setTextColorScheme] = useState<'dark' | 'light'>('dark');
   const [stamps, setStamps] = useState(4);
@@ -35,6 +36,7 @@ const CardEditorPage: React.FC = () => {
                   setRewardText(data.cardSettings.reward || '');
                   setCardColor(data.cardSettings.color || '#FEF3C7');
                   setTextColorScheme(data.cardSettings.textColorScheme || 'dark');
+                  setLogoUrl(data.cardSettings.logoUrl || '');
               } else if (data) {
                   setBusinessName(data.name || '');
               }
@@ -59,7 +61,8 @@ const CardEditorPage: React.FC = () => {
             name: businessName,
             reward: rewardText,
             color: cardColor,
-            textColorScheme: textColorScheme
+            textColorScheme: textColorScheme,
+            logoUrl: logoUrl
         });
         showToast('¡Cambios guardados con éxito!', 'success');
     } catch (error) {
@@ -113,6 +116,19 @@ const CardEditorPage: React.FC = () => {
               value={businessName}
               onChange={(e) => setBusinessName(e.target.value)}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black"
+            />
+          </div>
+          <div>
+            <label htmlFor="logoUrl" className="block text-base font-medium text-gray-700 mb-1">
+              URL del Logo (Opcional)
+            </label>
+            <input
+              id="logoUrl"
+              type="url"
+              value={logoUrl}
+              onChange={(e) => setLogoUrl(e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black"
+              placeholder="https://ejemplo.com/logo.png"
             />
           </div>
           <div>
@@ -249,6 +265,7 @@ const CardEditorPage: React.FC = () => {
             cardColor={cardColor}
             stamps={stamps}
             textColorScheme={textColorScheme}
+            logoUrl={logoUrl}
          />
       </div>
     </div>

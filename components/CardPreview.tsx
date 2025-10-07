@@ -6,6 +6,7 @@ interface CardPreviewProps {
   cardColor: string;
   stamps: number;
   textColorScheme: 'dark' | 'light';
+  logoUrl?: string;
 }
 
 const CheckIcon: React.FC = () => (
@@ -15,7 +16,7 @@ const CheckIcon: React.FC = () => (
 );
 
 
-const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, cardColor, stamps, textColorScheme }) => {
+const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, cardColor, stamps, textColorScheme, logoUrl }) => {
   const totalStamps = 10;
   const isRewardReady = stamps >= totalStamps;
 
@@ -34,8 +35,12 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
         style={{ backgroundColor: cardColor }}
       >
         <div className="text-center">
-            <div className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4 ${logoBgColor} transition-colors`}>
-                <span className={`text-2xl font-bold ${logoTextColor} transition-colors`}>L</span>
+            <div className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4 overflow-hidden ${logoBgColor} transition-colors`}>
+                {logoUrl ? (
+                    <img src={logoUrl} alt={`${businessName} logo`} className="w-full h-full object-cover" />
+                ) : (
+                    <span className={`text-2xl font-bold ${logoTextColor} transition-colors`}>L</span>
+                )}
             </div>
             <h2 className={`text-2xl font-bold truncate ${primaryTextColor} transition-colors`}>{businessName || 'Nombre del Negocio'}</h2>
             <p className={`text-base mt-2 ${secondaryTextColor} transition-colors`}>

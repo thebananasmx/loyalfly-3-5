@@ -55,7 +55,8 @@ export const registerBusiness = async (email: string, password: string, business
     name: businessName,
     reward: 'Tu Recompensa',
     color: '#FEF3C7',
-    textColorScheme: 'dark'
+    textColorScheme: 'dark',
+    logoUrl: ''
   });
   
   return { uid: user.uid, email: user.email };
@@ -111,7 +112,7 @@ export const getCustomers = async (businessId: string): Promise<Customer[]> => {
     } as Customer));
 };
 
-export const updateCardSettings = async (businessId: string, settings: { name: string; reward: string; color: string; textColorScheme: string }) => {
+export const updateCardSettings = async (businessId: string, settings: { name: string; reward: string; color: string; textColorScheme: string; logoUrl?: string; }) => {
     const cardConfigRef = doc(db, "businesses", businessId, "config", "card");
     // Use setDoc with merge: true to create the document if it doesn't exist,
     // or update it if it does. This is more robust than updateDoc.
