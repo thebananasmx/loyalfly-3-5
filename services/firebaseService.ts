@@ -102,6 +102,18 @@ export const getBusinessData = async (businessId: string) => {
     }
 }
 
+export const getPublicCardSettings = async (businessId: string) => {
+    const cardConfigRef = doc(db, "businesses", businessId, "config", "card");
+    const cardConfigSnap = await getDoc(cardConfigRef);
+
+    if (cardConfigSnap.exists()) {
+        return cardConfigSnap.data();
+    } else {
+        console.log("No such card configuration!");
+        return null;
+    }
+}
+
 export const getCustomers = async (businessId: string): Promise<Customer[]> => {
     const customersCol = collection(db, `businesses/${businessId}/customers`);
     const customerSnapshot = await getDocs(customersCol);

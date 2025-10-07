@@ -51,7 +51,7 @@ const CardEditorPage: React.FC = () => {
       fetchBusinessData();
   }, [user]);
 
-  const publicCardUrl = `${window.location.origin}${window.location.pathname}#/card/view`;
+  const publicCardUrl = user ? `${window.location.origin}${window.location.pathname}#/card/view?businessId=${user.uid}` : '';
 
   const handleSave = async () => {
     if (!user) return;
