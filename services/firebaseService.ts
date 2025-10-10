@@ -20,6 +20,7 @@ import {
   updateDoc,
   serverTimestamp,
   Timestamp,
+  deleteDoc,
 } from "firebase/firestore";
 import type { Customer } from '../types';
 
@@ -233,4 +234,27 @@ export const createNewCustomer = async (businessId: string, data: { name: string
         stamps: 0,
         rewardsRedeemed: 0,
     };
+};
+
+export const getCustomerById = async (businessId: string, customerId: string): Promise<Customer | null> => {
+    const customerDocRef = doc(db, `businesses/${businessId}/customers`, customerId);
+    const docSnap = await getDoc(customerDocRef);
+    if (docSnap.exists()) {
+        return { 
+            id: docSnap.id, 
+            ...docSnap.data(),
+            enrollmentDate: (docSnap.data().enrollmentDate as Timestamp)?.toDate().toISOString().split('T')[0] || new Date().toISOString().split('T')[0]
+        } as Customer;
+    }
+    return null;
+};
+
+export const updateCustomer = async (businessId: string, customerId: string, data: { name: string, phone: string, email: string }): Promise<void> => {
+    const customerDocRef = doc(db, `businesses/${businessId}/customers`, customerId);
+    await updateDoc(customerDocRef, data as any);
+};
+
+export const deleteCustomer = async (businessId: string, customerId: string): Promise<void> => {
+    const customerDocRef = doc(db, `businesses/${businessId}/customers`, customerId);
+    await deleteDoc(customerDocRef);
 };

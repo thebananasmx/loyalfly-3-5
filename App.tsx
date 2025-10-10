@@ -17,9 +17,9 @@ import DashboardPage from './pages/DashboardPage';
 import CardEditorPage from './pages/CardEditorPage';
 import StyleGuidePage from './pages/StyleGuidePage';
 import PublicCardPage from './pages/PublicCardPage';
-import AddStampPage from './pages/AddStampPage';
 import NewCustomerPage from './pages/NewCustomerPage';
 import ChangelogPage from './pages/ChangelogPage';
+import EditCustomerPage from './pages/EditCustomerPage';
 
 function App() {
   return (
@@ -52,8 +52,8 @@ function App() {
           >
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="tarjeta" element={<CardEditorPage />} />
-            <Route path="agregar-sello" element={<AddStampPage />} />
             <Route path="nuevo-cliente" element={<NewCustomerPage />} />
+            <Route path="editar-cliente/:customerId" element={<EditCustomerPage />} />
           </Route>
         </Routes>
       </HashRouter>
