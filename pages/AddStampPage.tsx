@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getCustomerByPhone, addStampToCustomer } from '../services/firebaseService';
 import type { Customer } from '../types';
@@ -36,6 +36,10 @@ const AddStampPage: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
     const [stampQuantity, setStampQuantity] = useState(1);
+
+    useEffect(() => {
+        document.title = 'Agregar Sello | Loyalfly App';
+    }, []);
 
     const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault();

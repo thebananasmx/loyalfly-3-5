@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import ErrorMessage from '../components/ErrorMessage';
@@ -18,6 +18,10 @@ const RegisterPage: React.FC = () => {
 
     const navigate = useNavigate();
     const { register } = useAuth();
+
+    useEffect(() => {
+        document.title = 'Registrarse | Loyalfly';
+    }, []);
 
     const validate = () => {
         const newErrors: { businessName?: string; email?: string; password?: string; confirmPassword?: string; } = {};

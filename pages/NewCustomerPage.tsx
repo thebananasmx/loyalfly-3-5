@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createNewCustomer } from '../services/firebaseService';
 import { useAuth } from '../context/AuthContext';
@@ -31,6 +31,10 @@ const NewCustomerPage: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     
+    useEffect(() => {
+        document.title = 'Nuevo Cliente | Loyalfly App';
+    }, []);
+
     const validate = () => {
         const newErrors: { name?: string; phone?: string; email?: string } = {};
 

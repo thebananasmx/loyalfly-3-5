@@ -27,6 +27,7 @@ const CardEditorPage: React.FC = () => {
   const [isLoadingData, setIsLoadingData] = useState(true);
 
   useEffect(() => {
+      document.title = 'Editor de Tarjeta | Loyalfly App';
       const fetchBusinessData = async () => {
           if (!user) return;
           setIsLoadingData(true);

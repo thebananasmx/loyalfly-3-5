@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const FeatureTag: React.FC<{ type: 'new' | 'improvement' }> = ({ type }) => {
     const isNew = type === 'new';
@@ -12,6 +12,10 @@ const FeatureTag: React.FC<{ type: 'new' | 'improvement' }> = ({ type }) => {
 };
 
 const ChangelogPage: React.FC = () => {
+  useEffect(() => {
+    document.title = 'Log de Versiones | Docs | Loyalfly';
+  }, []);
+
   return (
     <div className="max-w-3xl">
       <h1 className="text-4xl font-extrabold text-black mb-4 tracking-tight">Log de Versiones</h1>

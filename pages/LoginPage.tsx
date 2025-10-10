@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { sendPasswordReset } from '../services/firebaseService';
@@ -21,6 +21,10 @@ const LoginPage: React.FC = () => {
 
     const navigate = useNavigate();
     const { login } = useAuth();
+
+    useEffect(() => {
+        document.title = 'Iniciar Sesión | Loyalfly';
+    }, []);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getCustomers } from '../services/firebaseService';
@@ -14,6 +13,7 @@ const DashboardPage: React.FC = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        document.title = 'Dashboard | Loyalfly App';
         const fetchCustomers = async () => {
             if (!user) return;
             try {

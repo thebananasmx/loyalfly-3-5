@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const CheckIcon = () => <svg className="w-5 h-5 text-[#00AA00]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>;
@@ -38,6 +37,10 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan, price, description, fea
 
 
 const PricingPage: React.FC = () => {
+    useEffect(() => {
+        document.title = 'Precios y Planes | Loyalfly';
+    }, []);
+
     return (
         <div className="py-16 sm:py-24">
             <div className="container mx-auto px-4">

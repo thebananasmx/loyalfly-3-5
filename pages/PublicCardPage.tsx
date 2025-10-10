@@ -52,10 +52,12 @@ const PublicCardPage: React.FC = () => {
     const [userEmail, setUserEmail] = useState('');
 
     useEffect(() => {
+        document.title = 'Cargando Tarjeta... | Loyalfly';
         const fetchSettings = async () => {
             if (!slug) {
                 setErrors({ form: 'No se ha especificado un negocio.' });
                 setLoading(false);
+                document.title = 'Error | Loyalfly';
                 return;
             }
             try {
@@ -63,18 +65,22 @@ const PublicCardPage: React.FC = () => {
                 if (!id) {
                     setErrors({ form: 'No se pudo encontrar el negocio.' });
                     setLoading(false);
+                    document.title = 'Negocio no encontrado | Loyalfly';
                     return;
                 }
                 setBusinessId(id);
                 const data = await getPublicCardSettings(id);
                 if (data) {
                     setSettings(data as CardSettings);
+                    document.title = `Tu Tarjeta de Lealtad de ${data.name} | Loyalfly`;
                 } else {
                     setErrors({ form: 'No se pudo encontrar la configuración para este negocio.' });
+                    document.title = 'Tarjeta no encontrada | Loyalfly';
                 }
             } catch (err) {
                 console.error(err);
                 setErrors({ form: 'Ocurrió un error al cargar la información del negocio.' });
+                document.title = 'Error de Carga | Loyalfly';
             } finally {
                 setLoading(false);
             }

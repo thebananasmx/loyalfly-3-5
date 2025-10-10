@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import CardPreview from '../components/CardPreview';
 import ErrorMessage from '../components/ErrorMessage';
 import ExclamationCircleIcon from '../components/icons/ExclamationCircleIcon';
@@ -14,6 +14,10 @@ const ColorBox: React.FC<{ color: string; name: string; hex: string }> = ({ colo
 );
 
 const StyleGuidePage: React.FC = () => {
+  useEffect(() => {
+    document.title = 'Guía de Estilo | Docs | Loyalfly';
+  }, []);
+
   return (
     <div className="max-w-4xl">
       <h1 className="text-4xl font-extrabold text-black mb-4 tracking-tight">Guía de Estilo</h1>
