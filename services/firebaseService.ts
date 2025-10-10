@@ -5,6 +5,7 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import {
   getFirestore,
@@ -109,6 +110,11 @@ export const logout = async () => {
 };
 
 export const onAuthUserChanged = (callback: (user: any) => void) => onAuthStateChanged(auth, callback);
+
+export const sendPasswordReset = async (email: string) => {
+  await sendPasswordResetEmail(auth, email);
+};
+
 
 // --- FIRESTORE FUNCTIONS ---
 
