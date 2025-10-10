@@ -111,43 +111,67 @@ const PublicCardPage: React.FC = () => {
             setIsSubmitting(false);
         }
     };
-
+    
     const renderContent = () => {
+        if (error && !settings) { // Show fatal error if settings couldn't load
+            return (
+                <div className="text-center">
+                    <h1 className="text-2xl font-bold text-red-600">Error</h1>
+                    <p className="text-gray-700 mt-2">{error}</p>
+                </div>
+            )
+        }
+        
+        const businessHeader = (
+            <div className="text-center mb-6 animate-fade-in-up">
+                {settings?.logoUrl ? (
+                    <img src={settings.logoUrl} alt={`${settings.name} logo`} className="w-20 h-20 mx-auto rounded-full object-cover mb-4 shadow-md border border-gray-200" />
+                ) : (
+                    <div className="w-20 h-20 mx-auto rounded-full flex items-center justify-center bg-gray-100 mb-4 shadow-sm border border-gray-200">
+                        <span className="text-3xl font-bold text-gray-500">{settings?.name?.charAt(0)}</span>
+                    </div>
+                )}
+                <h1 className="text-2xl font-bold text-black">{settings?.name}</h1>
+            </div>
+        );
+
         switch(view) {
             case 'lookup':
                 return (
                     <div>
-                        <h1 className="text-3xl font-bold text-black tracking-tight text-center mb-2">Consulta tu Tarjeta</h1>
-                        <p className="text-gray-600 text-center mb-6">Ingresa tu número de teléfono para ver tus sellos.</p>
-                        <div className="mt-6 bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
-                            <form onSubmit={handleLookup} className="space-y-4">
-                                <div>
-                                    <label htmlFor="phoneLookup" className="block text-base font-medium text-gray-700">Número de Teléfono</label>
-                                    <input
-                                        id="phoneLookup"
-                                        type="tel"
-                                        value={phoneLookup}
-                                        onChange={(e) => setPhoneLookup(e.target.value)}
-                                        required
-                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black"
-                                        placeholder="Tu número de teléfono"
-                                    />
-                                </div>
-                                {error && <p className="text-sm text-red-600">{error}</p>}
-                                <button
-                                    type="submit"
-                                    disabled={isSubmitting}
-                                    className="w-full py-2.5 px-4 font-semibold text-white bg-black hover:bg-gray-800 rounded-md transition-colors disabled:bg-gray-400"
-                                >
-                                    {isSubmitting ? 'Consultando...' : 'Consultar'}
-                                </button>
-                            </form>
-                            <p className="text-center text-sm text-gray-500 mt-4">
-                                ¿Eres nuevo?{' '}
-                                <button onClick={() => setView('register')} className="font-medium text-[#00AA00] hover:underline focus:outline-none">
-                                    Regístrate aquí
-                                </button>
-                            </p>
+                        {businessHeader}
+                        <div className="animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+                            <h2 className="text-xl font-semibold text-black tracking-tight text-center mb-4">Consulta tu tarjeta</h2>
+                            <div className="bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
+                                <form onSubmit={handleLookup} className="space-y-4">
+                                    <div>
+                                        <label htmlFor="phoneLookup" className="sr-only">Número de Teléfono</label>
+                                        <input
+                                            id="phoneLookup"
+                                            type="tel"
+                                            value={phoneLookup}
+                                            onChange={(e) => setPhoneLookup(e.target.value)}
+                                            required
+                                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black"
+                                            placeholder="Tu número de teléfono"
+                                        />
+                                    </div>
+                                    {error && <p className="text-sm text-red-600">{error}</p>}
+                                    <button
+                                        type="submit"
+                                        disabled={isSubmitting}
+                                        className="w-full py-2.5 px-4 font-semibold text-white bg-black hover:bg-gray-800 rounded-md transition-colors disabled:bg-gray-400"
+                                    >
+                                        {isSubmitting ? 'Consultando...' : 'Consultar'}
+                                    </button>
+                                </form>
+                                <p className="text-center text-sm text-gray-500 mt-4">
+                                    ¿Eres nuevo?{' '}
+                                    <button onClick={() => setView('register')} className="font-medium text-[#00AA00] hover:underline focus:outline-none">
+                                        Regístrate aquí
+                                    </button>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 );
@@ -155,75 +179,84 @@ const PublicCardPage: React.FC = () => {
             case 'register':
                 return (
                     <div>
-                         <h1 className="text-3xl font-bold text-black tracking-tight text-center mb-2">Registro de Cliente</h1>
-                         <p className="text-gray-600 text-center mb-6">Únete al programa de lealtad de <span className="font-semibold">{settings?.name}</span>.</p>
-                         <div className="mt-6 bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
-                            <h2 className="text-xl font-bold text-black text-center mb-4">Completa tus datos</h2>
-                            <form onSubmit={handleRegister} className="space-y-4">
-                                <div>
-                                    <label htmlFor="userName" className="block text-base font-medium text-gray-700">Nombre</label>
-                                    <input
-                                        id="userName"
-                                        type="text"
-                                        value={userName}
-                                        onChange={(e) => setUserName(e.target.value)}
-                                        required
-                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black"
-                                        placeholder="Tu nombre completo"
-                                    />
-                                </div>
-                                <div>
-                                    <label htmlFor="userPhone" className="block text-base font-medium text-gray-700">Teléfono</label>
-                                    <input
-                                        id="userPhone"
-                                        type="tel"
-                                        value={userPhone}
-                                        onChange={(e) => setUserPhone(e.target.value)}
-                                        required
-                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black"
-                                        placeholder="Tu número de teléfono"
-                                    />
-                                </div>
-                                <div>
-                                    <label htmlFor="userEmail" className="block text-base font-medium text-gray-700">
-                                        Email <span className="text-gray-500">(Opcional)</span>
-                                    </label>
-                                    <input
-                                        id="userEmail"
-                                        type="email"
-                                        value={userEmail}
-                                        onChange={(e) => setUserEmail(e.target.value)}
-                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black"
-                                        placeholder="tu@email.com"
-                                    />
-                                </div>
-                                {error && <p className="text-sm text-red-600 text-center">{error}</p>}
-                                <button
-                                    type="submit"
-                                    disabled={isSubmitting}
-                                    className="w-full py-2.5 px-4 font-semibold text-white bg-black hover:bg-gray-800 rounded-md transition-colors disabled:bg-gray-400"
-                                >
-                                    {isSubmitting ? 'Registrando...' : 'Registrarme'}
-                                </button>
-                                <p className="text-center text-sm text-gray-500 mt-2">
-                                    ¿Ya tienes cuenta?{' '}
-                                    <button onClick={() => { setView('lookup'); setError(null); }} className="font-medium text-[#00AA00] hover:underline focus:outline-none">
-                                        Consulta tus sellos
+                        {businessHeader}
+                        <div className="animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+                           <h2 className="text-xl font-semibold text-black tracking-tight text-center mb-4">Regístrate</h2>
+                             <div className="bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
+                                <form onSubmit={handleRegister} className="space-y-4">
+                                    <div>
+                                        <label htmlFor="userName" className="block text-base font-medium text-gray-700 sr-only">Nombre</label>
+                                        <input
+                                            id="userName"
+                                            type="text"
+                                            value={userName}
+                                            onChange={(e) => setUserName(e.target.value)}
+                                            required
+                                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black"
+                                            placeholder="Tu nombre completo"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label htmlFor="userPhone" className="block text-base font-medium text-gray-700 sr-only">Teléfono</label>
+                                        <input
+                                            id="userPhone"
+                                            type="tel"
+                                            value={userPhone}
+                                            onChange={(e) => setUserPhone(e.target.value)}
+                                            required
+                                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black"
+                                            placeholder="Tu número de teléfono"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label htmlFor="userEmail" className="block text-base font-medium text-gray-700 sr-only">
+                                            Email (Opcional)
+                                        </label>
+                                        <input
+                                            id="userEmail"
+                                            type="email"
+                                            value={userEmail}
+                                            onChange={(e) => setUserEmail(e.target.value)}
+                                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black"
+                                            placeholder="tu@email.com (opcional)"
+                                        />
+                                    </div>
+                                    {error && <p className="text-sm text-red-600 text-center">{error}</p>}
+                                    <button
+                                        type="submit"
+                                        disabled={isSubmitting}
+                                        className="w-full py-2.5 px-4 font-semibold text-white bg-black hover:bg-gray-800 rounded-md transition-colors disabled:bg-gray-400"
+                                    >
+                                        {isSubmitting ? 'Registrando...' : 'Registrarme'}
                                     </button>
-                                </p>
-                            </form>
-                         </div>
+                                    <p className="text-center text-sm text-gray-500 mt-2">
+                                        ¿Ya tienes cuenta?{' '}
+                                        <button onClick={() => { setView('lookup'); setError(null); }} className="font-medium text-[#00AA00] hover:underline focus:outline-none">
+                                            Consulta tus sellos
+                                        </button>
+                                    </p>
+                                </form>
+                             </div>
+                        </div>
                     </div>
                 );
             
             case 'display':
                 return (
-                    <div>
+                     <div className="animate-fade-in-up">
+                        <CardPreview
+                          businessName={settings!.name}
+                          rewardText={settings!.reward}
+                          cardColor={settings!.color}
+                          stamps={customer?.stamps || 0}
+                          textColorScheme={settings!.textColorScheme}
+                          logoUrl={settings!.logoUrl}
+                          customerName={customer?.name}
+                          customerPhone={customer?.phone}
+                        />
                         <div className="mt-6 bg-white p-6 border border-gray-200 rounded-lg shadow-sm text-center">
-                            <h2 className="text-2xl font-bold text-black">¡Hola de nuevo, {customer?.name}!</h2>
-                            <p className="text-gray-600 mt-2 text-lg">
-                                Este es el estado actual de tu tarjeta de lealtad.
-                            </p>
+                            <h2 className="text-2xl font-bold text-black">¡Hola, {customer?.name}!</h2>
+                            <p className="text-gray-600 mt-1">Este es el estado de tu tarjeta.</p>
                              <button
                                 onClick={() => {
                                     setView('lookup');
@@ -250,40 +283,16 @@ const PublicCardPage: React.FC = () => {
             </div>
         );
     }
-
-    if (error && !settings) { // Show fatal error if settings couldn't load
-        return (
-            <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4 text-center">
-                <h1 className="text-2xl font-bold text-red-600">Error</h1>
-                <p className="text-gray-700 mt-2">{error || 'No se encontró el negocio.'}</p>
-            </div>
-        )
-    }
   
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4 font-sans">
-          <div className="w-full max-w-sm mx-auto">
-            {settings && (
-                <div className="mb-6 animate-fade-in-up">
-                     <CardPreview
-                      businessName={settings.name}
-                      rewardText={settings.reward}
-                      cardColor={settings.color}
-                      stamps={customer?.stamps || 0}
-                      textColorScheme={settings.textColorScheme}
-                      logoUrl={settings.logoUrl}
-                    />
-                </div>
-            )}
-            
-            <div className="w-full animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-                {settings && renderContent()}
+            <div className="w-full max-w-sm mx-auto">
+                {renderContent()}
             </div>
-          </div>
-          <div className="text-center text-sm text-gray-500 mt-8 space-y-1">
+            <div className="text-center text-sm text-gray-500 mt-8 space-y-1">
               <p>Powered by Loyalfly</p>
               <Link to="/terminos" className="hover:underline">Términos y Condiciones</Link>
-          </div>
+            </div>
         </div>
       );
 };

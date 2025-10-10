@@ -7,6 +7,8 @@ interface CardPreviewProps {
   stamps: number;
   textColorScheme: 'dark' | 'light';
   logoUrl?: string;
+  customerName?: string;
+  customerPhone?: string;
 }
 
 const CheckIcon: React.FC = () => (
@@ -16,7 +18,7 @@ const CheckIcon: React.FC = () => (
 );
 
 
-const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, cardColor, stamps, textColorScheme, logoUrl }) => {
+const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, cardColor, stamps, textColorScheme, logoUrl, customerName, customerPhone }) => {
   const totalStamps = 10;
   const isRewardReady = stamps >= totalStamps;
 
@@ -47,6 +49,13 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
                 {stamps}/{totalStamps} Sellos para tu próxima recompensa
             </p>
         </div>
+
+        {customerName && customerPhone && (
+            <div className="text-center pt-4 -mb-2 sm:-mb-2">
+                <p className={`text-sm font-medium truncate ${primaryTextColor}`}>{customerName}</p>
+                <p className={`text-xs ${secondaryTextColor}`}>{customerPhone}</p>
+            </div>
+        )}
 
         <div className="grid grid-cols-5 gap-3 sm:gap-4 my-6 sm:my-8">
             {Array.from({ length: totalStamps }).map((_, index) => (
