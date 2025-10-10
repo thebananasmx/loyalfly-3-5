@@ -23,6 +23,35 @@ const ChangelogPage: React.FC = () => {
         Un historial de todas las mejoras y nuevas funcionalidades que hemos agregado a Loyalfly para ayudarte a crecer.
       </p>
 
+      {/* --- VERSION v3.5.0.7 --- */}
+      <section className="mb-12">
+        <div className="pb-4 border-b border-gray-200">
+          <h2 className="text-3xl font-bold text-black">Versión 3.5.0.7</h2>
+          <p className="text-base text-gray-500 mt-1">Lanzada el 12 de Octubre de 2025</p>
+        </div>
+        
+        <ul className="mt-8 space-y-6">
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Flujo de Sellos Optimizado Directamente desde el Dashboard</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha eliminado la página dedicada de 'Agregar Sello'. Ahora, los cajeros pueden agregar sellos rápidamente a través de un modal directamente desde la lista de clientes, reduciendo el proceso a solo dos clics y mejorando significativamente la eficiencia.
+                  </p>
+              </div>
+          </li>
+          <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Gestión Completa de Clientes: Editar y Eliminar</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha introducido la capacidad de editar la información de un cliente (nombre, teléfono, email) en una nueva página dedicada. Además, se ha añadido una 'Zona de Peligro' segura para eliminar clientes de forma permanente, con una doble confirmación para evitar borrados accidentales.
+                  </p>
+              </div>
+          </li>
+        </ul>
+      </section>
+
       {/* --- VERSION v3.5.0.6 --- */}
       <section className="mb-12">
         <div className="pb-4 border-b border-gray-200">
