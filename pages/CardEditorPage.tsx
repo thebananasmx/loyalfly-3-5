@@ -9,6 +9,7 @@ const CopyIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-
 const CheckIconSuccess = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#00AA00]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>;
 const ExternalLinkIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>;
 const ArrowLeftIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>;
+const QRIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v1m6 11h-1m-1-6v1m-1-1h-1m-1 6h1m-1-1v1m0-1h1m4-4h1m-5 5v1m-1-1h1M4 4h4v4H4zm0 12h4v4H4zm12 0h4v4h-4zm0-12h4v4h-4z" /></svg>;
 
 
 const CardEditorPage: React.FC = () => {
@@ -241,15 +242,26 @@ const CardEditorPage: React.FC = () => {
                       {copied ? <CheckIconSuccess /> : <CopyIcon />}
                   </button>
               </div>
-               <a
+              <div className="mt-4 flex flex-wrap gap-2">
+                <a
                     href={publicCardUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-4 w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
                 >
                     <ExternalLinkIcon />
                     Ver Registro
                 </a>
+                <a
+                    href="https://loyalfly-qr-1-0.vercel.app/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                >
+                    <QRIcon />
+                    Genera QR
+                </a>
+              </div>
           </div>
         </div>
       </div>
