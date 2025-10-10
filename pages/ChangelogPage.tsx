@@ -19,6 +19,26 @@ const ChangelogPage: React.FC = () => {
         Un historial de todas las mejoras y nuevas funcionalidades que hemos agregado a Loyalfly para ayudarte a crecer.
       </p>
 
+      {/* --- VERSION v3.5.0.6 --- */}
+      <section className="mb-12">
+        <div className="pb-4 border-b border-gray-200">
+          <h2 className="text-3xl font-bold text-black">Versión 3.5.0.6</h2>
+          <p className="text-base text-gray-500 mt-1">Lanzada el 11 de Octubre de 2025</p>
+        </div>
+        
+        <ul className="mt-8 space-y-6">
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Validación de Formato para Teléfonos de México</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha implementado una validación en todos los campos de número de teléfono de la aplicación (registro de clientes, consulta de tarjeta y adición de sellos) para asegurar que los usuarios ingresen un formato válido de 10 dígitos. Esto mejora la calidad de los datos y prepara la plataforma para futuras integraciones como la verificación por SMS. Se han actualizado también los textos de ayuda (`placeholders`) para guiar al usuario.
+                  </p>
+              </div>
+          </li>
+        </ul>
+      </section>
+
       {/* --- VERSION v3.5.0.5 --- */}
       <section className="mb-12">
         <div className="pb-4 border-b border-gray-200">
