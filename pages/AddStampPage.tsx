@@ -8,6 +8,22 @@ import { useToast } from '../context/ToastContext';
 
 const ArrowLeftIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>;
 
+const validateMexicanPhoneNumber = (phone: string): boolean => {
+    if (!phone) return false;
+    let cleaned = phone.trim();
+
+    if (cleaned.startsWith('+521')) {
+        cleaned = cleaned.substring(4);
+    } else if (cleaned.startsWith('+52')) {
+        cleaned = cleaned.substring(3);
+    }
+
+    cleaned = cleaned.replace(/\D/g, '');
+
+    return /^\d{10}$/.test(cleaned);
+};
+
+
 const AddStampPage: React.FC = () => {
     const { user } = useAuth();
     const { showToast } = useToast();
@@ -21,6 +37,12 @@ const AddStampPage: React.FC = () => {
     const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!user) return;
+
+        if (!validateMexicanPhoneNumber(phone)) {
+            showToast('Por favor, ingresa un número de teléfono válido de 10 dígitos.', 'alert');
+            return;
+        }
+
         setLoading(true);
         setFoundCustomer(null);
         try {
@@ -90,7 +112,7 @@ const AddStampPage: React.FC = () => {
                             onChange={(e) => setPhone(e.target.value)}
                             required
                             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black"
-                            placeholder="Buscar por número de teléfono"
+                            placeholder="Buscar por número de teléfono (10 dígitos)"
                         />
                     </div>
                     <button

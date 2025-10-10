@@ -14,6 +14,21 @@ interface CardSettings {
     logoUrl?: string;
 }
 
+const validateMexicanPhoneNumber = (phone: string): boolean => {
+    if (!phone) return false;
+    let cleaned = phone.trim();
+
+    if (cleaned.startsWith('+521')) {
+        cleaned = cleaned.substring(4);
+    } else if (cleaned.startsWith('+52')) {
+        cleaned = cleaned.substring(3);
+    }
+
+    cleaned = cleaned.replace(/\D/g, '');
+
+    return /^\d{10}$/.test(cleaned);
+};
+
 const PublicCardPage: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
 
@@ -69,6 +84,12 @@ const PublicCardPage: React.FC = () => {
     const handleLookup = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!businessId || !phoneLookup) return;
+
+        if (!validateMexicanPhoneNumber(phoneLookup)) {
+            setError('Por favor, ingresa un número de teléfono válido de 10 dígitos.');
+            return;
+        }
+
         setIsSubmitting(true);
         setError(null);
         try {
@@ -90,6 +111,12 @@ const PublicCardPage: React.FC = () => {
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!userName || !userPhone || !businessId) return;
+        
+        if (!validateMexicanPhoneNumber(userPhone)) {
+            setError('Por favor, ingresa un número de teléfono válido de 10 dígitos.');
+            return;
+        }
+
         setIsSubmitting(true);
         setError(null);
 
@@ -153,7 +180,7 @@ const PublicCardPage: React.FC = () => {
                                             onChange={(e) => setPhoneLookup(e.target.value)}
                                             required
                                             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black"
-                                            placeholder="Tu número de teléfono"
+                                            placeholder="Tu número de teléfono (10 dígitos)"
                                         />
                                     </div>
                                     {error && <p className="text-sm text-red-600">{error}</p>}
@@ -205,7 +232,7 @@ const PublicCardPage: React.FC = () => {
                                             onChange={(e) => setUserPhone(e.target.value)}
                                             required
                                             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black"
-                                            placeholder="Tu número de teléfono"
+                                            placeholder="Tu número de teléfono (10 dígitos)"
                                         />
                                     </div>
                                     <div>
