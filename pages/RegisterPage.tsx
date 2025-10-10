@@ -4,8 +4,8 @@ import { useAuth } from '../context/AuthContext';
 import ErrorMessage from '../components/ErrorMessage';
 import ExclamationCircleIcon from '../components/icons/ExclamationCircleIcon';
 
-const EyeIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>;
-const EyeSlashIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 1.274-4.057 5.064-7 9.542-7 .847 0 1.67.111 2.458.325M9 12a3 3 0 11-6 0 3 3 0 016 0zm6 0a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M1 1l22 22" /></svg>;
+const EyeIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>;
+const EyeSlashIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 1.274-4.057 5.064-7 9.542-7 .847 0 1.67.111 2.458.325M9 12a3 3 0 11-6 0 3 3 0 016 0zm6 0a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M1 1l22 22" /></svg>;
 
 const RegisterPage: React.FC = () => {
     const [businessName, setBusinessName] = useState('');
@@ -87,7 +87,7 @@ const RegisterPage: React.FC = () => {
                                 value={businessName}
                                 onChange={(e) => setBusinessName(e.target.value)}
                                 required
-                                className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black ${errors.businessName ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'}`}
+                                className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.businessName ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
                                 placeholder="Ej: Café del Sol"
                                 aria-invalid={!!errors.businessName}
                                 aria-describedby="businessName-error"
@@ -110,7 +110,7 @@ const RegisterPage: React.FC = () => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
-                                className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black ${errors.email ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'}`}
+                                className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.email ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
                                 placeholder="tu@negocio.com"
                                 aria-invalid={!!errors.email}
                                 aria-describedby="email-error"
@@ -133,19 +133,26 @@ const RegisterPage: React.FC = () => {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
-                                className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black ${errors.password ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'}`}
+                                className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.password ? 'pr-16 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
                                 placeholder="Mínimo 6 caracteres"
                                 aria-invalid={!!errors.password}
                                 aria-describedby="password-error"
                             />
-                            <button
-                                type="button"
-                                onClick={() => setShowPassword(!showPassword)}
-                                className="absolute inset-y-0 right-0 px-3 flex items-center"
-                                aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
-                            >
-                                {showPassword ? <EyeSlashIcon /> : <EyeIcon />}
-                            </button>
+                            <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                                {errors.password && (
+                                    <div className="pointer-events-none">
+                                        <ExclamationCircleIcon />
+                                    </div>
+                                )}
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="ml-2 p-1 text-gray-500 hover:text-gray-700"
+                                    aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                                >
+                                    {showPassword ? <EyeSlashIcon /> : <EyeIcon />}
+                                </button>
+                            </div>
                         </div>
                         <ErrorMessage message={errors.password} id="password-error" />
                     </div>
@@ -159,16 +166,26 @@ const RegisterPage: React.FC = () => {
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 required
-                                className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black ${errors.confirmPassword ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'}`}
+                                className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.confirmPassword ? 'pr-16 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
                                 placeholder="Repite tu contraseña"
                                 aria-invalid={!!errors.confirmPassword}
                                 aria-describedby="confirmPassword-error"
                             />
-                             {errors.confirmPassword && (
-                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                                    <ExclamationCircleIcon />
-                                </div>
-                            )}
+                             <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                                {errors.confirmPassword && (
+                                    <div className="pointer-events-none">
+                                        <ExclamationCircleIcon />
+                                    </div>
+                                )}
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="ml-2 p-1 text-gray-500 hover:text-gray-700"
+                                    aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                                >
+                                    {showPassword ? <EyeSlashIcon /> : <EyeIcon />}
+                                </button>
+                            </div>
                         </div>
                         <ErrorMessage message={errors.confirmPassword} id="confirmPassword-error" />
                     </div>

@@ -90,7 +90,7 @@ const NewCustomerPage: React.FC = () => {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             required
-                            className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black ${errors.name ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'}`}
+                            className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.name ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
                             placeholder="Nombre del cliente"
                             aria-invalid={!!errors.name}
                             aria-describedby="name-error"
@@ -113,7 +113,7 @@ const NewCustomerPage: React.FC = () => {
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
                             required
-                            className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black ${errors.phone ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'}`}
+                            className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.phone ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
                             placeholder="Ej: 5512345678 (10 dígitos)"
                             aria-invalid={!!errors.phone}
                             aria-describedby="phone-error"
@@ -137,7 +137,7 @@ const NewCustomerPage: React.FC = () => {
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black ${errors.email ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'}`}
+                            className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.email ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
                             placeholder="cliente@email.com"
                             aria-invalid={!!errors.email}
                             aria-describedby="email-error"

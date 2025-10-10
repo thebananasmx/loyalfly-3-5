@@ -100,7 +100,7 @@ const LoginPage: React.FC = () => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
-                            className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black ${errors.email ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'}`}
+                            className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.email ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
                             placeholder="tu@negocio.com"
                             aria-invalid={!!errors.email}
                             aria-describedby="email-error"
@@ -115,16 +115,7 @@ const LoginPage: React.FC = () => {
                 </div>
 
                 <div>
-                    <div className="flex items-center justify-between">
-                        <label htmlFor="password" className="block text-base font-medium text-gray-700">Contraseña</label>
-                         <button 
-                            type="button"
-                            onClick={switchToResetView}
-                            className="text-sm font-medium text-[#00AA00] hover:underline focus:outline-none"
-                        >
-                            ¿Olvidaste tu contraseña?
-                        </button>
-                    </div>
+                    <label htmlFor="password" className="block text-base font-medium text-gray-700">Contraseña</label>
                     <div className="relative mt-1">
                         <input 
                             id="password"
@@ -132,7 +123,7 @@ const LoginPage: React.FC = () => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
-                            className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black ${errors.password ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'}`}
+                            className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.password ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
                             placeholder="••••••••"
                             aria-invalid={!!errors.password}
                             aria-describedby="password-error"
@@ -158,13 +149,20 @@ const LoginPage: React.FC = () => {
                     </button>
                 </div>
             </form>
-             <div className="text-center mt-6">
+             <div className="text-center mt-6 space-y-3">
                  <p className="text-base text-gray-500">
                     ¿No tienes una cuenta?{' '}
                     <Link to="/register" className="font-medium text-[#00AA00] hover:underline">
                         Regístrate
                     </Link>
                 </p>
+                <button 
+                    type="button"
+                    onClick={switchToResetView}
+                    className="text-sm font-medium text-[#00AA00] hover:underline focus:outline-none"
+                >
+                    ¿Olvidaste tu contraseña?
+                </button>
              </div>
         </>
     );
@@ -191,7 +189,7 @@ const LoginPage: React.FC = () => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
-                                className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black ${errors.email ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'}`}
+                                className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.email ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
                                 placeholder="tu@negocio.com"
                                 aria-invalid={!!errors.email}
                                 aria-describedby="email-reset-error"

@@ -39,9 +39,27 @@ const ChangelogPage: React.FC = () => {
           <li className="flex items-start gap-4">
               <FeatureTag type="improvement" />
               <div>
+                  <h3 className="font-semibold text-black">Interfaz de Validación de Formularios Estandarizada</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha implementado un sistema de validación de errores visualmente consistente en todos los formularios de la aplicación. Ahora, los campos con datos incorrectos se marcan con un borde rojo, un ícono de advertencia y un mensaje de error claro debajo, siguiendo las mejores prácticas de diseño para una experiencia de usuario más intuitiva y accesible.
+                  </p>
+              </div>
+          </li>
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
                   <h3 className="font-semibold text-black">Validación de Formato para Teléfonos de México</h3>
                   <p className="text-gray-600 mt-1">
                       Se ha implementado una validación en todos los campos de número de teléfono de la aplicación (registro de clientes, consulta de tarjeta y adición de sellos) para asegurar que los usuarios ingresen un formato válido de 10 dígitos. Esto mejora la calidad de los datos y prepara la plataforma para futuras integraciones como la verificación por SMS. Se han actualizado también los textos de ayuda (`placeholders`) para guiar al usuario.
+                  </p>
+              </div>
+          </li>
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Reorganización Visual del Formulario de Inicio de Sesión</h3>
+                  <p className="text-gray-600 mt-1">
+                      Para mejorar la claridad y el flujo visual, el enlace para restablecer la contraseña se ha reubicado en la parte inferior del formulario, debajo del enlace de registro. Este cambio prioriza las acciones principales de iniciar sesión y registrarse.
                   </p>
               </div>
           </li>

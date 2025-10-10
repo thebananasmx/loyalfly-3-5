@@ -193,7 +193,7 @@ const PublicCardPage: React.FC = () => {
                                                 value={phoneLookup}
                                                 onChange={(e) => setPhoneLookup(e.target.value)}
                                                 required
-                                                className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black ${errors.phoneLookup ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'}`}
+                                                className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.phoneLookup ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
                                                 placeholder="Tu número de teléfono (10 dígitos)"
                                                 aria-invalid={!!errors.phoneLookup}
                                                 aria-describedby="phoneLookup-error"
@@ -243,7 +243,7 @@ const PublicCardPage: React.FC = () => {
                                                 value={userName}
                                                 onChange={(e) => setUserName(e.target.value)}
                                                 required
-                                                className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black ${errors.userName ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'}`}
+                                                className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.userName ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
                                                 placeholder="Tu nombre completo"
                                                 aria-invalid={!!errors.userName}
                                                 aria-describedby="userName-error"
@@ -265,7 +265,7 @@ const PublicCardPage: React.FC = () => {
                                                 value={userPhone}
                                                 onChange={(e) => setUserPhone(e.target.value)}
                                                 required
-                                                className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black ${errors.userPhone ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'}`}
+                                                className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.userPhone ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
                                                 placeholder="Tu número de teléfono (10 dígitos)"
                                                 aria-invalid={!!errors.userPhone}
                                                 aria-describedby="userPhone-error"
@@ -288,7 +288,7 @@ const PublicCardPage: React.FC = () => {
                                                 type="email"
                                                 value={userEmail}
                                                 onChange={(e) => setUserEmail(e.target.value)}
-                                                className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black ${errors.userEmail ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'}`}
+                                                className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.userEmail ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
                                                 placeholder="tu@email.com (opcional)"
                                                 aria-invalid={!!errors.userEmail}
                                                 aria-describedby="userEmail-error"
