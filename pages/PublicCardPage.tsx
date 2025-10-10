@@ -254,21 +254,17 @@ const PublicCardPage: React.FC = () => {
                           customerName={customer?.name}
                           customerPhone={customer?.phone}
                         />
-                        <div className="mt-6 bg-white p-6 border border-gray-200 rounded-lg shadow-sm text-center">
-                            <h2 className="text-2xl font-bold text-black">¡Hola, {customer?.name}!</h2>
-                            <p className="text-gray-600 mt-1">Este es el estado de tu tarjeta.</p>
-                             <button
-                                onClick={() => {
-                                    setView('lookup');
-                                    setCustomer(null);
-                                    setPhoneLookup('');
-                                    setError(null);
-                                }}
-                                className="mt-4 w-full py-2 px-4 text-base font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
-                            >
-                                Consultar otro número
-                            </button>
-                        </div>
+                        <button
+                           onClick={() => {
+                               setView('lookup');
+                               setCustomer(null);
+                               setPhoneLookup('');
+                               setError(null);
+                           }}
+                           className="mt-6 w-full py-2.5 px-4 text-base font-medium text-gray-700 bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
+                       >
+                           Consultar otro número
+                       </button>
                     </div>
                 );
         }
