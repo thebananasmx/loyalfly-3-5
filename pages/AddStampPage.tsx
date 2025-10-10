@@ -5,11 +5,13 @@ import type { Customer } from '../types';
 import ConfirmationModal from '../components/ConfirmationModal';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
+import ErrorMessage from '../components/ErrorMessage';
+import ExclamationCircleIcon from '../components/icons/ExclamationCircleIcon';
 
 const ArrowLeftIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>;
 
-const validateMexicanPhoneNumber = (phone: string): boolean => {
-    if (!phone) return false;
+const validateMexicanPhoneNumber = (phone: string): string => {
+    if (!phone) return "El número de teléfono es requerido.";
     let cleaned = phone.trim();
 
     if (cleaned.startsWith('+521')) {
@@ -20,7 +22,7 @@ const validateMexicanPhoneNumber = (phone: string): boolean => {
 
     cleaned = cleaned.replace(/\D/g, '');
 
-    return /^\d{10}$/.test(cleaned);
+    return /^\d{10}$/.test(cleaned) ? "" : "Por favor, ingresa un número de teléfono válido de 10 dígitos.";
 };
 
 
@@ -28,6 +30,7 @@ const AddStampPage: React.FC = () => {
     const { user } = useAuth();
     const { showToast } = useToast();
     const [phone, setPhone] = useState('');
+    const [error, setError] = useState('');
     const [foundCustomer, setFoundCustomer] = useState<Customer | null>(null);
     const [loading, setLoading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,12 +41,14 @@ const AddStampPage: React.FC = () => {
         e.preventDefault();
         if (!user) return;
 
-        if (!validateMexicanPhoneNumber(phone)) {
-            showToast('Por favor, ingresa un número de teléfono válido de 10 dígitos.', 'alert');
+        const phoneError = validateMexicanPhoneNumber(phone);
+        if (phoneError) {
+            setError(phoneError);
             return;
         }
 
         setLoading(true);
+        setError('');
         setFoundCustomer(null);
         try {
             const customer = await getCustomerByPhone(user.uid, phone);
@@ -105,15 +110,25 @@ const AddStampPage: React.FC = () => {
                 <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-4">
                     <div className="flex-grow">
                         <label htmlFor="phone" className="sr-only">Número de Teléfono</label>
-                        <input
-                            id="phone"
-                            type="tel"
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                            required
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black"
-                            placeholder="Buscar por número de teléfono (10 dígitos)"
-                        />
+                         <div className="relative">
+                            <input
+                                id="phone"
+                                type="tel"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                                required
+                                className={`w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black ${error ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'}`}
+                                placeholder="Buscar por número de teléfono (10 dígitos)"
+                                aria-invalid={!!error}
+                                aria-describedby="phone-error"
+                            />
+                            {error && (
+                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                    <ExclamationCircleIcon />
+                                </div>
+                            )}
+                        </div>
+                        <ErrorMessage message={error} id="phone-error" />
                     </div>
                     <button
                         type="submit"
@@ -126,7 +141,7 @@ const AddStampPage: React.FC = () => {
             </div>
 
             {foundCustomer && (
-                <div className="mt-6 p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
+                <div className="mt-6 p-6 bg-white border border-gray-200 rounded-lg shadow-sm animate-fade-in-up">
                     <h2 className="text-xl font-bold text-black">Cliente Encontrado</h2>
                     <div className="mt-4 space-y-2 text-base">
                         <p><span className="font-medium text-gray-600">Nombre:</span> {foundCustomer.name}</p>

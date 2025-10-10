@@ -2,12 +2,20 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { sendPasswordReset } from '../services/firebaseService';
+import ErrorMessage from '../components/ErrorMessage';
+import ExclamationCircleIcon from '../components/icons/ExclamationCircleIcon';
+
+const validateEmail = (email: string) => {
+  if (!email) return "El email es requerido.";
+  if (!/\S+@\S+\.\S+/.test(email)) return "No es una dirección de email válida.";
+  return "";
+};
 
 const LoginPage: React.FC = () => {
     const [view, setView] = useState<'login' | 'reset'>('login');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+    const [errors, setErrors] = useState<{ email?: string; password?: string; form?: string }>({});
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -16,15 +24,23 @@ const LoginPage: React.FC = () => {
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError('');
+        setErrors({});
         setMessage('');
-        setLoading(true);
 
+        const emailError = validateEmail(email);
+        const passwordError = !password ? "La contraseña es requerida." : "";
+
+        if (emailError || passwordError) {
+            setErrors({ email: emailError, password: passwordError });
+            return;
+        }
+
+        setLoading(true);
         try {
             await login(email, password);
             navigate('/app/dashboard');
         } catch (err) {
-            setError('Credenciales incorrectas. Inténtalo de nuevo.');
+            setErrors({ form: 'Credenciales incorrectas. Inténtalo de nuevo.' });
             console.error(err);
         } finally {
             setLoading(false);
@@ -33,15 +49,21 @@ const LoginPage: React.FC = () => {
     
     const handleResetPassword = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError('');
+        setErrors({});
         setMessage('');
-        setLoading(true);
 
+        const emailError = validateEmail(email);
+        if (emailError) {
+            setErrors({ email: emailError });
+            return;
+        }
+
+        setLoading(true);
         try {
             await sendPasswordReset(email);
             setMessage('Si existe una cuenta, se ha enviado un enlace para restablecer tu contraseña a tu correo.');
         } catch (err) {
-            setError('No se pudo enviar el correo. Inténtalo de nuevo.');
+            setErrors({ form: 'No se pudo enviar el correo. Inténtalo de nuevo.' });
             console.error(err);
         } finally {
             setLoading(false);
@@ -50,14 +72,14 @@ const LoginPage: React.FC = () => {
 
     const switchToResetView = () => {
         setView('reset');
-        setError('');
+        setErrors({});
         setMessage('');
         setPassword('');
     };
 
     const switchToLoginView = () => {
         setView('login');
-        setError('');
+        setErrors({});
         setMessage('');
     };
 
@@ -71,15 +93,25 @@ const LoginPage: React.FC = () => {
             <form onSubmit={handleLogin} className="space-y-6">
                 <div>
                     <label htmlFor="email" className="block text-base font-medium text-gray-700">Email</label>
-                    <input 
-                        id="email"
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black"
-                        placeholder="tu@negocio.com"
-                    />
+                    <div className="relative mt-1">
+                        <input 
+                            id="email"
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                            className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black ${errors.email ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'}`}
+                            placeholder="tu@negocio.com"
+                            aria-invalid={!!errors.email}
+                            aria-describedby="email-error"
+                        />
+                         {errors.email && (
+                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                <ExclamationCircleIcon />
+                            </div>
+                        )}
+                    </div>
+                    <ErrorMessage message={errors.email} id="email-error" />
                 </div>
 
                 <div>
@@ -93,18 +125,28 @@ const LoginPage: React.FC = () => {
                             ¿Olvidaste tu contraseña?
                         </button>
                     </div>
-                     <input 
-                        id="password"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black"
-                        placeholder="••••••••"
-                    />
+                    <div className="relative mt-1">
+                        <input 
+                            id="password"
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black ${errors.password ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'}`}
+                            placeholder="••••••••"
+                            aria-invalid={!!errors.password}
+                            aria-describedby="password-error"
+                        />
+                        {errors.password && (
+                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                <ExclamationCircleIcon />
+                            </div>
+                        )}
+                    </div>
+                    <ErrorMessage message={errors.password} id="password-error" />
                 </div>
 
-                {error && <p className="text-base text-red-600">{error}</p>}
+                <ErrorMessage message={errors.form} />
 
                 <div>
                     <button 
@@ -141,19 +183,29 @@ const LoginPage: React.FC = () => {
             ) : (
                 <form onSubmit={handleResetPassword} className="space-y-6">
                     <div>
-                        <label htmlFor="email" className="block text-base font-medium text-gray-700">Email</label>
-                        <input 
-                            id="email"
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black"
-                            placeholder="tu@negocio.com"
-                        />
+                        <label htmlFor="email-reset" className="block text-base font-medium text-gray-700">Email</label>
+                        <div className="relative mt-1">
+                            <input 
+                                id="email-reset"
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                                className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black ${errors.email ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'}`}
+                                placeholder="tu@negocio.com"
+                                aria-invalid={!!errors.email}
+                                aria-describedby="email-reset-error"
+                            />
+                             {errors.email && (
+                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                    <ExclamationCircleIcon />
+                                </div>
+                            )}
+                        </div>
+                         <ErrorMessage message={errors.email} id="email-reset-error" />
                     </div>
 
-                    {error && <p className="text-base text-red-600">{error}</p>}
+                    <ErrorMessage message={errors.form} />
 
                     <div>
                         <button 

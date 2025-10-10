@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { createNewCustomer } from '../services/firebaseService';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
+import ErrorMessage from '../components/ErrorMessage';
+import ExclamationCircleIcon from '../components/icons/ExclamationCircleIcon';
 
-const validateMexicanPhoneNumber = (phone: string): boolean => {
-    if (!phone) return false;
+const validateMexicanPhoneNumber = (phone: string): string => {
+    if (!phone) return "El número de teléfono es requerido.";
     let cleaned = phone.trim();
 
     if (cleaned.startsWith('+521')) {
@@ -16,7 +18,7 @@ const validateMexicanPhoneNumber = (phone: string): boolean => {
 
     cleaned = cleaned.replace(/\D/g, '');
 
-    return /^\d{10}$/.test(cleaned);
+    return /^\d{10}$/.test(cleaned) ? "" : "Por favor, ingresa un número de teléfono válido de 10 dígitos.";
 };
 
 const NewCustomerPage: React.FC = () => {
@@ -25,8 +27,26 @@ const NewCustomerPage: React.FC = () => {
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
+    const [errors, setErrors] = useState<{ name?: string; phone?: string; email?: string }>({});
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    
+    const validate = () => {
+        const newErrors: { name?: string; phone?: string; email?: string } = {};
+
+        if (!name) newErrors.name = "El nombre del cliente es requerido.";
+
+        const phoneError = validateMexicanPhoneNumber(phone);
+        if (phoneError) newErrors.phone = phoneError;
+
+        if (email && !/\S+@\S+\.\S+/.test(email)) {
+            newErrors.email = "No es una dirección de email válida.";
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -34,11 +54,8 @@ const NewCustomerPage: React.FC = () => {
             showToast('Debes iniciar sesión para registrar un cliente.', 'error');
             return;
         }
-
-        if (!validateMexicanPhoneNumber(phone)) {
-            showToast('Por favor, ingresa un número de teléfono válido de 10 dígitos.', 'alert');
-            return;
-        }
+        
+        if (!validate()) return;
 
         setLoading(true);
 
@@ -66,42 +83,72 @@ const NewCustomerPage: React.FC = () => {
             <form onSubmit={handleSubmit} className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm space-y-6">
                 <div>
                     <label htmlFor="name" className="block text-base font-medium text-gray-700">Nombre Completo</label>
-                    <input
-                        id="name"
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black"
-                        placeholder="Nombre del cliente"
-                    />
+                    <div className="relative mt-1">
+                        <input
+                            id="name"
+                            type="text"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                            className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black ${errors.name ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'}`}
+                            placeholder="Nombre del cliente"
+                            aria-invalid={!!errors.name}
+                            aria-describedby="name-error"
+                        />
+                        {errors.name && (
+                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                <ExclamationCircleIcon />
+                            </div>
+                        )}
+                    </div>
+                     <ErrorMessage message={errors.name} id="name-error" />
                 </div>
 
                 <div>
                     <label htmlFor="phone" className="block text-base font-medium text-gray-700">Número de Teléfono</label>
-                    <input
-                        id="phone"
-                        type="tel"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        required
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black"
-                        placeholder="Ej: 5512345678 (10 dígitos)"
-                    />
+                    <div className="relative mt-1">
+                        <input
+                            id="phone"
+                            type="tel"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                            required
+                            className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black ${errors.phone ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'}`}
+                            placeholder="Ej: 5512345678 (10 dígitos)"
+                            aria-invalid={!!errors.phone}
+                            aria-describedby="phone-error"
+                        />
+                        {errors.phone && (
+                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                <ExclamationCircleIcon />
+                            </div>
+                        )}
+                    </div>
+                     <ErrorMessage message={errors.phone} id="phone-error" />
                 </div>
                 
                 <div>
                     <label htmlFor="email" className="block text-base font-medium text-gray-700">
                         Email <span className="text-gray-500">(Opcional)</span>
                     </label>
-                    <input
-                        id="email"
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black"
-                        placeholder="cliente@email.com"
-                    />
+                    <div className="relative mt-1">
+                        <input
+                            id="email"
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black ${errors.email ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'}`}
+                            placeholder="cliente@email.com"
+                            aria-invalid={!!errors.email}
+                            aria-describedby="email-error"
+                        />
+                         {errors.email && (
+                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                <ExclamationCircleIcon />
+                            </div>
+                        )}
+                    </div>
+                    <ErrorMessage message={errors.email} id="email-error" />
                 </div>
 
                 <div className="flex items-center justify-end gap-4">

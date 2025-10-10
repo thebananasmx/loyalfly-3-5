@@ -28,6 +28,15 @@ const ChangelogPage: React.FC = () => {
         
         <ul className="mt-8 space-y-6">
           <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Recuperación de Contraseña</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha añadido un enlace "¿Olvidaste tu contraseña?" en la pantalla de inicio de sesión. Esta funcionalidad inicia un flujo seguro gestionado por Firebase, que permite a los dueños de negocios recibir un correo electrónico para restablecer su contraseña, mejorando la accesibilidad y seguridad de la cuenta.
+                  </p>
+              </div>
+          </li>
+          <li className="flex items-start gap-4">
               <FeatureTag type="improvement" />
               <div>
                   <h3 className="font-semibold text-black">Validación de Formato para Teléfonos de México</h3>

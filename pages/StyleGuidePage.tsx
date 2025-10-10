@@ -1,6 +1,7 @@
-
 import React from 'react';
 import CardPreview from '../components/CardPreview';
+import ErrorMessage from '../components/ErrorMessage';
+import ExclamationCircleIcon from '../components/icons/ExclamationCircleIcon';
 
 const ColorBox: React.FC<{ color: string; name: string; hex: string }> = ({ color, name, hex }) => (
     <div>
@@ -85,14 +86,21 @@ const StyleGuidePage: React.FC = () => {
               </div>
                <div>
                   <label htmlFor="name-error" className="block text-base font-medium text-gray-700">Campo con Error</label>
-                  <input 
-                      id="name-error"
-                      type="text"
-                      required
-                      className="mt-1 block w-full px-3 py-2 border border-red-500 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500"
-                      defaultValue="Dato inválido"
-                  />
-                  <p className="mt-1 text-base text-red-600">Este campo es requerido.</p>
+                  <div className="relative mt-1 rounded-md shadow-sm">
+                    <input 
+                        id="name-error"
+                        type="text"
+                        required
+                        className="block w-full px-3 py-2 border border-red-500 rounded-md pr-10 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500"
+                        defaultValue="Dato inválido"
+                        aria-invalid="true"
+                        aria-describedby="name-error-message"
+                    />
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                        <ExclamationCircleIcon />
+                    </div>
+                  </div>
+                  <ErrorMessage message="Este campo es requerido." id="name-error-message" />
               </div>
           </div>
       </section>
@@ -107,7 +115,6 @@ const StyleGuidePage: React.FC = () => {
                   rewardText="Tu Recompensa"
                   cardColor="#FFFFFF"
                   stamps={3}
-                  // FIX: Added required `textColorScheme` prop.
                   textColorScheme="dark"
                />
           </div>
