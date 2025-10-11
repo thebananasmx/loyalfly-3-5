@@ -288,6 +288,33 @@ export const addStampToCustomer = async (businessId: string, customerId: string,
     }
 };
 
+export const redeemRewardForCustomer = async (businessId: string, customerId: string): Promise<Customer> => {
+    const customerDocRef = doc(db, `businesses/${businessId}/customers`, customerId);
+    const customerSnap = await getDoc(customerDocRef);
+    if (customerSnap.exists()) {
+        const currentStamps = customerSnap.data().stamps || 0;
+        const currentRewards = customerSnap.data().rewardsRedeemed || 0;
+
+        if (currentStamps < 10) {
+            throw new Error("Customer does not have enough stamps for a reward.");
+        }
+
+        await updateDoc(customerDocRef, {
+            stamps: currentStamps - 10,
+            rewardsRedeemed: currentRewards + 1
+        });
+
+        const updatedSnap = await getDoc(customerDocRef);
+        return { 
+            id: updatedSnap.id, 
+            ...updatedSnap.data(),
+            enrollmentDate: (updatedSnap.data().enrollmentDate as Timestamp)?.toDate().toISOString().split('T')[0] || new Date().toISOString().split('T')[0]
+        } as Customer;
+    } else {
+        throw new Error("Customer not found");
+    }
+};
+
 export const createNewCustomer = async (businessId: string, data: { name: string, phone: string, email: string }): Promise<Customer> => {
     const customersCol = collection(db, `businesses/${businessId}/customers`);
     const newCustomerData = {

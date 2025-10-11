@@ -23,6 +23,35 @@ const ChangelogPage: React.FC = () => {
         Un historial de todas las mejoras y nuevas funcionalidades que hemos agregado a Loyalfly para ayudarte a crecer.
       </p>
 
+      {/* --- VERSION v3.5.0.11 --- */}
+      <section className="mb-12">
+        <div className="pb-4 border-b border-gray-200">
+          <h2 className="text-3xl font-bold text-black">Versión 3.5.0.11</h2>
+          <p className="text-base text-gray-500 mt-1">Lanzada el 16 de Octubre de 2025</p>
+        </div>
+        
+        <ul className="mt-8 space-y-6">
+          <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Redención de Recompensas desde el Dashboard</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha implementado un flujo completo para la redención de recompensas. Cuando un cliente alcanza 10 sellos, el botón "Sello" en el dashboard se transforma automáticamente en un botón verde "Redimir". Al hacer clic, un modal de confirmación asegura la acción, y al confirmar, se descuentan 10 sellos y se incrementa el contador de recompensas canjeadas del cliente.
+                  </p>
+              </div>
+          </li>
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Interfaz de Acciones Contextual</h3>
+                  <p className="text-gray-600 mt-1">
+                      El botón de acción principal para cada cliente ahora es "inteligente", mostrando la acción más relevante ("Sello" o "Redimir") según el estado del cliente. Esto simplifica la interfaz, reduce la carga cognitiva del cajero y acelera las operaciones diarias.
+                  </p>
+              </div>
+          </li>
+        </ul>
+      </section>
+
       {/* --- VERSION v3.5.0.10 --- */}
       <section className="mb-12">
         <div className="pb-4 border-b border-gray-200">

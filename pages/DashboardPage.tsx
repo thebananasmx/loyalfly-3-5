@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getCustomers, addStampToCustomer, searchCustomers } from '../services/firebaseService';
+import { getCustomers, addStampToCustomer, searchCustomers, redeemRewardForCustomer } from '../services/firebaseService';
 import type { Customer } from '../types';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
@@ -10,6 +10,7 @@ const UserPlusIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-
 const StampIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd" /></svg>;
 const EditIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" /></svg>;
 const SearchIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" /></svg>;
+const GiftIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5 5a3 3 0 015.252-2.121l.738.737a.5.5 0 00.708 0l.738-.737A3 3 0 1115 5v2.243l-1.162.387a.5.5 0 00-.338.338L13.113 9H6.887l-.388-1.162a.5.5 0 00-.338-.338L5 7.243V5z" clipRule="evenodd" /><path d="M3 10a2 2 0 012-2h10a2 2 0 012 2v2a2 2 0 01-2 2h-1.333l-.738 2.212A.5.5 0 0114.5 17h-9a.5.5 0 01-.43-.788L4.333 14H3a2 2 0 01-2-2v-2z" /></svg>;
 
 // Custom hook for debouncing
 function useDebounce<T>(value: T, delay: number): T {
@@ -35,6 +36,7 @@ const DashboardPage: React.FC = () => {
 
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
     const [isStampModalOpen, setIsStampModalOpen] = useState(false);
+    const [isRedeemModalOpen, setIsRedeemModalOpen] = useState(false);
     const [stampQuantity, setStampQuantity] = useState(1);
     const [isUpdating, setIsUpdating] = useState(false);
     
@@ -57,7 +59,7 @@ const DashboardPage: React.FC = () => {
             }
         };
         fetchRecentCustomers();
-    }, [user]);
+    }, [user, showToast]);
 
     // Effect for handling search queries
     useEffect(() => {
@@ -87,12 +89,17 @@ const DashboardPage: React.FC = () => {
         };
 
         performSearch();
-    }, [debouncedSearchQuery, user]);
+    }, [debouncedSearchQuery, user, showToast, searchQuery]);
 
     const handleOpenStampModal = (customer: Customer) => {
         setSelectedCustomer(customer);
         setStampQuantity(1);
         setIsStampModalOpen(true);
+    };
+
+    const handleOpenRedeemModal = (customer: Customer) => {
+        setSelectedCustomer(customer);
+        setIsRedeemModalOpen(true);
     };
 
     const handleQuantityChange = (newQuantity: number) => {
@@ -123,6 +130,26 @@ const DashboardPage: React.FC = () => {
         }
     };
 
+    const handleConfirmRedeemReward = async () => {
+        if (!selectedCustomer || !user) return;
+        setIsUpdating(true);
+        try {
+            const updatedCustomer = await redeemRewardForCustomer(user.uid, selectedCustomer.id);
+            setCustomers(prevCustomers =>
+                prevCustomers.map(c =>
+                    c.id === updatedCustomer.id ? updatedCustomer : c
+                )
+            );
+            showToast(`¡Recompensa canjeada para ${updatedCustomer.name}!`, 'success');
+        } catch (err) {
+            showToast('No se pudo canjear la recompensa.', 'error');
+        } finally {
+            setIsUpdating(false);
+            setIsRedeemModalOpen(false);
+            setSelectedCustomer(null);
+        }
+    };
+
     const renderTableBody = () => {
         if (loading) {
             return (
@@ -149,14 +176,25 @@ const DashboardPage: React.FC = () => {
                     <td className="px-4 py-4 sm:px-6 text-center">{customer.rewardsRedeemed}</td>
                     <td className="px-4 py-4 sm:px-6 text-right">
                         <div className="flex justify-end items-center gap-2">
-                            <button
-                                onClick={() => handleOpenStampModal(customer)}
-                                className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-white bg-[#4D17FF] rounded-md hover:bg-opacity-90 transition-colors"
-                                title="Agregar Sello"
-                            >
-                                <StampIcon />
-                                <span>Sello</span>
-                            </button>
+                            {customer.stamps >= 10 ? (
+                                <button
+                                    onClick={() => handleOpenRedeemModal(customer)}
+                                    className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-white bg-[#00AA00] rounded-md hover:bg-opacity-90 transition-colors"
+                                    title="Redimir Recompensa"
+                                >
+                                    <GiftIcon />
+                                    <span>Redimir</span>
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => handleOpenStampModal(customer)}
+                                    className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-white bg-[#4D17FF] rounded-md hover:bg-opacity-90 transition-colors"
+                                    title="Agregar Sello"
+                                >
+                                    <StampIcon />
+                                    <span>Sello</span>
+                                </button>
+                            )}
                             <Link
                                 to={`/app/editar-cliente/${customer.id}`}
                                 className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
@@ -277,6 +315,19 @@ const DashboardPage: React.FC = () => {
                         <p className="font-semibold">{selectedCustomer.name}</p>
                         <p className="text-base text-gray-500">{selectedCustomer.phone}</p>
                     </div>
+                </ConfirmationModal>
+            )}
+
+            {selectedCustomer && (
+                <ConfirmationModal
+                    isOpen={isRedeemModalOpen}
+                    onClose={() => setIsRedeemModalOpen(false)}
+                    onConfirm={handleConfirmRedeemReward}
+                    title="Confirmar Redención"
+                    confirmText={isUpdating ? 'Redimiendo...' : 'Sí, Redimir'}
+                >
+                    <p>Estás a punto de redimir la recompensa para <strong>{selectedCustomer.name}</strong>.</p>
+                    <p className="mt-2">Su contador de sellos se reducirá en 10. ¿Estás seguro?</p>
                 </ConfirmationModal>
             )}
         </div>
