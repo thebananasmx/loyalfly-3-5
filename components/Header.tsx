@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
@@ -49,7 +48,7 @@ const Header: React.FC = () => {
                 </Link>
                 <Link 
                   to="/register" 
-                  className="px-4 py-2 text-base font-medium text-white bg-[#00AA00] rounded-md hover:bg-opacity-90 transition-colors"
+                  className="px-4 py-2 text-base font-medium text-white bg-[#4D17FF] rounded-md hover:bg-opacity-90 transition-colors"
                 >
                   Registrarse
                 </Link>
@@ -82,7 +81,7 @@ const Header: React.FC = () => {
             <Link 
               to="/register"
               onClick={closeMenu} 
-              className="px-4 py-2 text-center text-base font-medium text-white bg-[#00AA00] rounded-md hover:bg-opacity-90 transition-colors"
+              className="px-4 py-2 text-center text-base font-medium text-white bg-[#4D17FF] rounded-md hover:bg-opacity-90 transition-colors"
             >
               Registrarse
             </Link>

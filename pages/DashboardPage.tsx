@@ -151,7 +151,7 @@ const DashboardPage: React.FC = () => {
                         <div className="flex justify-end items-center gap-2">
                             <button
                                 onClick={() => handleOpenStampModal(customer)}
-                                className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-white bg-[#00AA00] rounded-md hover:bg-opacity-90 transition-colors"
+                                className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-white bg-[#4D17FF] rounded-md hover:bg-opacity-90 transition-colors"
                                 title="Agregar Sello"
                             >
                                 <StampIcon />

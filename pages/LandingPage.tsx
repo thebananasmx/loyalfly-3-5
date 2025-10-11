@@ -35,7 +35,7 @@ const LandingPage: React.FC = () => {
                     <div className="mt-8 flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
                         <Link 
                             to="/pricing"
-                            className="px-8 py-3 w-full sm:w-auto text-base md:text-lg font-medium text-white bg-[#00AA00] rounded-md hover:bg-opacity-90 transition-transform hover:scale-105"
+                            className="px-8 py-3 w-full sm:w-auto text-base md:text-lg font-medium text-white bg-[#4D17FF] rounded-md hover:bg-opacity-90 transition-transform hover:scale-105"
                         >
                             Ver Planes
                         </Link>

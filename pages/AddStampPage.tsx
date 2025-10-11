@@ -156,7 +156,7 @@ const AddStampPage: React.FC = () => {
                     <button
                         onClick={openModal}
                         disabled={isUpdating}
-                        className="mt-6 w-full py-2.5 px-4 font-semibold text-white bg-[#00AA00] rounded-md hover:bg-opacity-90 transition-colors disabled:bg-green-300"
+                        className="mt-6 w-full py-2.5 px-4 font-semibold text-white bg-[#4D17FF] rounded-md hover:bg-opacity-90 transition-colors disabled:bg-indigo-300"
                     >
                         {isUpdating ? 'Agregando...' : 'Agregar Sello'}
                     </button>

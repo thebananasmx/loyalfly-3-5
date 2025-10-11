@@ -210,7 +210,7 @@ const CardEditorPage: React.FC = () => {
               max="10"
               value={stamps}
               onChange={(e) => setStamps(Number(e.target.value))}
-              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#00AA00]"
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#4D17FF]"
             />
           </div>
           <button

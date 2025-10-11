@@ -5,7 +5,7 @@ import ExclamationCircleIcon from '../components/icons/ExclamationCircleIcon';
 
 const ColorBox: React.FC<{ color: string; name: string; hex: string }> = ({ color, name, hex }) => (
     <div>
-        <div className="h-24 rounded-lg" style={{ backgroundColor: color }}></div>
+        <div className="h-24 rounded-lg border border-gray-200" style={{ backgroundColor: color }}></div>
         <div className="mt-2">
             <p className="font-semibold text-black">{name}</p>
             <p className="text-base text-gray-500 uppercase">{hex}</p>
@@ -32,7 +32,10 @@ const StyleGuidePage: React.FC = () => {
               <ColorBox color="#FFFFFF" name="Fondo Principal" hex="#FFFFFF" />
               <ColorBox color="#000000" name="Texto Principal" hex="#000000" />
               <ColorBox color="#6B7280" name="Texto Secundario" hex="#6B7280" />
-              <ColorBox color="#00AA00" name="Acento (Éxito)" hex="#00AA00" />
+              <ColorBox color="#4D17FF" name="Acento Principal" hex="#4D17FF" />
+              <ColorBox color="#00AA00" name="Éxito" hex="#00AA00" />
+              <ColorBox color="#DC2626" name="Error" hex="#DC2626" />
+              <ColorBox color="#EAB308" name="Alerta" hex="#EAB308" />
           </div>
       </section>
 
@@ -50,7 +53,7 @@ const StyleGuidePage: React.FC = () => {
               <h2 className="text-3xl font-bold text-black">Heading 2 (Bold)</h2>
               <h3 className="text-xl font-semibold text-black">Heading 3 (Semibold)</h3>
               <p className="text-base text-gray-700">
-                  Este es un párrafo de texto normal (p). Se utiliza para la mayoría del contenido textual. <a href="#" className="text-[#00AA00] underline">Este es un enlace</a>. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Este es un párrafo de texto normal (p). Se utiliza para la mayoría del contenido textual. <a href="#" className="text-[#4D17FF] underline">Este es un enlace</a>. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
               </p>
           </div>
       </section>
@@ -60,7 +63,7 @@ const StyleGuidePage: React.FC = () => {
           <h2 className="text-2xl font-bold text-black border-b pb-2 mb-6">Botones</h2>
           <div className="flex flex-wrap items-start gap-4">
               <div className="flex flex-col items-center gap-2">
-                  <button className="px-6 py-2.5 font-medium text-white bg-[#00AA00] rounded-md hover:bg-opacity-90 transition-colors">Botón Primario</button>
+                  <button className="px-6 py-2.5 font-medium text-white bg-[#4D17FF] rounded-md hover:bg-opacity-90 transition-colors">Botón Primario</button>
                   <span className="text-base text-gray-500">Normal</span>
               </div>
               <div className="flex flex-col items-center gap-2">

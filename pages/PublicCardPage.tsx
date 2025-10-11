@@ -223,7 +223,7 @@ const PublicCardPage: React.FC = () => {
                                 </form>
                                 <p className="text-center text-sm text-gray-500 mt-4">
                                     ¿Eres nuevo?{' '}
-                                    <button onClick={() => setView('register')} className="font-medium text-[#00AA00] hover:underline focus:outline-none">
+                                    <button onClick={() => setView('register')} className="font-medium text-[#4D17FF] hover:underline focus:outline-none">
                                         Regístrate aquí
                                     </button>
                                 </p>
@@ -317,7 +317,7 @@ const PublicCardPage: React.FC = () => {
                                     </button>
                                     <p className="text-center text-sm text-gray-500 mt-2">
                                         ¿Ya tienes cuenta?{' '}
-                                        <button onClick={() => { setView('lookup'); setErrors({}); }} className="font-medium text-[#00AA00] hover:underline focus:outline-none">
+                                        <button onClick={() => { setView('lookup'); setErrors({}); }} className="font-medium text-[#4D17FF] hover:underline focus:outline-none">
                                             Consulta tus sellos
                                         </button>
                                     </p>

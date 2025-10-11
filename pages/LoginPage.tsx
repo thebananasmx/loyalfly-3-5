@@ -156,14 +156,14 @@ const LoginPage: React.FC = () => {
              <div className="text-center mt-6 space-y-3">
                  <p className="text-base text-gray-500">
                     ¿No tienes una cuenta?{' '}
-                    <Link to="/register" className="font-medium text-[#00AA00] hover:underline">
+                    <Link to="/register" className="font-medium text-[#4D17FF] hover:underline">
                         Regístrate
                     </Link>
                 </p>
                 <button 
                     type="button"
                     onClick={switchToResetView}
-                    className="text-sm font-medium text-[#00AA00] hover:underline focus:outline-none"
+                    className="text-sm font-medium text-[#4D17FF] hover:underline focus:outline-none"
                 >
                     ¿Olvidaste tu contraseña?
                 </button>
@@ -223,7 +223,7 @@ const LoginPage: React.FC = () => {
 
              <div className="text-center mt-6">
                  <p className="text-base text-gray-500">
-                    <button onClick={switchToLoginView} className="font-medium text-[#00AA00] hover:underline focus:outline-none">
+                    <button onClick={switchToLoginView} className="font-medium text-[#4D17FF] hover:underline focus:outline-none">
                         Volver a Iniciar Sesión
                     </button>
                 </p>
