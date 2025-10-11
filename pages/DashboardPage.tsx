@@ -11,25 +11,6 @@ const StampIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w
 const EditIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" /></svg>;
 const SearchIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" /></svg>;
 
-const Highlight: React.FC<{ text: string; query: string }> = ({ text, query }) => {
-    if (!text || !query || query.length < 3) {
-        return <>{text}</>;
-    }
-    const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const parts = text.split(new RegExp(`(${escapedQuery})`, 'gi'));
-    return (
-        <>
-            {parts.map((part, i) =>
-                part.toLowerCase() === query.toLowerCase() ? (
-                    <span key={i} className="bg-yellow-200">{part}</span>
-                ) : (
-                    <span key={i}>{part}</span>
-                )
-            )}
-        </>
-    );
-};
-
 // Custom hook for debouncing
 function useDebounce<T>(value: T, delay: number): T {
     const [debouncedValue, setDebouncedValue] = useState<T>(value);
@@ -160,9 +141,9 @@ const DashboardPage: React.FC = () => {
         if (customers.length > 0) {
             return customers.map((customer) => (
                 <tr key={customer.id} className="bg-white border-b border-gray-200 hover:bg-gray-50">
-                    <td className="px-4 py-4 sm:px-6 font-medium text-gray-900 whitespace-nowrap"><Highlight text={customer.name} query={debouncedSearchQuery} /></td>
-                    <td className="px-4 py-4 sm:px-6"><Highlight text={customer.phone} query={debouncedSearchQuery} /></td>
-                    <td className="px-4 py-4 sm:px-6 hidden md:table-cell"><Highlight text={customer.email} query={debouncedSearchQuery} /></td>
+                    <td className="px-4 py-4 sm:px-6 font-medium text-gray-900 whitespace-nowrap">{customer.name}</td>
+                    <td className="px-4 py-4 sm:px-6">{customer.phone}</td>
+                    <td className="px-4 py-4 sm:px-6 hidden md:table-cell">{customer.email}</td>
                     <td className="px-4 py-4 sm:px-6 hidden lg:table-cell">{customer.enrollmentDate}</td>
                     <td className="px-4 py-4 sm:px-6 text-center">{customer.stamps}</td>
                     <td className="px-4 py-4 sm:px-6 text-center">{customer.rewardsRedeemed}</td>
