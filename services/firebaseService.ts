@@ -60,6 +60,17 @@ const slugify = (str: string) => {
   return str;
 };
 
+const normalizeForSearch = (str: string) => {
+    if (!str) return '';
+    str = str.toLowerCase();
+    const from = "àáäâèéëêìíïîòóöôùúüûñç";
+    const to   = "aaaaeeeeiiiioooouuuunc";
+    for (let i = 0, l = from.length; i < l; i++) {
+        str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+    }
+    return str;
+};
+
 
 // --- AUTH FUNCTIONS ---
 
@@ -179,20 +190,18 @@ export const getCustomers = async (businessId: string): Promise<Customer[]> => {
 
 export const searchCustomers = async (businessId: string, searchQuery: string): Promise<Customer[]> => {
     const customersCol = collection(db, `businesses/${businessId}/customers`);
-    const lowercasedQuery = searchQuery.toLowerCase();
     
-    // Firestore doesn't support native text search or OR queries on different fields.
-    // We'll perform two separate prefix queries and merge the results.
+    const normalizedNameQuery = normalizeForSearch(searchQuery);
     
-    // Query for name prefix
+    // Query for name prefix using the normalized `searchableName` field
     const nameQuery = query(
         customersCol,
-        where('name', '>=', lowercasedQuery),
-        where('name', '<=', lowercasedQuery + '\uf8ff'),
+        where('searchableName', '>=', normalizedNameQuery),
+        where('searchableName', '<=', normalizedNameQuery + '\uf8ff'),
         limit(15)
     );
 
-    // Query for phone prefix
+    // Query for phone prefix (remains unchanged)
     const phoneQuery = query(
         customersCol,
         where('phone', '>=', searchQuery),
@@ -273,6 +282,7 @@ export const createNewCustomer = async (businessId: string, data: { name: string
     const customersCol = collection(db, `businesses/${businessId}/customers`);
     const newCustomerData = {
         ...data,
+        searchableName: normalizeForSearch(data.name),
         enrollmentDate: serverTimestamp(),
         stamps: 0,
         rewardsRedeemed: 0,
@@ -302,7 +312,11 @@ export const getCustomerById = async (businessId: string, customerId: string): P
 
 export const updateCustomer = async (businessId: string, customerId: string, data: { name: string, phone: string, email: string }): Promise<void> => {
     const customerDocRef = doc(db, `businesses/${businessId}/customers`, customerId);
-    await updateDoc(customerDocRef, data as any);
+    const dataToUpdate: any = { ...data };
+    if (data.name) {
+        dataToUpdate.searchableName = normalizeForSearch(data.name);
+    }
+    await updateDoc(customerDocRef, dataToUpdate);
 };
 
 export const deleteCustomer = async (businessId: string, customerId: string): Promise<void> => {
