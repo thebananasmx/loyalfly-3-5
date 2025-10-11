@@ -21,6 +21,8 @@ import {
   serverTimestamp,
   Timestamp,
   deleteDoc,
+  orderBy,
+  limit,
 } from "firebase/firestore";
 import type { Customer } from '../types';
 
@@ -61,7 +63,7 @@ const slugify = (str: string) => {
 
 // --- AUTH FUNCTIONS ---
 
-export const registerBusiness = async (email: string, password: string, businessName: string) => {
+export const registerBusiness = async (email: string, password:string, businessName: string) => {
   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
   const user = userCredential.user;
 
@@ -166,12 +168,61 @@ export const getPublicCardSettings = async (businessId: string) => {
 
 export const getCustomers = async (businessId: string): Promise<Customer[]> => {
     const customersCol = collection(db, `businesses/${businessId}/customers`);
-    const customerSnapshot = await getDocs(customersCol);
+    const q = query(customersCol, orderBy("enrollmentDate", "desc"), limit(25));
+    const customerSnapshot = await getDocs(q);
     return customerSnapshot.docs.map(doc => ({ 
         id: doc.id, 
         ...doc.data(),
         enrollmentDate: (doc.data().enrollmentDate as Timestamp)?.toDate().toISOString().split('T')[0] || new Date().toISOString().split('T')[0]
     } as Customer));
+};
+
+export const searchCustomers = async (businessId: string, searchQuery: string): Promise<Customer[]> => {
+    const customersCol = collection(db, `businesses/${businessId}/customers`);
+    const lowercasedQuery = searchQuery.toLowerCase();
+    
+    // Firestore doesn't support native text search or OR queries on different fields.
+    // We'll perform two separate prefix queries and merge the results.
+    
+    // Query for name prefix
+    const nameQuery = query(
+        customersCol,
+        where('name', '>=', lowercasedQuery),
+        where('name', '<=', lowercasedQuery + '\uf8ff'),
+        limit(15)
+    );
+
+    // Query for phone prefix
+    const phoneQuery = query(
+        customersCol,
+        where('phone', '>=', searchQuery),
+        where('phone', '<=', searchQuery + '\uf8ff'),
+        limit(15)
+    );
+
+    const [nameSnapshot, phoneSnapshot] = await Promise.all([
+        getDocs(nameQuery),
+        getDocs(phoneQuery)
+    ]);
+
+    const customersMap = new Map<string, Customer>();
+
+    const processSnapshot = (snapshot: any) => {
+        snapshot.docs.forEach((doc: any) => {
+            if (!customersMap.has(doc.id)) {
+                customersMap.set(doc.id, {
+                    id: doc.id,
+                    ...doc.data(),
+                    enrollmentDate: (doc.data().enrollmentDate as Timestamp)?.toDate().toISOString().split('T')[0] || new Date().toISOString().split('T')[0]
+                } as Customer);
+            }
+        });
+    };
+
+    processSnapshot(nameSnapshot);
+    processSnapshot(phoneSnapshot);
+
+    return Array.from(customersMap.values());
 };
 
 export const updateCardSettings = async (businessId: string, settings: { name: string; reward: string; color: string; textColorScheme: string; logoUrl?: string; }) => {

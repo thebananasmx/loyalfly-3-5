@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getCustomers, addStampToCustomer } from '../services/firebaseService';
+import { getCustomers, addStampToCustomer, searchCustomers } from '../services/firebaseService';
 import type { Customer } from '../types';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
@@ -11,51 +11,83 @@ const StampIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w
 const EditIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" /></svg>;
 const SearchIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" /></svg>;
 
+// Custom hook for debouncing
+function useDebounce<T>(value: T, delay: number): T {
+    const [debouncedValue, setDebouncedValue] = useState<T>(value);
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedValue(value);
+        }, delay);
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [value, delay]);
+    return debouncedValue;
+}
 
 const DashboardPage: React.FC = () => {
     const { user } = useAuth();
     const { showToast } = useToast();
     const [customers, setCustomers] = useState<Customer[]>([]);
-    const [filteredCustomers, setFilteredCustomers] = useState<Customer[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(true);
+    const [isSearching, setIsSearching] = useState(false);
 
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
     const [isStampModalOpen, setIsStampModalOpen] = useState(false);
     const [stampQuantity, setStampQuantity] = useState(1);
     const [isUpdating, setIsUpdating] = useState(false);
+    
+    const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
+    // Effect for initial load of recent customers
     useEffect(() => {
         document.title = 'Dashboard | Loyalfly App';
-        const fetchCustomers = async () => {
+        const fetchRecentCustomers = async () => {
             if (!user) return;
+            setLoading(true);
             try {
                 const data = await getCustomers(user.uid);
                 setCustomers(data);
-                setFilteredCustomers(data);
             } catch (error) {
-                console.error("Failed to fetch customers:", error);
+                console.error("Failed to fetch recent customers:", error);
+                showToast('No se pudieron cargar los clientes recientes.', 'error');
             } finally {
                 setLoading(false);
             }
         };
-        fetchCustomers();
+        fetchRecentCustomers();
     }, [user]);
-    
-    useEffect(() => {
-        const lowercasedQuery = searchQuery.toLowerCase().trim();
-        const numericQuery = searchQuery.replace(/\D/g, '');
 
-        if (lowercasedQuery.length < 3) {
-            setFilteredCustomers(customers);
-        } else {
-            const filtered = customers.filter(customer =>
-                customer.name.toLowerCase().includes(lowercasedQuery) ||
-                (numericQuery.length > 0 && customer.phone.includes(numericQuery))
-            );
-            setFilteredCustomers(filtered);
-        }
-    }, [searchQuery, customers]);
+    // Effect for handling search queries
+    useEffect(() => {
+        const performSearch = async () => {
+            if (!user) return;
+            
+            if (debouncedSearchQuery.length < 3) {
+                if (searchQuery === '') { // Only refetch recents if search is cleared
+                    setLoading(true);
+                    getCustomers(user.uid).then(data => {
+                        setCustomers(data);
+                    }).finally(() => setLoading(false));
+                }
+                return;
+            }
+
+            setIsSearching(true);
+            try {
+                const results = await searchCustomers(user.uid, debouncedSearchQuery);
+                setCustomers(results);
+            } catch (error) {
+                console.error("Failed to search customers:", error);
+                showToast('Ocurrió un error al buscar.', 'error');
+            } finally {
+                setIsSearching(false);
+            }
+        };
+
+        performSearch();
+    }, [debouncedSearchQuery, user]);
 
     const handleOpenStampModal = (customer: Customer) => {
         setSelectedCustomer(customer);
@@ -91,16 +123,62 @@ const DashboardPage: React.FC = () => {
         }
     };
 
-    if (loading) {
+    const renderTableBody = () => {
+        if (loading) {
+            return (
+                <tr>
+                    <td colSpan={7} className="text-center px-6 py-12">
+                        <div className="flex items-center justify-center">
+                            <div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-200 border-t-black" role="status">
+                                <span className="sr-only">Cargando...</span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            );
+        }
+
+        if (customers.length > 0) {
+            return customers.map((customer) => (
+                <tr key={customer.id} className="bg-white border-b border-gray-200 hover:bg-gray-50">
+                    <td className="px-4 py-4 sm:px-6 font-medium text-gray-900 whitespace-nowrap">{customer.name}</td>
+                    <td className="px-4 py-4 sm:px-6">{customer.phone}</td>
+                    <td className="px-4 py-4 sm:px-6 hidden md:table-cell">{customer.email}</td>
+                    <td className="px-4 py-4 sm:px-6 hidden lg:table-cell">{customer.enrollmentDate}</td>
+                    <td className="px-4 py-4 sm:px-6 text-center">{customer.stamps}</td>
+                    <td className="px-4 py-4 sm:px-6 text-center">{customer.rewardsRedeemed}</td>
+                    <td className="px-4 py-4 sm:px-6 text-right">
+                        <div className="flex justify-end items-center gap-2">
+                            <button
+                                onClick={() => handleOpenStampModal(customer)}
+                                className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-white bg-[#00AA00] rounded-md hover:bg-opacity-90 transition-colors"
+                                title="Agregar Sello"
+                            >
+                                <StampIcon />
+                                <span>Sello</span>
+                            </button>
+                            <Link
+                                to={`/app/editar-cliente/${customer.id}`}
+                                className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
+                            >
+                                <EditIcon/>
+                                <span>Editar</span>
+                            </Link>
+                        </div>
+                    </td>
+                </tr>
+            ));
+        }
+
         return (
-            <div className="flex items-center justify-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-2 border-gray-200 border-t-black" role="status">
-                  <span className="sr-only">Cargando...</span>
-                </div>
-            </div>
+            <tr>
+                <td colSpan={7} className="text-center px-6 py-12 text-gray-500">
+                    {searchQuery ? 'No se encontraron clientes que coincidan con tu búsqueda.' : 'Aún no tienes clientes registrados.'}
+                </td>
+            </tr>
         );
-    }
-    
+    };
+
     return (
         <div>
             <div className="space-y-6">
@@ -129,6 +207,11 @@ const DashboardPage: React.FC = () => {
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
+                         {isSearching && (
+                            <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                <div className="animate-spin rounded-full h-5 w-5 border-2 border-gray-200 border-t-black"></div>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -147,43 +230,7 @@ const DashboardPage: React.FC = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredCustomers.length > 0 ? (
-                                    filteredCustomers.map((customer) => (
-                                        <tr key={customer.id} className="bg-white border-b border-gray-200 hover:bg-gray-50">
-                                            <td className="px-4 py-4 sm:px-6 font-medium text-gray-900 whitespace-nowrap">{customer.name}</td>
-                                            <td className="px-4 py-4 sm:px-6">{customer.phone}</td>
-                                            <td className="px-4 py-4 sm:px-6 hidden md:table-cell">{customer.email}</td>
-                                            <td className="px-4 py-4 sm:px-6 hidden lg:table-cell">{customer.enrollmentDate}</td>
-                                            <td className="px-4 py-4 sm:px-6 text-center">{customer.stamps}</td>
-                                            <td className="px-4 py-4 sm:px-6 text-center">{customer.rewardsRedeemed}</td>
-                                            <td className="px-4 py-4 sm:px-6 text-right">
-                                                <div className="flex justify-end items-center gap-2">
-                                                    <button
-                                                        onClick={() => handleOpenStampModal(customer)}
-                                                        className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-white bg-[#00AA00] rounded-md hover:bg-opacity-90 transition-colors"
-                                                        title="Agregar Sello"
-                                                    >
-                                                        <StampIcon />
-                                                        <span>Sello</span>
-                                                    </button>
-                                                    <Link
-                                                        to={`/app/editar-cliente/${customer.id}`}
-                                                        className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
-                                                    >
-                                                        <EditIcon/>
-                                                        <span>Editar</span>
-                                                    </Link>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))
-                                ) : (
-                                    <tr>
-                                        <td colSpan={7} className="text-center px-6 py-12 text-gray-500">
-                                            {customers.length === 0 ? 'Aún no tienes clientes registrados.' : 'No se encontraron clientes que coincidan con tu búsqueda.'}
-                                        </td>
-                                    </tr>
-                                )}
+                                {renderTableBody()}
                             </tbody>
                         </table>
                     </div>
