@@ -9,12 +9,15 @@ import ConfirmationModal from '../components/ConfirmationModal';
 const UserPlusIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 11a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1v-1z" /></svg>;
 const StampIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd" /></svg>;
 const EditIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" /></svg>;
+const SearchIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" /></svg>;
 
 
 const DashboardPage: React.FC = () => {
     const { user } = useAuth();
     const { showToast } = useToast();
     const [customers, setCustomers] = useState<Customer[]>([]);
+    const [filteredCustomers, setFilteredCustomers] = useState<Customer[]>([]);
+    const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(true);
 
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
@@ -29,6 +32,7 @@ const DashboardPage: React.FC = () => {
             try {
                 const data = await getCustomers(user.uid);
                 setCustomers(data);
+                setFilteredCustomers(data);
             } catch (error) {
                 console.error("Failed to fetch customers:", error);
             } finally {
@@ -37,6 +41,21 @@ const DashboardPage: React.FC = () => {
         };
         fetchCustomers();
     }, [user]);
+    
+    useEffect(() => {
+        const lowercasedQuery = searchQuery.toLowerCase().trim();
+        const numericQuery = searchQuery.replace(/\D/g, '');
+
+        if (lowercasedQuery.length < 3) {
+            setFilteredCustomers(customers);
+        } else {
+            const filtered = customers.filter(customer =>
+                customer.name.toLowerCase().includes(lowercasedQuery) ||
+                (numericQuery.length > 0 && customer.phone.includes(numericQuery))
+            );
+            setFilteredCustomers(filtered);
+        }
+    }, [searchQuery, customers]);
 
     const handleOpenStampModal = (customer: Customer) => {
         setSelectedCustomer(customer);
@@ -96,6 +115,23 @@ const DashboardPage: React.FC = () => {
                     </Link>
                 </div>
                 
+                <div>
+                    <label htmlFor="customer-search" className="sr-only">Buscar cliente</label>
+                    <div className="relative">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <SearchIcon />
+                        </div>
+                        <input
+                            type="text"
+                            id="customer-search"
+                            className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm bg-white placeholder-gray-500 focus:outline-none focus:ring-black focus:border-black sm:text-base"
+                            placeholder="Buscar por nombre o teléfono (3+ caracteres)"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                    </div>
+                </div>
+
                 <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
                      <div className="overflow-x-auto">
                         <table className="w-full text-base text-left text-gray-600">
@@ -111,35 +147,43 @@ const DashboardPage: React.FC = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {customers.map((customer) => (
-                                    <tr key={customer.id} className="bg-white border-b border-gray-200 hover:bg-gray-50">
-                                        <td className="px-4 py-4 sm:px-6 font-medium text-gray-900 whitespace-nowrap">{customer.name}</td>
-                                        <td className="px-4 py-4 sm:px-6">{customer.phone}</td>
-                                        <td className="px-4 py-4 sm:px-6 hidden md:table-cell">{customer.email}</td>
-                                        <td className="px-4 py-4 sm:px-6 hidden lg:table-cell">{customer.enrollmentDate}</td>
-                                        <td className="px-4 py-4 sm:px-6 text-center">{customer.stamps}</td>
-                                        <td className="px-4 py-4 sm:px-6 text-center">{customer.rewardsRedeemed}</td>
-                                        <td className="px-4 py-4 sm:px-6 text-right">
-                                            <div className="flex justify-end items-center gap-2">
-                                                <button
-                                                    onClick={() => handleOpenStampModal(customer)}
-                                                    className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-white bg-[#00AA00] rounded-md hover:bg-opacity-90 transition-colors"
-                                                    title="Agregar Sello"
-                                                >
-                                                    <StampIcon />
-                                                    <span>Sello</span>
-                                                </button>
-                                                <Link
-                                                    to={`/app/editar-cliente/${customer.id}`}
-                                                    className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
-                                                >
-                                                    <EditIcon/>
-                                                    <span>Editar</span>
-                                                </Link>
-                                            </div>
+                                {filteredCustomers.length > 0 ? (
+                                    filteredCustomers.map((customer) => (
+                                        <tr key={customer.id} className="bg-white border-b border-gray-200 hover:bg-gray-50">
+                                            <td className="px-4 py-4 sm:px-6 font-medium text-gray-900 whitespace-nowrap">{customer.name}</td>
+                                            <td className="px-4 py-4 sm:px-6">{customer.phone}</td>
+                                            <td className="px-4 py-4 sm:px-6 hidden md:table-cell">{customer.email}</td>
+                                            <td className="px-4 py-4 sm:px-6 hidden lg:table-cell">{customer.enrollmentDate}</td>
+                                            <td className="px-4 py-4 sm:px-6 text-center">{customer.stamps}</td>
+                                            <td className="px-4 py-4 sm:px-6 text-center">{customer.rewardsRedeemed}</td>
+                                            <td className="px-4 py-4 sm:px-6 text-right">
+                                                <div className="flex justify-end items-center gap-2">
+                                                    <button
+                                                        onClick={() => handleOpenStampModal(customer)}
+                                                        className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-white bg-[#00AA00] rounded-md hover:bg-opacity-90 transition-colors"
+                                                        title="Agregar Sello"
+                                                    >
+                                                        <StampIcon />
+                                                        <span>Sello</span>
+                                                    </button>
+                                                    <Link
+                                                        to={`/app/editar-cliente/${customer.id}`}
+                                                        className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
+                                                    >
+                                                        <EditIcon/>
+                                                        <span>Editar</span>
+                                                    </Link>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan={7} className="text-center px-6 py-12 text-gray-500">
+                                            {customers.length === 0 ? 'Aún no tienes clientes registrados.' : 'No se encontraron clientes que coincidan con tu búsqueda.'}
                                         </td>
                                     </tr>
-                                ))}
+                                )}
                             </tbody>
                         </table>
                     </div>
