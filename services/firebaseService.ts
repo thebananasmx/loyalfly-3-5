@@ -209,9 +209,18 @@ export const searchCustomers = async (businessId: string, searchQuery: string): 
         limit(15)
     );
 
-    const [nameSnapshot, phoneSnapshot] = await Promise.all([
+    // Query for email prefix
+    const emailQuery = query(
+        customersCol,
+        where('email', '>=', searchQuery),
+        where('email', '<=', searchQuery + '\uf8ff'),
+        limit(15)
+    );
+
+    const [nameSnapshot, phoneSnapshot, emailSnapshot] = await Promise.all([
         getDocs(nameQuery),
-        getDocs(phoneQuery)
+        getDocs(phoneQuery),
+        getDocs(emailQuery)
     ]);
 
     const customersMap = new Map<string, Customer>();
@@ -230,6 +239,7 @@ export const searchCustomers = async (businessId: string, searchQuery: string): 
 
     processSnapshot(nameSnapshot);
     processSnapshot(phoneSnapshot);
+    processSnapshot(emailSnapshot);
 
     return Array.from(customersMap.values());
 };
