@@ -27,10 +27,19 @@ const ChangelogPage: React.FC = () => {
       <section className="mb-12">
         <div className="pb-4 border-b border-gray-200">
           <h2 className="text-3xl font-bold text-black">Versión 3.5.0.11</h2>
-          <p className="text-base text-gray-500 mt-1">Lanzada el 16 de Octubre de 2025</p>
+          <p className="text-base text-gray-500 mt-1">Lanzada el 17 de Octubre de 2025</p>
         </div>
         
         <ul className="mt-8 space-y-6">
+           <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Instalación Avanzada de Google Analytics para SPA</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha implementado Google Analytics para rastrear correctamente las navegaciones dentro de la aplicación (Single Page Application). Ahora, cada cambio de vista se registra como una "página vista", permitiendo un análisis detallado del comportamiento del usuario en toda la plataforma, no solo en la carga inicial.
+                  </p>
+              </div>
+          </li>
           <li className="flex items-start gap-4">
               <FeatureTag type="new" />
               <div>
