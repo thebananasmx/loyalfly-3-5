@@ -7,6 +7,7 @@ import MainLayout from './components/MainLayout';
 import AppLayout from './components/AppLayout';
 import ProtectedRoute from './components/ProtectedRoute';
 import DocsLayout from './components/DocsLayout';
+import AnalyticsTracker from './components/AnalyticsTracker';
 
 import LandingPage from './pages/LandingPage';
 import PricingPage from './pages/PricingPage';
@@ -25,6 +26,7 @@ function App() {
   return (
     <AuthProvider>
       <HashRouter>
+        <AnalyticsTracker />
         <Routes>
           <Route element={<MainLayout />}>
             <Route path="/" element={<LandingPage />} />
