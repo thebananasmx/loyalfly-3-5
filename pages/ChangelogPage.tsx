@@ -49,6 +49,15 @@ const ChangelogPage: React.FC = () => {
                   </p>
               </div>
           </li>
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Carga de Logos desde Fuente Externa</h3>
+                  <p className="text-gray-600 mt-1">
+                      Para mejorar la mantenibilidad y agilizar las actualizaciones de marca, los logos de la aplicación ahora se cargan desde una URL externa en lugar de ser archivos locales. Esto asegura que cualquier cambio en el logo se refleje instantáneamente en toda la plataforma sin necesidad de un nuevo despliegue.
+                  </p>
+              </div>
+          </li>
         </ul>
       </section>
       

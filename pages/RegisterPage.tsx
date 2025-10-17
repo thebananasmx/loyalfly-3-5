@@ -209,7 +209,7 @@ const RegisterPage: React.FC = () => {
                 <div className="text-center mt-6">
                     <p className="text-base text-gray-500">
                         ¿Ya tienes una cuenta?{' '}
-                        <Link to="/login" className="font-medium text-[#00AA00] hover:underline">
+                        <Link to="/login" className="font-medium text-[#4D17FF] hover:underline">
                             Inicia Sesión
                         </Link>
                     </p>

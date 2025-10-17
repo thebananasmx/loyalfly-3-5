@@ -76,6 +76,35 @@ const StyleGuidePage: React.FC = () => {
               </div>
           </div>
       </section>
+
+      {/* --- LOGOTIPO --- */}
+      <section className="mb-12">
+          <h2 className="text-2xl font-bold text-black border-b pb-2 mb-6">Logotipo</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center p-4 bg-gray-50 rounded-lg">
+              <div className="text-center">
+                  <h3 className="text-lg font-semibold text-black mb-4">Versión de Escritorio</h3>
+                  <div className="p-4 bg-white rounded-md inline-block border">
+                       <img 
+                          src="https://raw.githubusercontent.com/thebananasmx/loyalfly-3-5/refs/heads/main/assets/logo_desk.svg" 
+                          alt="Logo de escritorio" 
+                          className="h-12" 
+                      />
+                  </div>
+                  <p className="text-sm text-gray-600 mt-2">Usado en cabeceras y barras laterales con espacio horizontal.</p>
+              </div>
+              <div className="text-center">
+                  <h3 className="text-lg font-semibold text-black mb-4">Versión Móvil</h3>
+                   <div className="p-4 bg-white rounded-md inline-block border">
+                      <img 
+                          src="https://raw.githubusercontent.com/thebananasmx/loyalfly-3-5/refs/heads/main/assets/logo_mob.svg" 
+                          alt="Logo móvil" 
+                          className="h-12" 
+                      />
+                  </div>
+                  <p className="text-sm text-gray-600 mt-2">Usado en cabeceras móviles y espacios compactos.</p>
+              </div>
+          </div>
+      </section>
       
       {/* --- FORMULARIOS --- */}
       <section className="mb-12">
