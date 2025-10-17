@@ -9,9 +9,10 @@ interface PricingCardProps {
   description: string;
   features: string[];
   isFeatured?: boolean;
+  isContact?: boolean;
 }
 
-const PricingCard: React.FC<PricingCardProps> = ({ plan, price, description, features, isFeatured = false }) => {
+const PricingCard: React.FC<PricingCardProps> = ({ plan, price, description, features, isFeatured = false, isContact = false }) => {
   const cardClasses = `border rounded-lg p-6 sm:p-8 flex flex-col h-full ${isFeatured ? 'border-[#4D17FF] border-2' : 'border-gray-200'}`;
   const buttonClasses = `w-full mt-8 py-3 font-semibold rounded-md transition-colors text-center ${isFeatured ? 'bg-[#4D17FF] text-white hover:bg-opacity-90' : 'bg-black text-white hover:bg-gray-800'}`;
 
@@ -28,9 +29,15 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan, price, description, fea
           </li>
         ))}
       </ul>
-      <Link to="/register" className={buttonClasses}>
-        Empezar
-      </Link>
+      {isContact ? (
+        <a href="mailto:contacto@loyalfly.app" className={buttonClasses}>
+          Contáctanos
+        </a>
+      ) : (
+        <Link to="/register" className={buttonClasses}>
+          Empezar
+        </Link>
+      )}
     </div>
   );
 };
@@ -73,6 +80,7 @@ const PricingPage: React.FC = () => {
                             'Soporte por email'
                         ]}
                         isFeatured={true}
+                        isContact={true}
                     />
                     <PricingCard 
                         plan="Pro"
@@ -84,6 +92,7 @@ const PricingPage: React.FC = () => {
                             'Personalización completa',
                             'Soporte prioritario'
                         ]}
+                        isContact={true}
                     />
                 </div>
             </div>
