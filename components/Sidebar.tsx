@@ -48,7 +48,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             >
                 <div className="p-4 border-b border-gray-200 h-16 flex items-center">
                     <Link to="/app/dashboard" onClick={onClose}>
-                        <img src="/assets/logo_desk.png" alt="Loyalfly" className="h-7 w-auto" />
+                        <img src="https://raw.githubusercontent.com/thebananasmx/loyalfly-3-5/refs/heads/main/assets/logo_desk.svg" alt="Loyalfly" className="h-7 w-auto" />
                     </Link>
                 </div>
                 <nav className="flex-1 p-4 space-y-2">

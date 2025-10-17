@@ -30,8 +30,8 @@ const Header: React.FC = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link to="/" onClick={closeMenu}>
-            <img src="/assets/logo_desk.png" alt="Loyalfly" className="hidden md:block h-7 w-auto" />
-            <img src="/assets/logo_mob.png" alt="Loyalfly" className="md:hidden h-8 w-auto" />
+            <img src="https://raw.githubusercontent.com/thebananasmx/loyalfly-3-5/refs/heads/main/assets/logo_desk.svg" alt="Loyalfly" className="hidden md:block h-7 w-auto" />
+            <img src="https://raw.githubusercontent.com/thebananasmx/loyalfly-3-5/refs/heads/main/assets/logo_mob.svg" alt="Loyalfly" className="md:hidden h-8 w-auto" />
           </Link>
           
           {/* Desktop Nav */}
