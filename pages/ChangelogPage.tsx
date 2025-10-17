@@ -23,6 +23,35 @@ const ChangelogPage: React.FC = () => {
         Un historial de todas las mejoras y nuevas funcionalidades que hemos agregado a Loyalfly para ayudarte a crecer.
       </p>
 
+      {/* --- VERSION v3.5.0.12 --- */}
+      <section className="mb-12">
+        <div className="pb-4 border-b border-gray-200">
+          <h2 className="text-3xl font-bold text-black">Versión 3.5.0.12</h2>
+          <p className="text-base text-gray-500 mt-1">Lanzada el 18 de Octubre de 2025</p>
+        </div>
+        
+        <ul className="mt-8 space-y-6">
+           <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Módulo de Encuestas para Clientes</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha introducido una nueva funcionalidad de encuestas para aumentar la interacción con el cliente. Los dueños de negocios ahora pueden activar una encuesta simple de dos opciones desde el panel de administración. Cuando está activa, los clientes ven un banner en su tarjeta digital que los invita a votar a cambio de un sello extra. El sistema gestiona todo el flujo, desde la votación en una página dedicada hasta la adición automática del sello de recompensa.
+                  </p>
+              </div>
+          </li>
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Gestión y Análisis de Encuestas</h3>
+                  <p className="text-gray-600 mt-1">
+                      El nuevo módulo de encuestas en el panel de administración permite una gestión completa. Los negocios pueden personalizar el mensaje del banner, la pregunta y las dos respuestas. Además, se ha añadido una sección de resultados en tiempo real que muestra el total de votos y un desglose porcentual para cada opción, proporcionando información valiosa sobre la opinión del cliente de forma instantánea. La integración con Firestore asegura que las respuestas se almacenen de forma segura y se asocien correctamente con cada encuesta.
+                  </p>
+              </div>
+          </li>
+        </ul>
+      </section>
+      
       {/* --- VERSION v3.5.0.11 --- */}
       <section className="mb-12">
         <div className="pb-4 border-b border-gray-200">
