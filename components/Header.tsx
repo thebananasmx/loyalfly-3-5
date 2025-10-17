@@ -29,8 +29,9 @@ const Header: React.FC = () => {
     <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-sm border-b border-gray-200">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <Link to="/" onClick={closeMenu} className="text-xl font-bold tracking-tight text-black">
-            Loyalfly
+          <Link to="/" onClick={closeMenu}>
+            <img src="/assets/logo_desk.png" alt="Loyalfly" className="hidden md:block h-7 w-auto" />
+            <img src="/assets/logo_mob.png" alt="Loyalfly" className="md:hidden h-8 w-auto" />
           </Link>
           
           {/* Desktop Nav */}

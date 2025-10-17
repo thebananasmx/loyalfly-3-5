@@ -17,7 +17,9 @@ const AppLayout: React.FC = () => {
         <div className="flex-1 flex flex-col lg:ml-64">
           {/* Mobile Header */}
           <header className="lg:hidden sticky top-0 bg-white/80 backdrop-blur-sm border-b border-gray-200 z-10 flex items-center justify-between h-16 px-4 sm:px-6">
-            <Link to="/app/dashboard" className="text-xl font-bold text-black">Loyalfly</Link>
+            <Link to="/app/dashboard">
+              <img src="/assets/logo_desk.png" alt="Loyalfly" className="h-7 w-auto" />
+            </Link>
             <button onClick={() => setSidebarOpen(true)} className="p-1 text-gray-600 hover:text-black">
               <span className="sr-only">Abrir menú</span>
               <MenuIcon />
