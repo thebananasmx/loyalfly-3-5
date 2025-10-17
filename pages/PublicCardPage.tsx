@@ -1,7 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import CardPreview from '../components/CardPreview';
-import { getPublicCardSettings, createNewCustomer, getBusinessIdBySlug, getCustomerByPhone } from '../services/firebaseService';
+import { getPublicCardSettings, createNewCustomer, getBusinessIdBySlug, getCustomerByPhone, getSurveySettings, hasCustomerVoted } from '../services/firebaseService';
 import type { Customer } from '../types';
 import ErrorMessage from '../components/ErrorMessage';
 import ExclamationCircleIcon from '../components/icons/ExclamationCircleIcon';
@@ -14,6 +15,15 @@ interface CardSettings {
     color: string;
     textColorScheme: 'dark' | 'light';
     logoUrl?: string;
+}
+
+interface SurveySettings {
+    isEnabled: boolean;
+    bannerMessage: string;
+    question: string;
+    option1: string;
+    option2: string;
+    surveyId: string;
 }
 
 const validateMexicanPhoneNumber = (phone: string): string => {
@@ -44,6 +54,8 @@ const PublicCardPage: React.FC = () => {
     // View & Customer State
     const [view, setView] = useState<ViewState>('lookup');
     const [customer, setCustomer] = useState<Customer | null>(null);
+    const [surveySettings, setSurveySettings] = useState<SurveySettings | null>(null);
+    const [hasVoted, setHasVoted] = useState(true);
     
     // Form Inputs State
     const [phoneLookup, setPhoneLookup] = useState(''); // For the lookup form
@@ -105,6 +117,14 @@ const PublicCardPage: React.FC = () => {
             const foundCustomer = await getCustomerByPhone(businessId, phoneLookup);
             if (foundCustomer) {
                 setCustomer(foundCustomer);
+                const surveyData = await getSurveySettings(businessId);
+                if (surveyData && surveyData.isEnabled && surveyData.surveyId) {
+                    setSurveySettings(surveyData as SurveySettings);
+                    const voted = await hasCustomerVoted(businessId, foundCustomer.id, surveyData.surveyId);
+                    setHasVoted(voted);
+                } else {
+                    setHasVoted(true); // No active survey, so treat as "voted"
+                }
                 setView('display');
             } else {
                 setUserPhone(phoneLookup); // Pre-fill phone for registration
@@ -149,6 +169,11 @@ const PublicCardPage: React.FC = () => {
 
             const newCustomer = await createNewCustomer(businessId, { name: userName, phone: userPhone, email: userEmail });
             setCustomer(newCustomer);
+            const surveyData = await getSurveySettings(businessId);
+            if (surveyData && surveyData.isEnabled) {
+                setSurveySettings(surveyData as SurveySettings);
+                setHasVoted(false); // New customer, hasn't voted
+            }
             setView('display');
         } catch (err) {
             console.error("Registration failed", err);
@@ -330,6 +355,13 @@ const PublicCardPage: React.FC = () => {
             case 'display':
                 return (
                      <div className="animate-fade-in-up">
+                        {surveySettings && surveySettings.isEnabled && !hasVoted && (
+                            <div className="mb-4 text-center bg-yellow-100 border border-yellow-300 text-yellow-800 p-3 rounded-lg shadow-sm">
+                                <Link to={`/vote/${slug}?customerId=${customer?.id}`} className="font-semibold hover:underline">
+                                    🎉 {surveySettings.bannerMessage}
+                                </Link>
+                            </div>
+                        )}
                         <CardPreview
                           businessName={settings!.name}
                           rewardText={settings!.reward}

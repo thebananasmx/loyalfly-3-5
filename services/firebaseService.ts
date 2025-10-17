@@ -1,3 +1,4 @@
+
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -135,20 +136,23 @@ export const sendPasswordReset = async (email: string) => {
 export const getBusinessData = async (businessId: string) => {
     const businessDocRef = doc(db, "businesses", businessId);
     const cardConfigRef = doc(db, "businesses", businessId, "config", "card");
+    const surveyConfigRef = doc(db, "businesses", businessId, "config", "survey");
 
-    const [businessSnap, cardConfigSnap] = await Promise.all([
+    const [businessSnap, cardConfigSnap, surveyConfigSnap] = await Promise.all([
         getDoc(businessDocRef),
-        getDoc(cardConfigRef)
+        getDoc(cardConfigRef),
+        getDoc(surveyConfigRef)
     ]);
 
     if (businessSnap.exists()) {
         const businessData = businessSnap.data();
         const cardSettings = cardConfigSnap.exists() ? cardConfigSnap.data() : null;
+        const surveySettings = surveyConfigSnap.exists() ? surveyConfigSnap.data() : null;
         
-        // Merge the data to maintain the same return structure for the frontend
         return {
             ...businessData,
-            cardSettings: cardSettings
+            cardSettings: cardSettings,
+            surveySettings: surveySettings
         };
     } else {
         console.log("No such business document!");
@@ -246,8 +250,6 @@ export const searchCustomers = async (businessId: string, searchQuery: string): 
 
 export const updateCardSettings = async (businessId: string, settings: { name: string; reward: string; color: string; textColorScheme: string; logoUrl?: string; }) => {
     const cardConfigRef = doc(db, "businesses", businessId, "config", "card");
-    // Use setDoc with merge: true to create the document if it doesn't exist,
-    // or update it if it does. This is more robust than updateDoc.
     await setDoc(cardConfigRef, settings, { merge: true });
     return { success: true, settings };
 };
@@ -359,4 +361,57 @@ export const updateCustomer = async (businessId: string, customerId: string, dat
 export const deleteCustomer = async (businessId: string, customerId: string): Promise<void> => {
     const customerDocRef = doc(db, `businesses/${businessId}/customers`, customerId);
     await deleteDoc(customerDocRef);
+};
+
+// --- SURVEY FUNCTIONS ---
+
+export const getSurveySettings = async (businessId: string) => {
+    const surveyConfigRef = doc(db, "businesses", businessId, "config", "survey");
+    const surveyConfigSnap = await getDoc(surveyConfigRef);
+
+    if (surveyConfigSnap.exists()) {
+        return surveyConfigSnap.data();
+    } else {
+        return null;
+    }
+};
+
+export const updateSurveySettings = async (businessId: string, settings: any) => {
+    const surveyConfigRef = doc(db, "businesses", businessId, "config", "survey");
+    await setDoc(surveyConfigRef, settings, { merge: true });
+};
+
+export const getSurveyResponses = async (businessId: string, surveyId: string) => {
+    if (!surveyId) return [];
+    const responsesCol = collection(db, `businesses/${businessId}/surveyResponses`);
+    const q = query(responsesCol, where("surveyId", "==", surveyId), orderBy("createdAt", "desc"));
+    const responseSnapshot = await getDocs(q);
+    return responseSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+};
+
+export const hasCustomerVoted = async (businessId: string, customerId: string, surveyId: string): Promise<boolean> => {
+    if (!surveyId) return false;
+    const responsesCol = collection(db, `businesses/${businessId}/surveyResponses`);
+    const q = query(responsesCol, where("customerId", "==", customerId), where("surveyId", "==", surveyId), limit(1));
+    const querySnapshot = await getDocs(q);
+    return !querySnapshot.empty;
+};
+
+export const submitSurveyResponse = async (businessId: string, customerId: string, customerName: string, response: string, surveyId: string): Promise<Customer> => {
+    const alreadyVoted = await hasCustomerVoted(businessId, customerId, surveyId);
+    if (alreadyVoted) {
+        throw new Error("Customer has already voted on this survey.");
+    }
+    
+    const responsesCol = collection(db, `businesses/${businessId}/surveyResponses`);
+    await addDoc(responsesCol, {
+        customerId,
+        customerName,
+        response,
+        surveyId,
+        createdAt: serverTimestamp(),
+    });
+    
+    const updatedCustomer = await addStampToCustomer(businessId, customerId);
+    return updatedCustomer;
 };

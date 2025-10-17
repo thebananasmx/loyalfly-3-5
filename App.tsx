@@ -21,6 +21,8 @@ import PublicCardPage from './pages/PublicCardPage';
 import NewCustomerPage from './pages/NewCustomerPage';
 import ChangelogPage from './pages/ChangelogPage';
 import EditCustomerPage from './pages/EditCustomerPage';
+import SurveyPage from './pages/SurveyPage';
+import PublicVotePage from './pages/PublicVotePage';
 
 function App() {
   return (
@@ -43,6 +45,7 @@ function App() {
           </Route>
           
           <Route path="/view/:slug" element={<PublicCardPage />} />
+          <Route path="/vote/:slug" element={<PublicVotePage />} />
 
           <Route 
             path="/app"
@@ -56,6 +59,7 @@ function App() {
             <Route path="tarjeta" element={<CardEditorPage />} />
             <Route path="nuevo-cliente" element={<NewCustomerPage />} />
             <Route path="editar-cliente/:customerId" element={<EditCustomerPage />} />
+            <Route path="vote" element={<SurveyPage />} />
           </Route>
         </Routes>
       </HashRouter>
