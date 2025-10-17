@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
@@ -16,6 +15,9 @@ const SurveyPage: React.FC = () => {
     const [option2, setOption2] = useState('');
     const [surveyId, setSurveyId] = useState<string | null>(null);
     const [originalQuestion, setOriginalQuestion] = useState('');
+    const [originalOption1, setOriginalOption1] = useState('');
+    const [originalOption2, setOriginalOption2] = useState('');
+
 
     // State for responses
     const [responses, setResponses] = useState<any[]>([]);
@@ -39,7 +41,9 @@ const SurveyPage: React.FC = () => {
                     setQuestion(question || '');
                     setOriginalQuestion(question || '');
                     setOption1(option1 || '');
+                    setOriginalOption1(option1 || '');
                     setOption2(option2 || '');
+                    setOriginalOption2(option2 || '');
                     setSurveyId(surveyId || null);
                     if (surveyId) {
                         const surveyResponses = await getSurveyResponses(user.uid, surveyId);
@@ -56,7 +60,7 @@ const SurveyPage: React.FC = () => {
     }, [user, showToast]);
 
     useEffect(() => {
-        if (responses.length > 0) {
+        if (responses.length > 0 && option1 && option2) {
             const newStats = responses.reduce((acc, response) => {
                 if (response.response === option1) {
                     acc.option1++;
@@ -80,8 +84,14 @@ const SurveyPage: React.FC = () => {
 
         setIsSaving(true);
         let newSurveyId = surveyId;
-        // If the question changed, it's a new survey. Generate a new ID.
-        if (question !== originalQuestion && question.trim() !== '') {
+        
+        const isNewSurvey = (
+            (question.trim() !== '' && question !== originalQuestion) ||
+            option1 !== originalOption1 ||
+            option2 !== originalOption2
+        );
+
+        if (isNewSurvey) {
             newSurveyId = `survey_${Date.now()}`;
         }
         
@@ -89,10 +99,14 @@ const SurveyPage: React.FC = () => {
 
         try {
             await updateSurveySettings(user.uid, settings);
-            setSurveyId(newSurveyId); // Update local state
-            setOriginalQuestion(question); // Update original question to prevent new ID on next save
-            if (newSurveyId !== surveyId) {
-              setResponses([]); // It's a new survey, clear old responses from view
+            setSurveyId(newSurveyId);
+            
+            setOriginalQuestion(question);
+            setOriginalOption1(option1);
+            setOriginalOption2(option2);
+
+            if (isNewSurvey) {
+              setResponses([]);
             }
             showToast('Configuración de encuesta guardada.', 'success');
         } catch (error) {

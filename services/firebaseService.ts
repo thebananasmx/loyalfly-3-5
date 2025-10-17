@@ -384,7 +384,7 @@ export const updateSurveySettings = async (businessId: string, settings: any) =>
 export const getSurveyResponses = async (businessId: string, surveyId: string) => {
     if (!surveyId) return [];
     const responsesCol = collection(db, `businesses/${businessId}/surveyResponses`);
-    const q = query(responsesCol, where("surveyId", "==", surveyId), orderBy("createdAt", "desc"));
+    const q = query(responsesCol, where("surveyId", "==", surveyId));
     const responseSnapshot = await getDocs(q);
     return responseSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 };
