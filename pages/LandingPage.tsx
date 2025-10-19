@@ -149,14 +149,14 @@ const LandingPage: React.FC = () => {
                         <p className="mt-4 max-w-2xl mx-auto text-gray-600">Desde cafeterías hasta salones de belleza, Loyalfly se adapta a ti.</p>
                     </div>
                     
-                    <div className="relative max-w-4xl mx-auto">
+                    <div className="relative max-w-5xl mx-auto md:px-16">
                         <div className="overflow-hidden rounded-lg">
                             <div 
                                 className="flex transition-transform duration-500 ease-in-out"
                                 style={{ transform: `translateX(-${currentIndex * 100}%)` }}
                             >
                                 {slides.map((slide, index) => (
-                                    <div key={index} className="w-full flex-shrink-0 p-2">
+                                    <div key={index} className="w-full flex-shrink-0 p-8">
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
                                             <div className="md:order-2">
                                                 <img
@@ -182,14 +182,14 @@ const LandingPage: React.FC = () => {
                         <button
                             onClick={goToPrevious}
                             aria-label="Diapositiva anterior"
-                            className="hidden md:flex items-center justify-center absolute top-1/2 -left-4 transform -translate-y-1/2 w-10 h-10 bg-white/80 rounded-full shadow-md hover:bg-white transition-colors z-10"
+                            className="hidden md:flex items-center justify-center absolute top-1/2 left-4 transform -translate-y-1/2 w-10 h-10 bg-white/80 rounded-full shadow-md hover:bg-white transition-colors z-10"
                         >
                             <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>
                         </button>
                         <button
                             onClick={goToNext}
                             aria-label="Siguiente diapositiva"
-                            className="hidden md:flex items-center justify-center absolute top-1/2 -right-4 transform -translate-y-1/2 w-10 h-10 bg-white/80 rounded-full shadow-md hover:bg-white transition-colors z-10"
+                            className="hidden md:flex items-center justify-center absolute top-1/2 right-4 transform -translate-y-1/2 w-10 h-10 bg-white/80 rounded-full shadow-md hover:bg-white transition-colors z-10"
                         >
                             <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
                         </button>
