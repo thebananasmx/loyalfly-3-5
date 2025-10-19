@@ -26,6 +26,7 @@ import AdminLoginPage from './pages/AdminLoginPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import SuperAdminProtectedRoute from './components/SuperAdminProtectedRoute';
 import AdminLayout from './components/AdminLayout';
+import UserFlowsPage from './pages/UserFlowsPage';
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
               <Route index element={<Navigate to="/docs/style-guide" replace />} />
               <Route path="style-guide" element={<StyleGuidePage />} />
               <Route path="changelog" element={<ChangelogPage />} />
+              <Route path="flujos" element={<UserFlowsPage />} />
             </Route>
           </Route>
           

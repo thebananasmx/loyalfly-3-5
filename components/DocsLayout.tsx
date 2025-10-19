@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
 
@@ -25,6 +24,12 @@ const DocsLayout: React.FC = () => {
                             className={({isActive}) => `${navLinkClasses} ${isActive ? activeClass : inactiveClass}`}
                         >
                             Log de Versiones
+                        </NavLink>
+                        <NavLink
+                            to="/docs/flujos"
+                            className={({isActive}) => `${navLinkClasses} ${isActive ? activeClass : inactiveClass}`}
+                        >
+                            Flujos de Usuario
                         </NavLink>
                     </nav>
                 </aside>
