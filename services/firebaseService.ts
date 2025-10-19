@@ -363,6 +363,57 @@ export const deleteCustomer = async (businessId: string, customerId: string): Pr
     await deleteDoc(customerDocRef);
 };
 
+// --- SUPER ADMIN FUNCTIONS ---
+
+export interface BusinessAdminData {
+  id: string;
+  name: string;
+  email: string;
+  plan?: 'Gratis' | 'Entrepreneur' | 'Pro';
+  customerCount: number;
+  totalStamps: number;
+  totalRewards: number;
+}
+
+export const getAllBusinessesForSuperAdmin = async (): Promise<BusinessAdminData[]> => {
+    const businessCol = collection(db, "businesses");
+    const businessSnapshot = await getDocs(businessCol);
+    const businesses = businessSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+    const businessesWithData = await Promise.all(
+        businesses.map(async (business) => {
+            const customersCol = collection(db, `businesses/${business.id}/customers`);
+            const customerSnapshot = await getDocs(customersCol);
+            
+            let totalStamps = 0;
+            let totalRewards = 0;
+
+            customerSnapshot.docs.forEach(doc => {
+                const data = doc.data();
+                totalStamps += data.stamps || 0;
+                totalRewards += data.rewardsRedeemed || 0;
+            });
+
+            return {
+                id: business.id,
+                name: business.name as string,
+                email: business.email as string,
+                plan: (business.plan as 'Gratis' | 'Entrepreneur' | 'Pro') || 'Gratis',
+                customerCount: customerSnapshot.size,
+                totalStamps,
+                totalRewards,
+            };
+        })
+    );
+    
+    return businessesWithData;
+};
+
+export const updateBusinessPlan = async (businessId: string, plan: 'Gratis' | 'Entrepreneur' | 'Pro') => {
+    const businessDocRef = doc(db, "businesses", businessId);
+    await updateDoc(businessDocRef, { plan });
+};
+
 // --- SURVEY FUNCTIONS ---
 
 export const getSurveySettings = async (businessId: string) => {

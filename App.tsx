@@ -23,6 +23,7 @@ import ChangelogPage from './pages/ChangelogPage';
 import EditCustomerPage from './pages/EditCustomerPage';
 import SurveyPage from './pages/SurveyPage';
 import PublicVotePage from './pages/PublicVotePage';
+import SuperAdminPage from './pages/SuperAdminPage';
 
 function App() {
   return (
@@ -60,6 +61,7 @@ function App() {
             <Route path="nuevo-cliente" element={<NewCustomerPage />} />
             <Route path="editar-cliente/:customerId" element={<EditCustomerPage />} />
             <Route path="vote" element={<SurveyPage />} />
+            <Route path="super-admin" element={<SuperAdminPage />} />
           </Route>
         </Routes>
       </HashRouter>
