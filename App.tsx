@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
@@ -23,7 +22,10 @@ import ChangelogPage from './pages/ChangelogPage';
 import EditCustomerPage from './pages/EditCustomerPage';
 import SurveyPage from './pages/SurveyPage';
 import PublicVotePage from './pages/PublicVotePage';
-import SuperAdminPage from './pages/SuperAdminPage';
+import AdminLoginPage from './pages/AdminLoginPage';
+import AdminDashboardPage from './pages/AdminDashboardPage';
+import SuperAdminProtectedRoute from './components/SuperAdminProtectedRoute';
+import AdminLayout from './components/AdminLayout';
 
 function App() {
   return (
@@ -31,6 +33,7 @@ function App() {
       <HashRouter>
         <AnalyticsTracker />
         <Routes>
+          {/* Public & Main Routes */}
           <Route element={<MainLayout />}>
             <Route path="/" element={<LandingPage />} />
             <Route path="/pricing" element={<PricingPage />} />
@@ -45,9 +48,11 @@ function App() {
             </Route>
           </Route>
           
+          {/* Public Card & Vote Routes (no layout) */}
           <Route path="/view/:slug" element={<PublicCardPage />} />
           <Route path="/vote/:slug" element={<PublicVotePage />} />
 
+          {/* Business App Routes */}
           <Route 
             path="/app"
             element={
@@ -56,13 +61,27 @@ function App() {
               </ProtectedRoute>
             }
           >
+            <Route index element={<Navigate to="/app/dashboard" replace />} />
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="tarjeta" element={<CardEditorPage />} />
             <Route path="nuevo-cliente" element={<NewCustomerPage />} />
             <Route path="editar-cliente/:customerId" element={<EditCustomerPage />} />
             <Route path="vote" element={<SurveyPage />} />
-            <Route path="super-admin" element={<SuperAdminPage />} />
           </Route>
+
+          {/* Super Admin Routes */}
+          <Route path="/admin" element={<AdminLoginPage />} />
+          <Route 
+            path="/admin"
+            element={
+              <SuperAdminProtectedRoute>
+                <AdminLayout />
+              </SuperAdminProtectedRoute>
+            }
+          >
+            <Route path="dashboard" element={<AdminDashboardPage />} />
+          </Route>
+
         </Routes>
       </HashRouter>
     </AuthProvider>

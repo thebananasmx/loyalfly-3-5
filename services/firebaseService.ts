@@ -362,6 +362,25 @@ export const deleteCustomer = async (businessId: string, customerId: string): Pr
     await deleteDoc(customerDocRef);
 };
 
+// --- SUPER ADMIN AUTH & HELPERS ---
+
+export const isSuperAdmin = async (userId: string): Promise<boolean> => {
+    if (!userId) return false;
+    const adminDocRef = doc(db, "super_admins", userId);
+    const adminDocSnap = await getDoc(adminDocRef);
+    return adminDocSnap.exists();
+};
+
+export const registerSuperAdmin = async (email: string, password: string) => {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    await setDoc(doc(db, "super_admins", user.uid), {
+        email: user.email,
+        registeredAt: serverTimestamp(),
+    });
+    return { uid: user.uid, email: user.email };
+};
+
 // --- SUPER ADMIN FUNCTIONS ---
 
 export interface BusinessAdminData {
