@@ -31,6 +31,33 @@ const ChangelogPage: React.FC = () => {
         </div>
         
         <ul className="mt-8 space-y-6">
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Carrusel de Industrias Dinámico</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha actualizado el carrusel de la página de inicio para que cada industria muestre una imagen representativa diferente, mejorando el atractivo visual y la relevancia del contenido.
+                  </p>
+              </div>
+          </li>
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Optimización del Banner Principal para Móviles</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha ajustado el diseño del banner principal en dispositivos móviles para priorizar el mensaje. Ahora el texto y los botones de acción aparecen encima de la imagen en pantallas pequeñas, mejorando la jerarquía de la información.
+                  </p>
+              </div>
+          </li>
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Ajuste de Espaciado en la Página de Inicio</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha reducido el margen superior del banner principal para disminuir el espacio en blanco entre este y el encabezado, creando un diseño más compacto y visualmente cohesivo.
+                  </p>
+              </div>
+          </li>
            <li className="flex items-start gap-4">
               <FeatureTag type="new" />
               <div>
