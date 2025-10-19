@@ -79,9 +79,9 @@ const LandingPage: React.FC = () => {
     return (
         <div className="bg-white">
             {/* Hero Section */}
-            <section className="py-20 md:py-32">
+            <section className="pt-12 md:pt-16 pb-20 md:pb-32">
                 <div className="container mx-auto px-4">
-                    <div className="flex flex-col-reverse md:flex-row items-center gap-12">
+                    <div className="flex flex-col md:flex-row items-center gap-12">
                         {/* Left side: Text content */}
                         <div className="md:w-1/2 text-center md:text-left">
                             <h1 className="text-4xl md:text-6xl font-extrabold text-black tracking-tight">
