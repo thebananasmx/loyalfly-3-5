@@ -1,13 +1,16 @@
-
 import React, { useState, useEffect } from 'react';
-import { getAllBusinessesForSuperAdmin, updateBusinessPlan } from '../services/firebaseService';
+import { getAllBusinessesForSuperAdmin, updateBusinessPlan, deleteBusinessForSuperAdmin } from '../services/firebaseService';
 import { useToast } from '../context/ToastContext';
 import type { BusinessAdminData } from '../services/firebaseService';
+import ConfirmationModal from '../components/ConfirmationModal';
 
 const SuperAdminPage: React.FC = () => {
     const [businesses, setBusinesses] = useState<BusinessAdminData[]>([]);
     const [loading, setLoading] = useState(true);
     const { showToast } = useToast();
+    
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [selectedBusiness, setSelectedBusiness] = useState<BusinessAdminData | null>(null);
 
     useEffect(() => {
         document.title = 'Super Admin | Loyalfly App';
@@ -27,7 +30,6 @@ const SuperAdminPage: React.FC = () => {
     }, [showToast]);
 
     const handlePlanChange = async (businessId: string, newPlan: 'Gratis' | 'Entrepreneur' | 'Pro') => {
-        // Optimistic UI update
         const originalBusinesses = businesses;
         setBusinesses(prev => prev.map(b => b.id === businessId ? { ...b, plan: newPlan } : b));
 
@@ -37,16 +39,36 @@ const SuperAdminPage: React.FC = () => {
         } catch (error) {
             showToast('Error al actualizar el plan.', 'error');
             console.error(error);
-            // Revert on failure
             setBusinesses(originalBusinesses);
         }
     };
     
+    const handleOpenDeleteModal = (business: BusinessAdminData) => {
+        setSelectedBusiness(business);
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!selectedBusiness) return;
+
+        try {
+            await deleteBusinessForSuperAdmin(selectedBusiness.id);
+            setBusinesses(prev => prev.filter(b => b.id !== selectedBusiness.id));
+            showToast(`Negocio "${selectedBusiness.name}" eliminado.`, 'success');
+        } catch (error) {
+            console.error("Failed to delete business:", error);
+            showToast('No se pudo eliminar el negocio.', 'error');
+        } finally {
+            setIsDeleteModalOpen(false);
+            setSelectedBusiness(null);
+        }
+    };
+
     const renderTableBody = () => {
         if (loading) {
             return (
                 <tr>
-                    <td colSpan={6} className="text-center px-6 py-12">
+                    <td colSpan={7} className="text-center px-6 py-12">
                         <div className="flex items-center justify-center">
                             <div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-200 border-t-black" role="status">
                                 <span className="sr-only">Cargando...</span>
@@ -60,7 +82,7 @@ const SuperAdminPage: React.FC = () => {
         if (businesses.length === 0) {
             return (
                 <tr>
-                    <td colSpan={6} className="text-center px-6 py-12 text-gray-500">
+                    <td colSpan={7} className="text-center px-6 py-12 text-gray-500">
                         No hay negocios registrados en la plataforma.
                     </td>
                 </tr>
@@ -85,6 +107,15 @@ const SuperAdminPage: React.FC = () => {
                         <option value="Pro">Pro</option>
                     </select>
                 </td>
+                <td className="px-4 py-4 sm:px-6 text-right">
+                    <button
+                        onClick={() => handleOpenDeleteModal(business)}
+                        className="text-red-600 hover:text-red-800 font-medium transition-colors"
+                        title={`Eliminar ${business.name}`}
+                    >
+                        Eliminar
+                    </button>
+                </td>
             </tr>
         ));
     };
@@ -104,6 +135,7 @@ const SuperAdminPage: React.FC = () => {
                                 <th scope="col" className="px-4 py-3 sm:px-6 text-center">Sellos Dados</th>
                                 <th scope="col" className="px-4 py-3 sm:px-6 text-center">Recompensas</th>
                                 <th scope="col" className="px-4 py-3 sm:px-6">Plan</th>
+                                <th scope="col" className="px-4 py-3 sm:px-6 text-right">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -112,6 +144,19 @@ const SuperAdminPage: React.FC = () => {
                     </table>
                 </div>
             </div>
+            
+            {selectedBusiness && (
+                <ConfirmationModal
+                    isOpen={isDeleteModalOpen}
+                    onClose={() => setIsDeleteModalOpen(false)}
+                    onConfirm={handleConfirmDelete}
+                    title="¿Eliminar Negocio?"
+                    confirmText="Sí, eliminar permanentemente"
+                >
+                    <p>Estás a punto de eliminar permanentemente a <strong>{selectedBusiness.name}</strong> y todos sus datos (clientes, sellos, configuración, etc.).</p>
+                    <p className="mt-2 font-bold text-red-600">Esta acción no se puede deshacer. ¿Estás seguro?</p>
+                </ConfirmationModal>
+            )}
         </div>
     );
 };

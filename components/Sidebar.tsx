@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { NavLink, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -77,14 +76,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                     >
                         <SurveyIcon />
                         <span>Encuesta</span>
-                    </NavLink>
-                    <NavLink 
-                        to="/app/super-admin"
-                        onClick={onClose}
-                        className={({isActive}) => `${navLinkClasses} ${isActive ? activeClass : inactiveClass}`}
-                    >
-                        <SuperAdminIcon />
-                        <span>Super Admin</span>
                     </NavLink>
                 </nav>
                 <div className="p-4 border-t border-gray-200">

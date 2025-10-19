@@ -1,4 +1,3 @@
-
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -412,6 +411,33 @@ export const getAllBusinessesForSuperAdmin = async (): Promise<BusinessAdminData
 export const updateBusinessPlan = async (businessId: string, plan: 'Gratis' | 'Entrepreneur' | 'Pro') => {
     const businessDocRef = doc(db, "businesses", businessId);
     await updateDoc(businessDocRef, { plan });
+};
+
+export const deleteBusinessForSuperAdmin = async (businessId: string): Promise<void> => {
+    const businessDocRef = doc(db, "businesses", businessId);
+    const businessSnap = await getDoc(businessDocRef);
+    if (!businessSnap.exists()) throw new Error("Business not found");
+    const slug = businessSnap.data().slug;
+
+    // Delete subcollections
+    const customerCol = collection(db, `businesses/${businessId}/customers`);
+    const customerSnapshot = await getDocs(customerCol);
+    await Promise.all(customerSnapshot.docs.map(d => deleteDoc(d.ref)));
+
+    const configCol = collection(db, `businesses/${businessId}/config`);
+    const configSnapshot = await getDocs(configCol);
+    await Promise.all(configSnapshot.docs.map(d => deleteDoc(d.ref)));
+
+    const surveyResponsesCol = collection(db, `businesses/${businessId}/surveyResponses`);
+    const surveyResponsesSnapshot = await getDocs(surveyResponsesCol);
+    await Promise.all(surveyResponsesSnapshot.docs.map(d => deleteDoc(d.ref)));
+
+    // Delete main doc and slug doc
+    await deleteDoc(businessDocRef);
+    if (slug) {
+        const slugDocRef = doc(db, "slugs", slug);
+        await deleteDoc(slugDocRef);
+    }
 };
 
 // --- SURVEY FUNCTIONS ---
