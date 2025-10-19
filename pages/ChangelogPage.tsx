@@ -31,6 +31,24 @@ const ChangelogPage: React.FC = () => {
         </div>
         
         <ul className="mt-8 space-y-6">
+           <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Portal de Super Administración Centralizado</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha creado un portal de administración exclusivo y seguro en `/admin`. Este portal cuenta con su propio sistema de registro e inicio de sesión, y un dashboard centralizado que permite al administrador de la plataforma supervisar todos los negocios registrados, ver métricas clave (total de clientes, sellos, recompensas), gestionar planes de suscripción y eliminar negocios de forma segura.
+                  </p>
+              </div>
+          </li>
+          <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Documentación de Flujos de Usuario</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha añadido una nueva página a la sección de Documentación llamada "Flujos de Usuario". Esta guía mapea y describe en detalle todos los recorridos clave dentro de la plataforma, cubriendo las acciones del dueño del negocio, el cliente final y el super administrador para ofrecer una comprensión completa del funcionamiento de la aplicación.
+                  </p>
+              </div>
+          </li>
           <li className="flex items-start gap-4">
               <FeatureTag type="improvement" />
               <div>
