@@ -64,17 +64,17 @@ const PricingPage: React.FC = () => {
                         price="$0"
                         description="Para empezar y probar."
                         features={[
-                            'Hasta 10 clientes',
+                            'Hasta 100 clientes',
                             'Tarjeta de lealtad digital',
                             'Personalización básica'
                         ]}
                     />
                     <PricingCard 
                         plan="Entrepreneur"
-                        price="$29"
+                        price="$299 / mes"
                         description="Ideal para negocios en crecimiento."
                         features={[
-                            'Hasta 100 clientes',
+                            'Hasta 1000 clientes',
                             'Tarjeta de lealtad digital',
                             'Personalización completa',
                             'Soporte por email'
@@ -84,7 +84,7 @@ const PricingPage: React.FC = () => {
                     />
                     <PricingCard 
                         plan="Pro"
-                        price="$99"
+                        price="$999 / mes"
                         description="Para negocios establecidos."
                         features={[
                             'Clientes ilimitados',
