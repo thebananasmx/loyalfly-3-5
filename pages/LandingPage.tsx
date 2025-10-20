@@ -29,7 +29,7 @@ const slides = [
         title: "El platillo principal es la fidelidad.",
         description: "Desde postres de cortesía hasta descuentos especiales, crea un programa de recompensas que deje a tus comensales con un excelente sabor de boca.",
         color: "bg-red-100 text-red-800",
-        imageUrl: "https://i.postimg.cc/tJ403tWN/restaurant-loyalfly.png"
+        imageUrl: "https://i.postimg.cc/prGRWDf3/restaurant-loyalfly.png"
     },
     {
         industry: "Emprendedores",
