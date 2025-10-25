@@ -107,6 +107,21 @@ export const registerBusiness = async (email: string, password:string, businessN
     textColorScheme: 'dark',
     logoUrl: ''
   });
+
+  // --- ZAPIER TRIGGER ---
+  // Create a document in a separate collection to trigger the Zapier automation
+  // for the welcome email.
+  try {
+    const zapierTriggerCollectionRef = collection(db, "new_business_registrations");
+    await addDoc(zapierTriggerCollectionRef, {
+      email: user.email,
+      businessName: businessName,
+      registeredAt: serverTimestamp(),
+    });
+  } catch (error) {
+    // Log the error but don't block the user registration process
+    console.error("Zapier trigger failed:", error);
+  }
   
   return { uid: user.uid, email: user.email };
 };
