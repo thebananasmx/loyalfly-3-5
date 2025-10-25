@@ -23,6 +23,44 @@ const ChangelogPage: React.FC = () => {
         Un historial de todas las mejoras y nuevas funcionalidades que hemos agregado a Loyalfly para ayudarte a crecer.
       </p>
 
+      {/* --- VERSION v3.5.0.13 --- */}
+      <section className="mb-12">
+        <div className="pb-4 border-b border-gray-200">
+          <h2 className="text-3xl font-bold text-black">Versión 3.5.0.13</h2>
+          <p className="text-base text-gray-500 mt-1">Lanzada el 19 de Octubre de 2025</p>
+        </div>
+        
+        <ul className="mt-8 space-y-6">
+           <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Responsividad del Panel de Administración</h3>
+                  <p className="text-gray-600 mt-1">
+                      El panel de administración en `/admin/dashboard` ahora es completamente responsivo. Incorpora un menú de hamburguesa en pantallas pequeñas para mostrar y ocultar la barra lateral, replicando el diseño intuitivo del dashboard principal de la aplicación y asegurando una experiencia consistente en todos los dispositivos.
+                  </p>
+              </div>
+          </li>
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Optimización del Menú Móvil</h3>
+                  <p className="text-gray-600 mt-1">
+                      El menú de navegación móvil en la página de inicio ha sido completamente rediseñado para ser una experiencia de pantalla completa. Además, ahora muestra la versión compacta del logotipo (`logo_mob.svg`) para una mejor consistencia de marca en dispositivos pequeños.
+                  </p>
+              </div>
+          </li>
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Mejora del Encabezado de Escritorio</h3>
+                  <p className="text-gray-600 mt-1">
+                      Para mejorar la presencia de la marca, se ha aumentado la altura del encabezado en la vista de escritorio a 72px. Este cambio permite un logotipo más grande y visible, reforzando la identidad visual de la plataforma.
+                  </p>
+              </div>
+          </li>
+        </ul>
+      </section>
+
       {/* --- VERSION v3.5.0.12 --- */}
       <section className="mb-12">
         <div className="pb-4 border-b border-gray-200">
