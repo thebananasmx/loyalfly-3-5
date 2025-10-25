@@ -40,9 +40,9 @@ const Header: React.FC = () => {
     <>
       <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-sm border-b border-gray-200">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-[72px]">
             <Link to="/" onClick={closeMenu}>
-              <img src="https://raw.githubusercontent.com/thebananasmx/loyalfly-3-5/refs/heads/main/assets/logo_desk.svg" alt="Loyalfly" className="hidden md:block h-7 w-auto" />
+              <img src="https://raw.githubusercontent.com/thebananasmx/loyalfly-3-5/refs/heads/main/assets/logo_desk.svg" alt="Loyalfly" className="hidden md:block h-9 w-auto" />
               <img src="https://raw.githubusercontent.com/thebananasmx/loyalfly-3-5/refs/heads/main/assets/logo_mob.svg" alt="Loyalfly" className="md:hidden h-8 w-auto" />
             </Link>
             
