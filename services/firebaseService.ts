@@ -1,3 +1,4 @@
+
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -24,7 +25,7 @@ import {
   orderBy,
   limit,
 } from "firebase/firestore";
-import type { Customer } from '../types';
+import type { Customer, Business } from '../types';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAnW9n-Ou53G1RmD0amMXJfQ_OadfefVug",
@@ -95,6 +96,7 @@ export const registerBusiness = async (email: string, password:string, businessN
     name: businessName,
     email: user.email,
     slug: slug,
+    plan: 'Gratis', // Default plan
     createdAt: serverTimestamp(),
   });
 
@@ -147,15 +149,17 @@ export const sendPasswordReset = async (email: string) => {
 
 // --- FIRESTORE FUNCTIONS ---
 
-export const getBusinessData = async (businessId: string) => {
+export const getBusinessData = async (businessId: string): Promise<Business | null> => {
     const businessDocRef = doc(db, "businesses", businessId);
     const cardConfigRef = doc(db, "businesses", businessId, "config", "card");
     const surveyConfigRef = doc(db, "businesses", businessId, "config", "survey");
+    const customersCol = collection(db, `businesses/${businessId}/customers`);
 
-    const [businessSnap, cardConfigSnap, surveyConfigSnap] = await Promise.all([
+    const [businessSnap, cardConfigSnap, surveyConfigSnap, customerSnapshot] = await Promise.all([
         getDoc(businessDocRef),
         getDoc(cardConfigRef),
-        getDoc(surveyConfigRef)
+        getDoc(surveyConfigRef),
+        getDocs(customersCol)
     ]);
 
     if (businessSnap.exists()) {
@@ -164,10 +168,12 @@ export const getBusinessData = async (businessId: string) => {
         const surveySettings = surveyConfigSnap.exists() ? surveyConfigSnap.data() : null;
         
         return {
+            id: businessId,
             ...businessData,
             cardSettings: cardSettings,
-            surveySettings: surveySettings
-        };
+            surveySettings: surveySettings,
+            customerCount: customerSnapshot.size
+        } as Business;
     } else {
         console.log("No such business document!");
         return null;
@@ -341,7 +347,26 @@ export const redeemRewardForCustomer = async (businessId: string, customerId: st
     }
 };
 
+const PLAN_LIMITS = {
+    Gratis: 100,
+    Entrepreneur: 1000,
+};
+
 export const createNewCustomer = async (businessId: string, data: { name: string, phone: string, email: string }): Promise<Customer> => {
+    const businessData = await getBusinessData(businessId);
+    if (!businessData) {
+        throw new Error("Business not found");
+    }
+
+    const { plan, customerCount } = businessData;
+    
+    if (plan === 'Gratis' && customerCount >= PLAN_LIMITS.Gratis) {
+        throw new Error("LIMIT_REACHED");
+    }
+    if (plan === 'Entrepreneur' && customerCount >= PLAN_LIMITS.Entrepreneur) {
+        throw new Error("LIMIT_REACHED");
+    }
+
     const customersCol = collection(db, `businesses/${businessId}/customers`);
     const newCustomerData = {
         ...data,

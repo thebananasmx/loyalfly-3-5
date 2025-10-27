@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
     getCustomers, 
     addStampToCustomer, 
@@ -7,9 +8,10 @@ import {
     redeemRewardForCustomer,
     getAllCustomers,
     getCustomerByPhone,
-    createNewCustomer
+    createNewCustomer,
+    getBusinessData
 } from '../services/firebaseService';
-import type { Customer } from '../types';
+import type { Customer, Business } from '../types';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import ConfirmationModal from '../components/ConfirmationModal';
@@ -21,6 +23,27 @@ const SearchIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 
 const GiftIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5 5a3 3 0 015.252-2.121l.738.737a.5.5 0 00.708 0l.738-.737A3 3 0 1115 5v2.243l-1.162.387a.5.5 0 00-.338.338L13.113 9H6.887l-.388-1.162a.5.5 0 00-.338-.338L5 7.243V5z" clipRule="evenodd" /><path d="M3 10a2 2 0 012-2h10a2 2 0 012 2v2a2 2 0 01-2 2h-1.333l-.738 2.212A.5.5 0 0114.5 17h-9a.5.5 0 01-.43-.788L4.333 14H3a2 2 0 01-2-2v-2z" /></svg>;
 const DownloadIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 9.707a1 1 0 011.414 0L9 11.293V3a1 1 0 112 0v8.293l1.293-1.586a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" /></svg>;
 const UploadIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M4 12a1 1 0 011 1v3a1 1 0 001 1h8a1 1 0 001-1v-3a1 1 0 112 0v3a3 3 0 01-3 3H6a3 3 0 01-3-3v-3a1 1 0 011-1z" /><path d="M10 2a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 2z" /></svg>;
+
+const PLAN_LIMITS = {
+    Gratis: 100,
+    Entrepreneur: 1000,
+};
+
+const AlertBar: React.FC<{ plan: 'Gratis' | 'Entrepreneur' }> = ({ plan }) => {
+    return (
+        <div className="p-4 mb-6 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700">
+            <div className="flex justify-between items-center">
+                <div>
+                    <p className="font-bold">Límite de Clientes Alcanzado</p>
+                    <p>Has alcanzado el máximo de {PLAN_LIMITS[plan]} clientes para el plan {plan}.</p>
+                </div>
+                <a href="mailto:contacto@loyalfly.app" className="px-4 py-2 bg-yellow-500 text-white font-semibold rounded-md hover:bg-yellow-600 transition-colors">
+                    Contáctanos para mejorar
+                </a>
+            </div>
+        </div>
+    );
+};
 
 
 // Custom hook for debouncing
@@ -40,7 +63,9 @@ function useDebounce<T>(value: T, delay: number): T {
 const DashboardPage: React.FC = () => {
     const { user } = useAuth();
     const { showToast } = useToast();
+    const navigate = useNavigate();
     const [customers, setCustomers] = useState<Customer[]>([]);
+    const [businessData, setBusinessData] = useState<Business | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(true);
     const [isSearching, setIsSearching] = useState(false);
@@ -56,18 +81,22 @@ const DashboardPage: React.FC = () => {
     const [isDownloading, setIsDownloading] = useState(false);
     const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
     const [uploadStep, setUploadStep] = useState<'info' | 'processing' | 'result'>('info');
-    const [uploadResult, setUploadResult] = useState<{ success: number; skipped: number; errors: string[] } | null>(null);
+    const [uploadResult, setUploadResult] = useState<{ success: number; skipped: number; errors: string[], limitReached?: boolean } | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const fetchRecentCustomers = async () => {
+    const fetchDashboardData = async () => {
         if (!user) return;
         setLoading(true);
         try {
-            const data = await getCustomers(user.uid);
-            setCustomers(data);
+            const [customersData, businessInfo] = await Promise.all([
+                getCustomers(user.uid),
+                getBusinessData(user.uid)
+            ]);
+            setCustomers(customersData);
+            setBusinessData(businessInfo);
         } catch (error) {
-            console.error("Failed to fetch recent customers:", error);
-            showToast('No se pudieron cargar los clientes recientes.', 'error');
+            console.error("Failed to fetch dashboard data:", error);
+            showToast('No se pudieron cargar los datos del dashboard.', 'error');
         } finally {
             setLoading(false);
         }
@@ -76,7 +105,7 @@ const DashboardPage: React.FC = () => {
     // Effect for initial load of recent customers
     useEffect(() => {
         document.title = 'Dashboard | Loyalfly App';
-        fetchRecentCustomers();
+        fetchDashboardData();
     }, [user, showToast]);
 
     // Effect for handling search queries
@@ -86,7 +115,7 @@ const DashboardPage: React.FC = () => {
             
             if (debouncedSearchQuery.length < 3) {
                 if (searchQuery === '') { // Only refetch recents if search is cleared
-                    fetchRecentCustomers();
+                    fetchDashboardData();
                 }
                 return;
             }
@@ -221,7 +250,7 @@ const DashboardPage: React.FC = () => {
     };
 
     const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (!user) return;
+        if (!user || !businessData) return;
         const file = event.target.files?.[0];
         if (!file) return;
 
@@ -239,10 +268,18 @@ const DashboardPage: React.FC = () => {
 
             let success = 0;
             let skipped = 0;
+            let limitReached = false;
             const errors: string[] = [];
+            const planLimit = businessData.plan ? PLAN_LIMITS[businessData.plan as keyof typeof PLAN_LIMITS] : Infinity;
 
             for (const row of rows) {
                 if (!row.trim()) continue;
+
+                if (businessData.customerCount + success >= planLimit) {
+                    limitReached = true;
+                    skipped++;
+                    continue;
+                }
 
                 const [name, phone, email] = row.split(',').map(cell => cell.trim().replace(/"/g, ''));
                 
@@ -267,16 +304,21 @@ const DashboardPage: React.FC = () => {
                     }
                     await createNewCustomer(user.uid, { name, phone: cleanedPhone, email: email || '' });
                     success++;
-                } catch (err) {
-                    skipped++;
-                    errors.push(`Fila omitida (error al guardar): ${row}`);
-                    console.error(err);
+                } catch (err: any) {
+                    if (err.message === "LIMIT_REACHED") {
+                        limitReached = true;
+                        skipped++;
+                    } else {
+                        skipped++;
+                        errors.push(`Fila omitida (error al guardar): ${row}`);
+                        console.error(err);
+                    }
                 }
             }
 
-            setUploadResult({ success, skipped, errors });
+            setUploadResult({ success, skipped, errors, limitReached });
             setUploadStep('result');
-            fetchRecentCustomers();
+            fetchDashboardData();
         };
         reader.readAsText(file);
         
@@ -284,6 +326,8 @@ const DashboardPage: React.FC = () => {
             fileInputRef.current.value = '';
         }
     };
+
+    const isLimitReached = businessData && businessData.plan && businessData.plan !== 'Pro' && PLAN_LIMITS[businessData.plan] && businessData.customerCount >= PLAN_LIMITS[businessData.plan];
 
     const renderTableBody = () => {
         if (loading) {
@@ -354,6 +398,9 @@ const DashboardPage: React.FC = () => {
 
     return (
         <div>
+            {isLimitReached && businessData?.plan && businessData.plan !== 'Pro' && (
+                <AlertBar plan={businessData.plan} />
+            )}
             <div className="space-y-6">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <h1 className="text-3xl font-bold text-black tracking-tight">Dashboard de Clientes</h1>
@@ -364,7 +411,8 @@ const DashboardPage: React.FC = () => {
                                 setUploadResult(null);
                                 setIsUploadModalOpen(true);
                             }}
-                            className="inline-flex items-center justify-center gap-2 px-4 py-2 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                            disabled={isLimitReached}
+                            className="inline-flex items-center justify-center gap-2 px-4 py-2 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <UploadIcon />
                             Carga Masiva
@@ -381,13 +429,14 @@ const DashboardPage: React.FC = () => {
                             )}
                             {isDownloading ? 'Descargando...' : 'Descargar CSV'}
                         </button>
-                        <Link
-                            to="/app/nuevo-cliente"
-                            className="inline-flex items-center justify-center gap-2 px-4 py-2 text-base font-medium text-white bg-black rounded-md hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                        <button
+                            onClick={() => !isLimitReached && navigate('/app/nuevo-cliente')}
+                            disabled={isLimitReached}
+                            className="inline-flex items-center justify-center gap-2 px-4 py-2 text-base font-medium text-white bg-black rounded-md hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <UserPlusIcon />
                             Nuevo Cliente
-                        </Link>
+                        </button>
                     </div>
                 </div>
                 
@@ -533,6 +582,9 @@ const DashboardPage: React.FC = () => {
                                 <div className="mt-4 space-y-2">
                                     <p className="text-base text-green-600"><strong>{uploadResult.success}</strong> clientes agregados exitosamente.</p>
                                     <p className="text-base text-yellow-600"><strong>{uploadResult.skipped}</strong> filas omitidas (duplicados o errores de formato).</p>
+                                    {uploadResult.limitReached && (
+                                        <p className="text-base text-red-600"><strong>Se alcanzó el límite de clientes de tu plan.</strong> No se pudieron agregar más clientes.</p>
+                                    )}
                                 </div>
                                 {uploadResult.errors.length > 0 && (
                                     <details className="mt-4 text-sm">

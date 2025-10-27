@@ -8,3 +8,14 @@ export interface Customer {
   stamps: number;
   rewardsRedeemed: number;
 }
+
+export interface Business {
+  id: string;
+  name: string;
+  email: string;
+  slug: string;
+  plan?: 'Gratis' | 'Entrepreneur' | 'Pro';
+  customerCount: number;
+  cardSettings: any;
+  surveySettings: any;
+}
