@@ -12,7 +12,7 @@ interface CardPreviewProps {
 }
 
 const StarIcon: React.FC = () => (
-    <svg className="w-8 h-8 text-[#FFC700]" viewBox="0 0 24 24" fill="currentColor">
+    <svg className="w-10 h-10 text-[#FFC700]" viewBox="0 0 24 24" fill="currentColor">
         <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
     </svg>
 );
@@ -33,7 +33,7 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
   return (
     <div className="w-full max-w-sm mx-auto font-sans shadow-lg rounded-lg overflow-hidden">
       <div 
-        className="p-4 sm:p-5 transition-colors duration-300" 
+        className="p-4 sm:p-5 transition-colors duration-300 flex flex-col" 
         style={{ backgroundColor: cardColor }}
       >
         {/* Header */}
@@ -54,11 +54,11 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
         </div>
 
         {/* Stamps Grid */}
-        <div className="grid grid-cols-5 gap-2 sm:gap-3 my-4 sm:my-5">
+        <div className="grid grid-cols-5 gap-2 sm:gap-3 my-4 sm:my-6">
             {Array.from({ length: totalStamps }).map((_, index) => (
                 <div
                     key={index}
-                    className={`w-12 h-12 mx-auto rounded-full flex items-center justify-center transition-all duration-300 ${
+                    className={`w-full aspect-square rounded-full flex items-center justify-center transition-all duration-300 ${
                         index < stamps ? filledStampBgColor : unfilledStampBgColor
                     }`}
                 >
@@ -69,9 +69,15 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
 
         {/* Customer Info */}
         {customerName && customerPhone && (
-            <div className="text-center pt-2">
-                <p className={`text-base font-medium truncate ${primaryTextColor}`}>{customerName}</p>
-                <p className={`text-sm ${secondaryTextColor}`}>{customerPhone}</p>
+            <div className={`border-t pt-4 mt-2 grid grid-cols-2 gap-4 ${isLight ? 'border-white/30' : 'border-black/20'}`}>
+                <div>
+                    <p className={`text-xs uppercase tracking-wider font-semibold ${secondaryTextColor}`}>NOMBRE</p>
+                    <p className={`text-lg font-bold truncate ${primaryTextColor}`}>{customerName}</p>
+                </div>
+                <div className="text-right">
+                    <p className={`text-xs uppercase tracking-wider font-semibold ${secondaryTextColor}`}>NÚMERO TELEFÓNICO</p>
+                    <p className={`text-lg font-bold truncate ${primaryTextColor}`}>{customerPhone}</p>
+                </div>
             </div>
         )}
       </div>
