@@ -32,6 +32,24 @@ const ChangelogPage: React.FC = () => {
         
         <ul className="mt-8 space-y-6">
            <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Barra de Información Promocional en la Página de Inicio</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha añadido un banner llamativo en la parte superior de la página de inicio para incentivar el registro de nuevos usuarios. Incluye un mensaje comercial, un botón de llamado a la acción y es completamente descartable por el usuario para no ser intrusivo.
+                  </p>
+              </div>
+          </li>
+          <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Banner de Consentimiento de Cookies</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha implementado un banner de consentimiento de cookies discreto en la parte inferior del sitio para cumplir con las normativas de privacidad. El banner permite a los usuarios aceptar o rechazar el uso de cookies, y su preferencia se guarda en el navegador para no volver a mostrarlo en futuras visitas.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
               <FeatureTag type="improvement" />
               <div>
                   <h3 className="font-semibold text-black">Punto de Restauración Estable</h3>
