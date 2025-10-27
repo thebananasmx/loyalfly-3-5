@@ -34,6 +34,15 @@ const ChangelogPage: React.FC = () => {
            <li className="flex items-start gap-4">
               <FeatureTag type="improvement" />
               <div>
+                  <h3 className="font-semibold text-black">Rediseño Integral de la Tarjeta de Lealtad</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha rediseñado por completo la previsualización de la tarjeta de lealtad para hacerla más compacta, moderna y efectiva en dispositivos móviles. Los cambios incluyen un encabezado reorganizado, mayor prioridad visual para los sellos, información del cliente estructurada en columnas y un diseño unificado sin separadores para un look más limpio y profesional.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
                   <h3 className="font-semibold text-black">Mejora Visual en los Sellos de la Tarjeta</h3>
                   <p className="text-gray-600 mt-1">
                       Se ha reemplazado el ícono de "check" en los sellos de la tarjeta de lealtad por una estrella dorada y más grande. Este cambio mejora significativamente la visibilidad y el atractivo visual, haciendo que el progreso del cliente sea más claro, satisfactorio y gratificante.
