@@ -12,7 +12,7 @@ interface CardPreviewProps {
 }
 
 const StarIcon: React.FC = () => (
-    <svg className="w-6 h-6 text-[#FFC700]" viewBox="0 0 24 24" fill="currentColor">
+    <svg className="w-10 h-10 text-[#FFC700]" viewBox="0 0 24 24" fill="currentColor">
         <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
     </svg>
 );
@@ -61,7 +61,7 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
             {Array.from({ length: totalStamps }).map((_, index) => (
                 <div
                     key={index}
-                    className={`w-10 h-10 sm:w-12 sm:h-12 mx-auto rounded-full flex items-center justify-center transition-all duration-300 ${
+                    className={`w-14 h-14 mx-auto rounded-full flex items-center justify-center transition-all duration-300 ${
                         index < stamps ? filledStampBgColor : unfilledStampBgColor
                     }`}
                 >
