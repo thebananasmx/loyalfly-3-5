@@ -32,6 +32,15 @@ const ChangelogPage: React.FC = () => {
         
         <ul className="mt-8 space-y-6">
            <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Mejora Visual en los Sellos de la Tarjeta</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha reemplazado el ícono de "check" en los sellos de la tarjeta de lealtad por una estrella dorada y más grande. Este cambio mejora significativamente la visibilidad y el atractivo visual, haciendo que el progreso del cliente sea más claro, satisfactorio y gratificante.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
               <FeatureTag type="new" />
               <div>
                   <h3 className="font-semibold text-black">Barra de Información Promocional en la Página de Inicio</h3>
