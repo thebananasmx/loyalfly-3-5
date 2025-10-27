@@ -11,12 +11,12 @@ interface CardPreviewProps {
   customerPhone?: string;
 }
 
+// Increased size of the star icon itself
 const StarIcon: React.FC = () => (
-    <svg className="w-10 h-10 text-[#FFC700]" viewBox="0 0 24 24" fill="currentColor">
+    <svg className="w-8 h-8 text-[#FFC700]" viewBox="0 0 24 24" fill="currentColor">
         <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
     </svg>
 );
-
 
 const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, cardColor, stamps, textColorScheme, logoUrl, customerName, customerPhone }) => {
   const totalStamps = 10;
@@ -29,13 +29,16 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
   const logoBgColor = isLight ? 'bg-white/20' : 'bg-black/10';
   const filledStampBgColor = isLight ? 'bg-white' : 'bg-black';
   const unfilledStampBgColor = 'bg-white/30';
+  const separatorColor = isLight ? 'border-white/30' : 'border-black/20';
+  const rewardReadyTextColor = isLight ? 'text-green-300' : 'text-green-600';
 
   return (
-    <div className="w-full max-w-sm mx-auto font-sans shadow-lg rounded-lg overflow-hidden">
-      <div 
-        className="p-4 sm:p-5 transition-colors duration-300 flex flex-col" 
+    // Single container for the entire card, with rounded corners and shadow.
+    <div 
+        className="w-full max-w-sm mx-auto font-sans shadow-lg rounded-lg overflow-hidden flex flex-col transition-colors duration-300" 
         style={{ backgroundColor: cardColor }}
-      >
+    >
+      <div className="p-4 sm:p-5 flex-grow">
         {/* Header */}
         <div className="flex items-center justify-between gap-4">
             <div className={`flex-shrink-0 w-14 h-14 rounded-full flex items-center justify-center overflow-hidden ${logoBgColor} transition-colors`}>
@@ -53,8 +56,8 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
             </div>
         </div>
 
-        {/* Stamps Grid */}
-        <div className="grid grid-cols-5 gap-2 sm:gap-3 my-4 sm:my-6">
+        {/* Stamps Grid - Increased size for containers */}
+        <div className="grid grid-cols-5 gap-3 my-6">
             {Array.from({ length: totalStamps }).map((_, index) => (
                 <div
                     key={index}
@@ -69,35 +72,39 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
 
         {/* Customer Info */}
         {customerName && customerPhone && (
-            <div className={`border-t pt-4 mt-2 grid grid-cols-2 gap-4 ${isLight ? 'border-white/30' : 'border-black/20'}`}>
-                <div>
-                    <p className={`text-xs uppercase tracking-wider font-semibold ${secondaryTextColor}`}>NOMBRE</p>
-                    <p className={`text-lg font-bold truncate ${primaryTextColor}`}>{customerName}</p>
+            <>
+                <div className={`border-t ${separatorColor}`}></div>
+                <div className="pt-4 mt-4 grid grid-cols-2 gap-4">
+                    <div>
+                        <p className={`text-xs uppercase tracking-wider font-semibold ${secondaryTextColor}`}>NOMBRE</p>
+                        <p className={`text-lg font-bold truncate ${primaryTextColor}`}>{customerName}</p>
+                    </div>
+                    <div className="text-left">
+                        <p className={`text-xs uppercase tracking-wider font-semibold ${secondaryTextColor}`}>NÚMERO TELEFÓNICO</p>
+                        <p className={`text-lg font-bold truncate ${primaryTextColor}`}>{customerPhone}</p>
+                    </div>
                 </div>
-                <div className="text-right">
-                    <p className={`text-xs uppercase tracking-wider font-semibold ${secondaryTextColor}`}>NÚMERO TELEFÓNICO</p>
-                    <p className={`text-lg font-bold truncate ${primaryTextColor}`}>{customerPhone}</p>
-                </div>
-            </div>
+            </>
         )}
       </div>
       
-      <div className="bg-white p-4 sm:p-5 border-t border-gray-200">
+      {/* Reward Section - Now integrated inside the main container */}
+      <div className={`p-4 sm:p-5 border-t ${separatorColor}`}>
         {isRewardReady ? (
             <div>
-                <p className="text-center font-bold text-lg text-[#00AA00]">
+                <p className={`text-center font-bold text-lg ${rewardReadyTextColor}`}>
                     ¡Felicidades! ya tienes:
                 </p>
-                <p className="text-center font-semibold text-gray-800 mt-1">
+                <p className={`text-center font-semibold mt-1 ${primaryTextColor}`}>
                     {rewardText}
                 </p>
             </div>
         ) : (
              <div>
-                <p className="text-center text-base text-gray-600">
+                <p className={`text-center text-base ${secondaryTextColor}`}>
                     Tu próxima Recompensa:
                 </p>
-                <p className="text-center font-semibold text-gray-800 mt-1">
+                <p className={`text-center font-semibold mt-1 ${primaryTextColor}`}>
                     {rewardText}
                 </p>
             </div>
