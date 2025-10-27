@@ -206,6 +206,16 @@ export const getCustomers = async (businessId: string): Promise<Customer[]> => {
     } as Customer));
 };
 
+export const getAllCustomers = async (businessId: string): Promise<Customer[]> => {
+    const customersCol = collection(db, `businesses/${businessId}/customers`);
+    const customerSnapshot = await getDocs(customersCol);
+    return customerSnapshot.docs.map(doc => ({ 
+        id: doc.id, 
+        ...doc.data(),
+        enrollmentDate: (doc.data().enrollmentDate as Timestamp)?.toDate().toISOString().split('T')[0] || new Date().toISOString().split('T')[0]
+    } as Customer));
+};
+
 export const searchCustomers = async (businessId: string, searchQuery: string): Promise<Customer[]> => {
     const customersCol = collection(db, `businesses/${businessId}/customers`);
     
