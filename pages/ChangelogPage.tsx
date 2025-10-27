@@ -23,6 +23,26 @@ const ChangelogPage: React.FC = () => {
         Un historial de todas las mejoras y nuevas funcionalidades que hemos agregado a Loyalfly para ayudarte a crecer.
       </p>
 
+      {/* --- VERSION v3.5.0.14 --- */}
+      <section className="mb-12">
+        <div className="pb-4 border-b border-gray-200">
+          <h2 className="text-3xl font-bold text-black">Versión 3.5.0.14</h2>
+          <p className="text-base text-gray-500 mt-1">Lanzada el 20 de Octubre de 2025</p>
+        </div>
+        
+        <ul className="mt-8 space-y-6">
+           <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Punto de Restauración Estable</h3>
+                  <p className="text-gray-600 mt-1">
+                      Esta versión marca un punto de restauración consolidado y estable. Se han afianzado todas las funcionalidades implementadas hasta la fecha, incluyendo la gestión de límites de clientes basada en planes de suscripción (Gratis, Entrepreneur) y las herramientas de importación y exportación masiva de clientes mediante archivos CSV. Esta base de código robusta y verificada sirve como un pilar fundamental para el desarrollo de futuras características.
+                  </p>
+              </div>
+          </li>
+        </ul>
+      </section>
+
       {/* --- VERSION v3.5.0.13 --- */}
       <section className="mb-12">
         <div className="pb-4 border-b border-gray-200">
