@@ -29,7 +29,6 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
   const logoBgColor = isLight ? 'bg-white/20' : 'bg-black/10';
   const filledStampBgColor = isLight ? 'bg-white' : 'bg-black';
   const unfilledStampBgColor = 'bg-white/30';
-  const separatorColor = isLight ? 'border-white/30' : 'border-black/20';
   const rewardReadyTextColor = isLight ? 'text-green-300' : 'text-green-600';
 
   return (
@@ -56,8 +55,8 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
             </div>
         </div>
 
-        {/* Stamps Grid - Increased size for containers */}
-        <div className="grid grid-cols-5 gap-3 my-6">
+        {/* Stamps Grid - Space between elements reduced */}
+        <div className="grid grid-cols-5 gap-3 mt-6 mb-4">
             {Array.from({ length: totalStamps }).map((_, index) => (
                 <div
                     key={index}
@@ -72,24 +71,21 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
 
         {/* Customer Info */}
         {customerName && customerPhone && (
-            <>
-                <div className={`border-t ${separatorColor}`}></div>
-                <div className="pt-4 mt-4 grid grid-cols-2 gap-4">
-                    <div>
-                        <p className={`text-xs uppercase tracking-wider font-semibold ${secondaryTextColor}`}>NOMBRE</p>
-                        <p className={`text-lg font-bold truncate ${primaryTextColor}`}>{customerName}</p>
-                    </div>
-                    <div className="text-left">
-                        <p className={`text-xs uppercase tracking-wider font-semibold ${secondaryTextColor}`}>NÚMERO TELEFÓNICO</p>
-                        <p className={`text-lg font-bold truncate ${primaryTextColor}`}>{customerPhone}</p>
-                    </div>
+            <div className="grid grid-cols-2 gap-4">
+                <div>
+                    <p className={`text-xs uppercase tracking-wider font-semibold ${secondaryTextColor}`}>NOMBRE</p>
+                    <p className={`text-lg font-bold truncate ${primaryTextColor}`}>{customerName}</p>
                 </div>
-            </>
+                <div className="text-left">
+                    <p className={`text-xs uppercase tracking-wider font-semibold ${secondaryTextColor}`}>NÚMERO TELEFÓNICO</p>
+                    <p className={`text-lg font-bold truncate ${primaryTextColor}`}>{customerPhone}</p>
+                </div>
+            </div>
         )}
       </div>
       
-      {/* Reward Section - Now integrated inside the main container */}
-      <div className={`p-4 sm:p-5 border-t ${separatorColor}`}>
+      {/* Reward Section - Integrated without border */}
+      <div className="p-4 sm:p-5">
         {isRewardReady ? (
             <div>
                 <p className={`text-center font-bold text-lg ${rewardReadyTextColor}`}>
