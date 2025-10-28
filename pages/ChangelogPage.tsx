@@ -34,6 +34,15 @@ const ChangelogPage: React.FC = () => {
            <li className="flex items-start gap-4">
               <FeatureTag type="improvement" />
               <div>
+                  <h3 className="font-semibold text-black">Optimización de la Posición del Aviso de Cookies</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha ajustado la posición del banner de consentimiento de cookies. Ahora se muestra en la esquina inferior izquierda en pantallas de escritorio para evitar superponerse con widgets de chat, mientras que en dispositivos móviles mantiene su posición para una experiencia de usuario óptima.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
                   <h3 className="font-semibold text-black">Rediseño Integral de la Tarjeta de Lealtad</h3>
                   <p className="text-gray-600 mt-1">
                       Se ha rediseñado por completo la previsualización de la tarjeta de lealtad para hacerla más compacta, moderna y efectiva en dispositivos móviles. Los cambios incluyen un encabezado reorganizado, mayor prioridad visual para los sellos, información del cliente estructurada en columnas y un diseño unificado sin separadores para un look más limpio y profesional.
