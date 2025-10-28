@@ -29,7 +29,7 @@ const CookieConsent: React.FC = () => {
     }
 
     return (
-        <div className="fixed bottom-4 right-4 z-50 w-full max-w-sm p-5 bg-white border border-gray-200 rounded-lg shadow-lg animate-fade-in-up">
+        <div className="fixed bottom-4 right-4 md:right-auto md:left-4 z-50 w-full max-w-sm p-5 bg-white border border-gray-200 rounded-lg shadow-lg animate-fade-in-up">
             <div className="flex justify-between items-start">
                 <div>
                     <h3 className="text-lg font-semibold text-black">Uso de Cookies</h3>
