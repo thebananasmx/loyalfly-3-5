@@ -371,6 +371,7 @@ const PublicCardPage: React.FC = () => {
                           logoUrl={settings!.logoUrl}
                           customerName={customer?.name}
                           customerPhone={customer?.phone}
+                          customerId={customer?.id}
                         />
                         <button
                            onClick={() => {

@@ -1,4 +1,5 @@
 import React from 'react';
+import QRCode from './QRCode';
 
 interface CardPreviewProps {
   businessName: string;
@@ -9,6 +10,7 @@ interface CardPreviewProps {
   logoUrl?: string;
   customerName?: string;
   customerPhone?: string;
+  customerId?: string;
 }
 
 // Increased size of the star icon itself
@@ -18,7 +20,7 @@ const StarIcon: React.FC = () => (
     </svg>
 );
 
-const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, cardColor, stamps, textColorScheme, logoUrl, customerName, customerPhone }) => {
+const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, cardColor, stamps, textColorScheme, logoUrl, customerName, customerPhone, customerId }) => {
   const totalStamps = 10;
   const isRewardReady = stamps >= totalStamps;
 
@@ -106,6 +108,15 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
             </div>
         )}
       </div>
+
+      {/* QR Code Section */}
+      {customerId && (
+        <div className="bg-white p-4">
+          <div className="mx-auto" style={{ width: '160px', height: '160px' }}>
+            <QRCode url={customerId} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

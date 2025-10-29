@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Html5Qrcode } from 'html5-qrcode';
 import { 
     getCustomers, 
     addStampToCustomer, 
@@ -9,7 +10,8 @@ import {
     getAllCustomers,
     getCustomerByPhone,
     createNewCustomer,
-    getBusinessData
+    getBusinessData,
+    getCustomerById
 } from '../services/firebaseService';
 import type { Customer, Business } from '../types';
 import { useAuth } from '../context/AuthContext';
@@ -23,6 +25,7 @@ const SearchIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 
 const GiftIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5 5a3 3 0 015.252-2.121l.738.737a.5.5 0 00.708 0l.738-.737A3 3 0 1115 5v2.243l-1.162.387a.5.5 0 00-.338.338L13.113 9H6.887l-.388-1.162a.5.5 0 00-.338-.338L5 7.243V5z" clipRule="evenodd" /><path d="M3 10a2 2 0 012-2h10a2 2 0 012 2v2a2 2 0 01-2 2h-1.333l-.738 2.212A.5.5 0 0114.5 17h-9a.5.5 0 01-.43-.788L4.333 14H3a2 2 0 01-2-2v-2z" /></svg>;
 const DownloadIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 9.707a1 1 0 011.414 0L9 11.293V3a1 1 0 112 0v8.293l1.293-1.586a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" /></svg>;
 const UploadIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M4 12a1 1 0 011 1v3a1 1 0 001 1h8a1 1 0 001-1v-3a1 1 0 112 0v3a3 3 0 01-3 3H6a3 3 0 01-3-3v-3a1 1 0 011-1z" /><path d="M10 2a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 2z" /></svg>;
+const QRIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v1m6 11h-1m-1-6v1m-1-1h-1m-1 6h1m-1-1v1m0-1h1m4-4h1m-5 5v1m-1-1h1M4 4h4v4H4zm0 12h4v4H4zm12 0h4v4h-4zm0-12h4v4h-4z" /></svg>;
 
 const PLAN_LIMITS = {
     Gratis: 100,
@@ -83,6 +86,7 @@ const DashboardPage: React.FC = () => {
     const [uploadStep, setUploadStep] = useState<'info' | 'processing' | 'result'>('info');
     const [uploadResult, setUploadResult] = useState<{ success: number; skipped: number; errors: string[], limitReached?: boolean } | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [isScannerOpen, setIsScannerOpen] = useState(false);
 
     const fetchDashboardData = async () => {
         if (!user) return;
@@ -134,6 +138,56 @@ const DashboardPage: React.FC = () => {
 
         performSearch();
     }, [debouncedSearchQuery, user, showToast, searchQuery]);
+
+    // Effect for QR Code Scanner
+    useEffect(() => {
+        if (!isScannerOpen || !user?.uid) return;
+
+        const qrReaderId = "qr-reader";
+        const html5QrCode = new Html5Qrcode(qrReaderId);
+
+        const qrCodeSuccessCallback = async (decodedText: string) => {
+            try {
+                if (html5QrCode.isScanning) {
+                    await html5QrCode.stop();
+                }
+            } catch (err) {
+                console.warn("QR scanner failed to stop gracefully.", err);
+            }
+            setIsScannerOpen(false);
+            
+            try {
+                const customer = await getCustomerById(user.uid, decodedText);
+                if (customer) {
+                    handleOpenStampModal(customer);
+                } else {
+                    showToast('Cliente no encontrado con este código QR.', 'error');
+                }
+            } catch (err) {
+                showToast('Error al buscar cliente.', 'error');
+            }
+        };
+
+        const config = { fps: 10, qrbox: { width: 250, height: 250 }, aspectRatio: 1.0 };
+        
+        html5QrCode.start(
+            { facingMode: "environment" },
+            config,
+            qrCodeSuccessCallback,
+            () => {} // Error callback, ignored for continuous scanning
+        ).catch((err) => {
+            showToast('No se pudo iniciar el escáner. Revisa los permisos de la cámara.', 'error');
+            console.error("Unable to start scanning.", err);
+            setIsScannerOpen(false);
+        });
+
+        return () => {
+            if (html5QrCode && html5QrCode.isScanning) {
+                html5QrCode.stop().catch(err => console.warn("QR scanner failed to stop on cleanup.", err));
+            }
+        };
+    }, [isScannerOpen, user?.uid]);
+
 
     const handleOpenStampModal = (customer: Customer) => {
         setSelectedCustomer(customer);
@@ -406,6 +460,22 @@ const DashboardPage: React.FC = () => {
                     <h1 className="text-3xl font-bold text-black tracking-tight">Dashboard de Clientes</h1>
                      <div className="flex items-center gap-2 flex-wrap">
                         <button
+                            onClick={() => setIsScannerOpen(true)}
+                            disabled={isLimitReached}
+                            className="inline-flex items-center justify-center gap-2 px-4 py-2 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            <QRIcon />
+                            Escanear QR
+                        </button>
+                         <button
+                            onClick={() => !isLimitReached && navigate('/app/nuevo-cliente')}
+                            disabled={isLimitReached}
+                            className="inline-flex items-center justify-center gap-2 px-4 py-2 text-base font-medium text-white bg-black rounded-md hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            <UserPlusIcon />
+                            Nuevo Cliente
+                        </button>
+                        <button
                             onClick={() => {
                                 setUploadStep('info');
                                 setUploadResult(null);
@@ -428,14 +498,6 @@ const DashboardPage: React.FC = () => {
                                 <DownloadIcon />
                             )}
                             {isDownloading ? 'Descargando...' : 'Descargar CSV'}
-                        </button>
-                        <button
-                            onClick={() => !isLimitReached && navigate('/app/nuevo-cliente')}
-                            disabled={isLimitReached}
-                            className="inline-flex items-center justify-center gap-2 px-4 py-2 text-base font-medium text-white bg-black rounded-md hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            <UserPlusIcon />
-                            Nuevo Cliente
                         </button>
                     </div>
                 </div>
@@ -599,6 +661,21 @@ const DashboardPage: React.FC = () => {
                                 </div>
                             </div>
                         )}
+                    </div>
+                </div>
+            )}
+
+            {isScannerOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4" aria-modal="true" role="dialog">
+                    <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6 relative">
+                        <h2 className="text-xl font-bold text-black mb-4">Escanear Código QR</h2>
+                        <div id="qr-reader" className="w-full"></div>
+                        <button
+                            onClick={() => setIsScannerOpen(false)}
+                            className="mt-4 w-full px-4 py-2 text-base font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+                        >
+                            Cancelar
+                        </button>
                     </div>
                 </div>
             )}
