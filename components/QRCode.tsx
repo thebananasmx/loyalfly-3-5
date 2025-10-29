@@ -1,16 +1,30 @@
-import React from 'react';
-import QRCode from 'react-qr-code';
+import React, { useRef, useEffect } from 'react';
+import QRCode from 'qrcode';
 
 const RealQRCode: React.FC<{ url: string }> = ({ url }) => {
-  return (
-    <QRCode
-      value={url}
-      size={256} // Render at a higher resolution and let CSS scale it down.
-      style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
-      viewBox="0 0 256 256"
-      level="H" // High error correction level for better readability
-    />
-  );
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (canvas && url) {
+      // The container div is 160x160px. We draw directly into the canvas at that size.
+      QRCode.toCanvas(canvas, url, {
+        width: 160,
+        margin: 1, // Minimal margin to make the QR code larger within the container
+        errorCorrectionLevel: 'H', // High error correction for better scannability
+        color: {
+          dark: '#000000',
+          light: '#FFFFFF',
+        }
+      }, (error) => {
+        if (error) console.error('Error generating QR Code:', error);
+      });
+    }
+  }, [url]); // This effect runs whenever the `url` prop changes
+
+  // The canvas will be sized by the `toCanvas` function.
+  // It's placed inside a sized div in the CardPreview component.
+  return <canvas ref={canvasRef} />;
 };
 
 export default RealQRCode;
