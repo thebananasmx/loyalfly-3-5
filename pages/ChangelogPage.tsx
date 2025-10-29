@@ -22,6 +22,35 @@ const ChangelogPage: React.FC = () => {
       <p className="text-lg text-gray-600 mb-12">
         Un historial de todas las mejoras y nuevas funcionalidades que hemos agregado a Loyalfly para ayudarte a crecer.
       </p>
+      
+      {/* --- VERSION v3.5.0.15 --- */}
+      <section className="mb-12">
+        <div className="pb-4 border-b border-gray-200">
+          <h2 className="text-3xl font-bold text-black">Versión 3.5.0.15</h2>
+          <p className="text-base text-gray-500 mt-1">Lanzada el 21 de Octubre de 2025</p>
+        </div>
+        
+        <ul className="mt-8 space-y-6">
+           <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Generación de Códigos QR Dinámicos para Clientes</h3>
+                  <p className="text-gray-600 mt-1">
+                      Cada tarjeta de cliente ahora incluye un código QR único y personal, generado dinámicamente con su ID. Este QR se crea como una imagen (tipo PNG/JPG), facilitando su guardado o compartición. Esta funcionalidad reemplaza al generador de QR externo y lo integra directamente en la plataforma.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Flujo Rápido de Sellos con Escáner QR en el Dashboard</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha introducido un botón "Escanear QR" en el dashboard que activa la cámara del dispositivo. Al escanear el QR de un cliente, el sistema lo identifica al instante y abre directamente el modal para añadir sellos, eliminando la necesidad de buscar manualmente y agilizando el servicio al cliente de forma espectacular.
+                  </p>
+              </div>
+          </li>
+        </ul>
+      </section>
 
       {/* --- VERSION v3.5.0.14 --- */}
       <section className="mb-12">
