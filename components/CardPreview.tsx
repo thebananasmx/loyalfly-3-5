@@ -111,9 +111,9 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
 
       {/* QR Code Section */}
       {customerId && (
-        <div className="bg-white p-4">
-          <div className="mx-auto" style={{ width: '160px', height: '160px' }}>
-            <QRCode url={customerId} />
+        <div className="p-4">
+          <div className="mx-auto" style={{ width: '120px', height: '120px' }}>
+            <QRCode url={customerId} cardColor={cardColor} textColorScheme={textColorScheme} />
           </div>
         </div>
       )}
