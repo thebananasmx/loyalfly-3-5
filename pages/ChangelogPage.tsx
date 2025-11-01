@@ -49,6 +49,15 @@ const ChangelogPage: React.FC = () => {
                   </p>
               </div>
           </li>
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Ajustes Estéticos al Código QR</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha refinado la apariencia del código QR en la tarjeta del cliente para una mejor integración visual. Se ajustó su tamaño a 120x120px y se encapsuló en un contenedor con un sutil margen y esquinas redondeadas, dándole un aspecto más pulido y estético dentro del diseño de la tarjeta.
+                  </p>
+              </div>
+          </li>
         </ul>
       </section>
 
@@ -367,7 +376,7 @@ const ChangelogPage: React.FC = () => {
               <div>
                   <h3 className="font-semibold text-black">Gestión Completa de Clientes: Editar y Eliminar</h3>
                   <p className="text-gray-600 mt-1">
-                      Se ha introducido la capacidad de editar la información de un cliente (nombre, teléfono, email) en una nueva página dedicada. Además, se ha añadido una 'Zona de Peligro' segura para eliminar clientes de forma permanente, con una doble confirmación para evitar borrados accidentales.
+                      Se ha introducido la capacidad de editar la información de un cliente (nombre, teléfono, email) en una nueva página dedicada. Además, se ha añadido una 'Zona de Peligro' segura para eliminar clientes de forma permanentemente, con una doble confirmación para evitar borrados accidentales.
                   </p>
               </div>
           </li>
