@@ -22,35 +22,35 @@ const slides = [
         title: "Aroma a lealtad en cada taza.",
         description: "Premia a tus clientes frecuentes con un café gratis y haz que cada visita cuente. Loyalfly es el ingrediente secreto para que vuelvan por más.",
         color: "bg-yellow-100 text-yellow-800",
-        imageUrl: "https://i.postimg.cc/rFQQpdX9/coffee-loyalfly.png"
+        imageUrl: "https://res.cloudinary.com/dg4wbuppq/image/upload/v1762011139/coffee_loyalfly_mg9r2p.png"
     },
     {
         industry: "Restaurantes",
         title: "El platillo principal es la fidelidad.",
         description: "Desde postres de cortesía hasta descuentos especiales, crea un programa de recompensas que deje a tus comensales con un excelente sabor de boca.",
         color: "bg-red-100 text-red-800",
-        imageUrl: "https://i.postimg.cc/prGRWDf3/restaurant-loyalfly.png"
+        imageUrl: "https://res.cloudinary.com/dg4wbuppq/image/upload/v1762011138/restaurant_loyalfly_hs7cwc.png"
     },
     {
         industry: "Emprendedores",
         title: "Construye una comunidad, no solo clientes.",
         description: "Si tienes una tienda local o un pequeño negocio, Loyalfly te ayuda a crear conexiones duraderas y a convertir compradores ocasionales en tus fans número uno.",
         color: "bg-blue-100 text-blue-800",
-        imageUrl: "https://i.postimg.cc/4xjyv5R6/paint-loyalfly.png"
+        imageUrl: "https://res.cloudinary.com/dg4wbuppq/image/upload/v1762011139/paint_loyalfly_aqcand.png"
     },
     {
         industry: "Nail & Makeup Artists",
         title: "Belleza que recompensa.",
         description: "Ofrece un servicio gratuito o un descuento exclusivo después de varias visitas. Es la manera perfecta de agradecer a tus clientas por su confianza y lealtad.",
         color: "bg-pink-100 text-pink-800",
-        imageUrl: "https://i.postimg.cc/mgfKQz6H/makeup-loyalfly.png"
+        imageUrl: "https://res.cloudinary.com/dg4wbuppq/image/upload/v1762011141/makeup_loyalfly_s0yta0.png"
     },
     {
         industry: "Estilistas y Barberos",
         title: "Un corte por encima de la competencia.",
         description: "Fideliza a tu clientela con un programa de lealtad tan impecable como tus cortes. Un servicio gratuito cada ciertos cortes es un incentivo que funciona.",
         color: "bg-gray-200 text-gray-800",
-        imageUrl: "https://i.postimg.cc/QCMjZ9ZY/barber-loyalfly.png"
+        imageUrl: "https://res.cloudinary.com/dg4wbuppq/image/upload/v1762011138/barber_loyalfly_r8ymwd.png"
     }
 ];
 
