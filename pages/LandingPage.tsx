@@ -3,6 +3,11 @@ import { Link } from 'react-router-dom';
 
 const CheckCircleIcon = () => <svg className="w-6 h-6 text-[#00AA00]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>;
 
+const StoreIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" /></svg>;
+const CoffeeIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M3 1a1 1 0 011 1v12a1 1 0 11-2 0V2a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 7H16a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" /></svg>;
+const ScissorsIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M7.003 3.012a1 1 0 011.414 0l2.28 2.28a.5.5 0 010 .707l-1.586 1.586a1 1 0 01-1.414-1.414l.879-.88-1.17-1.17a1 1 0 010-1.414l-.293-.293zm2.28 9.28a.5.5 0 000 .707l1.586 1.586a1 1 0 001.414-1.414l-.879-.88 1.17-1.17a1 1 0 000-1.414l-2.28-2.28a1 1 0 00-1.414 0l-.293.293zm2.586-7.586a1 1 0 010 1.414l-8 8a1 1 0 01-1.414-1.414l8-8a1 1 0 011.414 0z" clipRule="evenodd" /><path d="M3 5a2 2 0 100 4 2 2 0 000-4zM11 11a2 2 0 100 4 2 2 0 000-4z" /></svg>;
+const SparklesIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5 2a1 1 0 00-1 1v1.5a1 1 0 002 0V3a1 1 0 00-1-1zM5 6.5a1 1 0 00-1 1V9a1 1 0 002 0V7.5a1 1 0 00-1-1zM5 11a1 1 0 00-1 1v1.5a1 1 0 002 0V12a1 1 0 00-1-1zM8 2a1 1 0 00-1 1v1.5a1 1 0 002 0V3a1 1 0 00-1-1zM8 6.5a1 1 0 00-1 1V9a1 1 0 002 0V7.5a1 1 0 00-1-1zM8 11a1 1 0 00-1 1v1.5a1 1 0 002 0V12a1 1 0 00-1-1zM11.5 2a1 1 0 011-1h1.5a1 1 0 010 2h-1.5a1 1 0 01-1-1zM11 6.5a1 1 0 00-1 1V9a1 1 0 002 0V7.5a1 1 0 00-1-1zM11 11a1 1 0 00-1 1v1.5a1 1 0 002 0V12a1 1 0 00-1-1zM14.5 6.5a1 1 0 011-1h1.5a1 1 0 010 2h-1.5a1 1 0 01-1-1z" clipRule="evenodd" /></svg>;
+
 
 const Feature: React.FC<{ title: string; description: string }> = ({ title, description }) => (
     <div className="flex items-start space-x-4">
@@ -54,9 +59,41 @@ const slides = [
     }
 ];
 
+const tabs = [
+  {
+    id: 'emprendedores',
+    title: 'Emprendedores',
+    icon: <StoreIcon />,
+    description: 'Una tarjeta versátil y moderna, perfecta para cualquier tipo de negocio que está comenzando a construir una base de clientes leales.',
+    imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1762055851/card_loyalfly_tmx9vh.png'
+  },
+  {
+    id: 'cafeterias',
+    title: 'Cafeterías',
+    icon: <CoffeeIcon />,
+    description: 'Un diseño cálido y acogedor que invita a tus clientes a volver por su próxima taza de café o su platillo favorito.',
+    imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1762057146/card_cafe_mzjj0q.png'
+  },
+  {
+    id: 'barberias',
+    title: 'Barberías',
+    icon: <ScissorsIcon />,
+    description: 'Estilo y sofisticación en una tarjeta que refleja la calidad de tus cortes y servicios. Ideal para salones y barberías.',
+    imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1762057493/card_barber_ftfyxa.png'
+  },
+  {
+    id: 'belleza',
+    title: 'Belleza',
+    icon: <SparklesIcon />,
+    description: 'Un toque de elegancia y glamour para recompensar la fidelidad de tus clientas y hacer que se sientan especiales en cada visita.',
+    imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1762057298/card_beauty_cu1r3n.png'
+  }
+];
+
 
 const LandingPage: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [activeTab, setActiveTab] = useState(tabs[0].id);
 
     useEffect(() => {
         document.title = 'Loyalfly | Programa de Lealtad Digital para Negocios';
@@ -75,6 +112,8 @@ const LandingPage: React.FC = () => {
     const goToNext = () => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
     };
+    
+    const activeTabData = tabs.find(tab => tab.id === activeTab);
 
     return (
         <div className="bg-white">
@@ -118,8 +157,53 @@ const LandingPage: React.FC = () => {
                 </div>
             </section>
 
-            {/* Features Section */}
+            {/* Designs Tab Section */}
             <section className="py-20 bg-gray-50">
+                <div className="container mx-auto px-4">
+                    <div className="text-center mb-12">
+                        <h2 className="text-3xl font-bold text-black">Diseños que enamoran a tus clientes</h2>
+                        <p className="mt-4 max-w-2xl mx-auto text-gray-600">Elige un estilo que represente tu marca y personalízalo a tu gusto en segundos.</p>
+                    </div>
+
+                    <div className="max-w-4xl mx-auto">
+                        {/* Tab buttons */}
+                        <div className="mb-8 p-1.5 bg-gray-200 rounded-lg flex flex-wrap justify-center gap-2">
+                            {tabs.map(tab => (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setActiveTab(tab.id)}
+                                    className={`px-4 py-2 text-base font-medium rounded-md transition-all duration-200 flex-grow text-center flex items-center justify-center gap-2 ${
+                                        activeTab === tab.id ? 'bg-[#4D17FF] text-white shadow-sm' : 'bg-white text-gray-700 hover:bg-gray-100 shadow-sm'
+                                    }`}
+                                >
+                                    {tab.icon}
+                                    {tab.title}
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* Tab content */}
+                        {activeTabData && (
+                            <div key={activeTabData.id} className="grid md:grid-cols-2 gap-8 md:gap-12 items-center animate-fade-in-up">
+                                <div className="text-center md:text-left">
+                                    <h3 className="text-2xl font-bold text-black">{activeTabData.title}</h3>
+                                    <p className="mt-4 text-gray-600">{activeTabData.description}</p>
+                                </div>
+                                <div>
+                                    <img
+                                        src={activeTabData.imageUrl}
+                                        alt={`Tarjeta de lealtad para ${activeTabData.title}`}
+                                        className="rounded-lg shadow-xl mx-auto max-w-xs"
+                                    />
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </section>
+
+            {/* Features Section */}
+            <section className="py-20 bg-white">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-12">
                         <h2 className="text-3xl font-bold text-black">Todo lo que necesitas para crecer</h2>
@@ -147,7 +231,7 @@ const LandingPage: React.FC = () => {
             </section>
 
             {/* Industries Carousel Section */}
-            <section className="py-20 bg-white">
+            <section className="py-20 bg-gray-50">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-12">
                         <h2 className="text-3xl font-bold text-black">Perfecto para tu Negocio</h2>
