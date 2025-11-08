@@ -80,17 +80,17 @@ export const registerBusiness = async (email: string, password:string, businessN
   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
   const user = userCredential.user;
 
-  // Generate a unique slug
+  // Generate a unique slug in the 'businessSlugs' collection
   let slug = slugify(businessName);
-  let slugDoc = await getDoc(doc(db, "slugs", slug));
+  let slugDoc = await getDoc(doc(db, "businessSlugs", slug));
   let counter = 1;
   while(slugDoc.exists()) {
     slug = `${slugify(businessName)}-${counter}`;
-    slugDoc = await getDoc(doc(db, "slugs", slug));
+    slugDoc = await getDoc(doc(db, "businessSlugs", slug));
     counter++;
   }
 
-  await setDoc(doc(db, "slugs", slug), { businessId: user.uid, type: 'business' });
+  await setDoc(doc(db, "businessSlugs", slug), { businessId: user.uid });
   
   // Create the main business document
   await setDoc(doc(db, "businesses", user.uid), {
@@ -182,11 +182,10 @@ export const getBusinessData = async (businessId: string): Promise<Business | nu
 }
 
 export const getBusinessIdBySlug = async (slug: string): Promise<string | null> => {
-    const slugDocRef = doc(db, "slugs", slug);
+    const slugDocRef = doc(db, "businessSlugs", slug);
     const slugDocSnap = await getDoc(slugDocRef);
     if (slugDocSnap.exists()) {
-        const data = slugDocSnap.data();
-        return data.type === 'business' ? data.businessId : null;
+        return slugDocSnap.data().businessId;
     }
     return null;
 }
@@ -506,7 +505,7 @@ export const deleteBusinessForSuperAdmin = async (businessId: string): Promise<v
     // Delete main doc and slug doc
     await deleteDoc(businessDocRef);
     if (slug) {
-        const slugDocRef = doc(db, "slugs", slug);
+        const slugDocRef = doc(db, "businessSlugs", slug);
         await deleteDoc(slugDocRef);
     }
 };
@@ -570,11 +569,11 @@ export const createBlogPost = async (authorId: string, data: Omit<BlogPost, 'id'
     const blogPostsCol = collection(db, 'blogPosts');
     
     let slug = slugify(data.title);
-    let slugDoc = await getDoc(doc(db, "slugs", slug));
+    let slugDoc = await getDoc(doc(db, "blogSlugs", slug));
     let counter = 1;
     while(slugDoc.exists()) {
         slug = `${slugify(data.title)}-${counter}`;
-        slugDoc = await getDoc(doc(db, "slugs", slug));
+        slugDoc = await getDoc(doc(db, "blogSlugs", slug));
         counter++;
     }
 
@@ -587,7 +586,7 @@ export const createBlogPost = async (authorId: string, data: Omit<BlogPost, 'id'
     };
     const docRef = await addDoc(blogPostsCol, newPostData);
     
-    await setDoc(doc(db, "slugs", slug), { postId: docRef.id, type: 'blog' });
+    await setDoc(doc(db, "blogSlugs", slug), { postId: docRef.id });
 
     return { ...newPostData, id: docRef.id, createdAt: new Date() } as BlogPost;
 };
@@ -599,7 +598,7 @@ export const updateBlogPost = async (postId: string, data: Partial<Omit<BlogPost
 
 export const deleteBlogPost = async (postId: string, slug: string): Promise<void> => {
     const postDocRef = doc(db, 'blogPosts', postId);
-    const slugDocRef = doc(db, 'slugs', slug);
+    const slugDocRef = doc(db, 'blogSlugs', slug);
     await deleteDoc(postDocRef);
     await deleteDoc(slugDocRef);
 };
@@ -621,10 +620,10 @@ export const getPublishedBlogPosts = async (): Promise<BlogPost[]> => {
 };
 
 export const getBlogPostBySlug = async (slug: string): Promise<BlogPost | null> => {
-    const slugDocRef = doc(db, "slugs", slug);
+    const slugDocRef = doc(db, "blogSlugs", slug);
     const slugDocSnap = await getDoc(slugDocRef);
 
-    if (slugDocSnap.exists() && slugDocSnap.data().type === 'blog') {
+    if (slugDocSnap.exists()) {
         const postId = slugDocSnap.data().postId;
         const postDocRef = doc(db, 'blogPosts', postId);
         const postDocSnap = await getDoc(postDocRef);

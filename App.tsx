@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 
 import MainLayout from './components/MainLayout';
@@ -35,7 +35,7 @@ import AdminBlogEditorPage from './pages/AdminBlogEditorPage';
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <HashRouter>
         <AnalyticsTracker />
         <Routes>
           {/* Public & Main Routes */}
@@ -95,7 +95,7 @@ function App() {
           </Route>
 
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </AuthProvider>
   );
 }
