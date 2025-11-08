@@ -41,6 +41,11 @@ const AddStampPage: React.FC = () => {
         document.title = 'Agregar Sello | Loyalfly App';
     }, []);
 
+    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const sanitized = e.target.value.replace(/\D/g, '');
+        setPhone(sanitized.slice(0, 10));
+    };
+
     const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!user) return;
@@ -119,7 +124,8 @@ const AddStampPage: React.FC = () => {
                                 id="phone"
                                 type="tel"
                                 value={phone}
-                                onChange={(e) => setPhone(e.target.value)}
+                                onChange={handlePhoneChange}
+                                maxLength={10}
                                 required
                                 className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${error ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
                                 placeholder="Buscar por número de teléfono (10 dígitos)"

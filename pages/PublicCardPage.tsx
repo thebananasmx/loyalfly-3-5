@@ -1,6 +1,3 @@
-
-
-
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import CardPreview from '../components/CardPreview';
@@ -102,6 +99,11 @@ const PublicCardPage: React.FC = () => {
 
         fetchSettings();
     }, [slug]);
+
+    const handlePhoneChange = (setter: React.Dispatch<React.SetStateAction<string>>) => (e: React.ChangeEvent<HTMLInputElement>) => {
+        const sanitized = e.target.value.replace(/\D/g, '');
+        setter(sanitized.slice(0, 10));
+    };
 
     const handleLookup = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -224,7 +226,8 @@ const PublicCardPage: React.FC = () => {
                                                 id="phoneLookup"
                                                 type="tel"
                                                 value={phoneLookup}
-                                                onChange={(e) => setPhoneLookup(e.target.value)}
+                                                onChange={handlePhoneChange(setPhoneLookup)}
+                                                maxLength={10}
                                                 required
                                                 className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.phoneLookup ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
                                                 placeholder="Tu número de teléfono (10 dígitos)"
@@ -296,7 +299,8 @@ const PublicCardPage: React.FC = () => {
                                                 id="userPhone"
                                                 type="tel"
                                                 value={userPhone}
-                                                onChange={(e) => setUserPhone(e.target.value)}
+                                                onChange={handlePhoneChange(setUserPhone)}
+                                                maxLength={10}
                                                 required
                                                 className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.userPhone ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
                                                 placeholder="Tu número de teléfono (10 dígitos)"

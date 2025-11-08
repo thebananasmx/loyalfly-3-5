@@ -69,6 +69,11 @@ const EditCustomerPage: React.FC = () => {
         fetchCustomer();
     }, [user, customerId, navigate, showToast]);
 
+    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const sanitized = e.target.value.replace(/\D/g, '');
+        setPhone(sanitized.slice(0, 10));
+    };
+
     const validate = () => {
         const newErrors: { name?: string; phone?: string; email?: string } = {};
 
@@ -165,7 +170,8 @@ const EditCustomerPage: React.FC = () => {
                             id="phone"
                             type="tel"
                             value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
+                            onChange={handlePhoneChange}
+                            maxLength={10}
                             required
                             className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.phone ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
                             aria-invalid={!!errors.phone}
