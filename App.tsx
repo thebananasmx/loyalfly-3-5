@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 
 import MainLayout from './components/MainLayout';
@@ -27,11 +27,15 @@ import AdminDashboardPage from './pages/AdminDashboardPage';
 import SuperAdminProtectedRoute from './components/SuperAdminProtectedRoute';
 import AdminLayout from './components/AdminLayout';
 import UserFlowsPage from './pages/UserFlowsPage';
+import BlogPage from './pages/BlogPage';
+import BlogPostPage from './pages/BlogPostPage';
+import AdminBlogListPage from './pages/AdminBlogListPage';
+import AdminBlogEditorPage from './pages/AdminBlogEditorPage';
 
 function App() {
   return (
     <AuthProvider>
-      <HashRouter>
+      <BrowserRouter>
         <AnalyticsTracker />
         <Routes>
           {/* Public & Main Routes */}
@@ -41,6 +45,8 @@ function App() {
             <Route path="/terminos" element={<TermsPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/blog/:slug" element={<BlogPostPage />} />
             
             <Route path="/docs" element={<DocsLayout />}>
               <Route index element={<Navigate to="/docs/style-guide" replace />} />
@@ -72,7 +78,7 @@ function App() {
           </Route>
 
           {/* Super Admin Routes */}
-          <Route path="/admin" element={<AdminLoginPage />} />
+          <Route path="/admin/login" element={<AdminLoginPage />} />
           <Route 
             path="/admin"
             element={
@@ -81,11 +87,18 @@ function App() {
               </SuperAdminProtectedRoute>
             }
           >
+            <Route index element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="dashboard" element={<AdminDashboardPage />} />
+            <Route path="blog" element={<AdminBlogListPage />} />
+            <Route path="blog/nuevo" element={<AdminBlogEditorPage />} />
+            <Route path="blog/editar/:postId" element={<AdminBlogEditorPage />} />
           </Route>
 
+          {/* Redirect old admin route */}
+          <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
+
         </Routes>
-      </HashRouter>
+      </BrowserRouter>
     </AuthProvider>
   );
 }

@@ -1,4 +1,5 @@
 
+
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -25,7 +26,7 @@ import {
   orderBy,
   limit,
 } from "firebase/firestore";
-import type { Customer, Business } from '../types';
+import type { Customer, Business, BlogPost } from '../types';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAnW9n-Ou53G1RmD0amMXJfQ_OadfefVug",
@@ -89,7 +90,7 @@ export const registerBusiness = async (email: string, password:string, businessN
     counter++;
   }
 
-  await setDoc(doc(db, "slugs", slug), { businessId: user.uid });
+  await setDoc(doc(db, "slugs", slug), { businessId: user.uid, type: 'business' });
   
   // Create the main business document
   await setDoc(doc(db, "businesses", user.uid), {
@@ -184,7 +185,8 @@ export const getBusinessIdBySlug = async (slug: string): Promise<string | null> 
     const slugDocRef = doc(db, "slugs", slug);
     const slugDocSnap = await getDoc(slugDocRef);
     if (slugDocSnap.exists()) {
-        return slugDocSnap.data().businessId;
+        const data = slugDocSnap.data();
+        return data.type === 'business' ? data.businessId : null;
     }
     return null;
 }
@@ -560,4 +562,98 @@ export const submitSurveyResponse = async (businessId: string, customerId: strin
     
     const updatedCustomer = await addStampToCustomer(businessId, customerId);
     return updatedCustomer;
+};
+
+// --- BLOG FUNCTIONS ---
+
+export const createBlogPost = async (authorId: string, data: Omit<BlogPost, 'id' | 'createdAt' | 'slug'>): Promise<BlogPost> => {
+    const blogPostsCol = collection(db, 'blogPosts');
+    
+    let slug = slugify(data.title);
+    let slugDoc = await getDoc(doc(db, "slugs", slug));
+    let counter = 1;
+    while(slugDoc.exists()) {
+        slug = `${slugify(data.title)}-${counter}`;
+        slugDoc = await getDoc(doc(db, "slugs", slug));
+        counter++;
+    }
+
+    const newPostData = {
+        ...data,
+        slug,
+        authorId,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+    };
+    const docRef = await addDoc(blogPostsCol, newPostData);
+    
+    await setDoc(doc(db, "slugs", slug), { postId: docRef.id, type: 'blog' });
+
+    return { ...newPostData, id: docRef.id, createdAt: new Date() } as BlogPost;
+};
+
+export const updateBlogPost = async (postId: string, data: Partial<Omit<BlogPost, 'id' | 'slug'>>): Promise<void> => {
+    const postDocRef = doc(db, 'blogPosts', postId);
+    await updateDoc(postDocRef, { ...data, updatedAt: serverTimestamp() });
+};
+
+export const deleteBlogPost = async (postId: string, slug: string): Promise<void> => {
+    const postDocRef = doc(db, 'blogPosts', postId);
+    const slugDocRef = doc(db, 'slugs', slug);
+    await deleteDoc(postDocRef);
+    await deleteDoc(slugDocRef);
+};
+
+export const getPublishedBlogPosts = async (): Promise<BlogPost[]> => {
+    const blogPostsCol = collection(db, 'blogPosts');
+    const q = query(blogPostsCol, where('status', '==', 'published'), orderBy('createdAt', 'desc'));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ 
+        id: doc.id, 
+        ...doc.data(),
+        createdAt: (doc.data().createdAt as Timestamp)?.toDate() || new Date()
+    } as BlogPost));
+};
+
+export const getBlogPostBySlug = async (slug: string): Promise<BlogPost | null> => {
+    const slugDocRef = doc(db, "slugs", slug);
+    const slugDocSnap = await getDoc(slugDocRef);
+
+    if (slugDocSnap.exists() && slugDocSnap.data().type === 'blog') {
+        const postId = slugDocSnap.data().postId;
+        const postDocRef = doc(db, 'blogPosts', postId);
+        const postDocSnap = await getDoc(postDocRef);
+        if (postDocSnap.exists()) {
+            return { 
+                id: postDocSnap.id, 
+                ...postDocSnap.data(),
+                createdAt: (postDocSnap.data().createdAt as Timestamp)?.toDate() || new Date()
+            } as BlogPost;
+        }
+    }
+    return null;
+};
+
+export const getAllBlogPostsForAdmin = async (): Promise<BlogPost[]> => {
+    const blogPostsCol = collection(db, 'blogPosts');
+    const q = query(blogPostsCol, orderBy('createdAt', 'desc'));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ 
+        id: doc.id, 
+        ...doc.data(),
+        createdAt: (doc.data().createdAt as Timestamp)?.toDate().toISOString().split('T')[0] || new Date().toISOString().split('T')[0]
+    } as BlogPost));
+};
+
+export const getBlogPostById = async (postId: string): Promise<BlogPost | null> => {
+    const postDocRef = doc(db, 'blogPosts', postId);
+    const docSnap = await getDoc(postDocRef);
+    if (docSnap.exists()) {
+        return { 
+            id: docSnap.id, 
+            ...docSnap.data(),
+            createdAt: (docSnap.data().createdAt as Timestamp)?.toDate() || new Date()
+        } as BlogPost;
+    }
+    return null;
 };

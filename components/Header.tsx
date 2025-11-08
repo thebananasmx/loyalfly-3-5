@@ -50,6 +50,7 @@ const Header: React.FC = () => {
             <div className="hidden md:flex items-center">
               <nav className="flex items-center space-x-6">
                 <NavItem to="/pricing" baseClassName="text-base font-medium">Precios</NavItem>
+                <NavItem to="/blog" baseClassName="text-base font-medium">Blog</NavItem>
                 <NavItem to="/terminos" baseClassName="text-base font-medium">Términos</NavItem>
               </nav>
               <div className="flex items-center space-x-4 ml-6">
@@ -95,6 +96,7 @@ const Header: React.FC = () => {
           <div className="flex-grow flex flex-col justify-center items-center px-8 pb-16">
              <nav className="flex flex-col items-center space-y-8">
                 <NavItem to="/pricing" onClick={closeMenu} baseClassName="text-2xl font-medium">Precios</NavItem>
+                <NavItem to="/blog" onClick={closeMenu} baseClassName="text-2xl font-medium">Blog</NavItem>
                 <NavItem to="/terminos" onClick={closeMenu} baseClassName="text-2xl font-medium">Términos</NavItem>
              </nav>
              <div className="w-full max-w-xs mt-16 space-y-4">

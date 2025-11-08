@@ -19,3 +19,16 @@ export interface Business {
   cardSettings: any;
   surveySettings: any;
 }
+
+export interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  imageUrl: string;
+  content: string;
+  excerpt: string;
+  status: 'draft' | 'published';
+  authorId?: string;
+  createdAt: any;
+  updatedAt?: any;
+}
