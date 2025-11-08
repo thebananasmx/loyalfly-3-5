@@ -23,6 +23,35 @@ const ChangelogPage: React.FC = () => {
         Un historial de todas las mejoras y nuevas funcionalidades que hemos agregado a Loyalfly para ayudarte a crecer.
       </p>
       
+      {/* --- VERSION v3.5.0.16 --- */}
+      <section className="mb-12">
+        <div className="pb-4 border-b border-gray-200">
+          <h2 className="text-3xl font-bold text-black">Versión 3.5.0.16</h2>
+          <p className="text-base text-gray-500 mt-1">Lanzada el 22 de Octubre de 2025</p>
+        </div>
+        
+        <ul className="mt-8 space-y-6">
+           <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Corrección en la Carga de Artículos del Blog</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha solucionado un problema que impedía que los artículos publicados se mostraran en la página del blog. La corrección ajusta la forma en que se consultan los datos en Firestore, garantizando que todos los posts con estado "publicado" se carguen y muestren correctamente sin necesidad de configuraciones manuales en la base de datos.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Solución de Bucle de Redirección en el Panel de Administración</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha corregido un error crítico que causaba un bucle de redirección infinito al intentar acceder a la ruta `/admin`, lo que impedía la carga del panel. El problema se resolvió ajustando la lógica de las rutas protegidas para dirigir correctamente a los usuarios no autorizados a la página de inicio de sesión del administrador.
+                  </p>
+              </div>
+          </li>
+        </ul>
+      </section>
+
       {/* --- VERSION v3.5.0.15 --- */}
       <section className="mb-12">
         <div className="pb-4 border-b border-gray-200">
