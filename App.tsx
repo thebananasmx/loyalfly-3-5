@@ -94,9 +94,6 @@ function App() {
             <Route path="blog/editar/:postId" element={<AdminBlogEditorPage />} />
           </Route>
 
-          {/* Redirect old admin route */}
-          <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
-
         </Routes>
       </BrowserRouter>
     </AuthProvider>

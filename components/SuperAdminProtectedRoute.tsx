@@ -21,7 +21,7 @@ const SuperAdminProtectedRoute: React.FC<SuperAdminProtectedRouteProps> = ({ chi
   }
 
   if (!user || !isSuperAdmin) {
-    return <Navigate to="/admin" state={{ from: location }} replace />;
+    return <Navigate to="/admin/login" state={{ from: location }} replace />;
   }
 
   return <>{children}</>;
