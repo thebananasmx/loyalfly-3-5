@@ -606,13 +606,18 @@ export const deleteBlogPost = async (postId: string, slug: string): Promise<void
 
 export const getPublishedBlogPosts = async (): Promise<BlogPost[]> => {
     const blogPostsCol = collection(db, 'blogPosts');
-    const q = query(blogPostsCol, where('status', '==', 'published'), orderBy('createdAt', 'desc'));
+    // Query only by createdAt to avoid needing a composite index.
+    const q = query(blogPostsCol, orderBy('createdAt', 'desc'));
     const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({ 
+    
+    const allPosts = snapshot.docs.map(doc => ({ 
         id: doc.id, 
         ...doc.data(),
         createdAt: (doc.data().createdAt as Timestamp)?.toDate() || new Date()
     } as BlogPost));
+    
+    // Filter for published posts on the client side.
+    return allPosts.filter(post => post.status === 'published');
 };
 
 export const getBlogPostBySlug = async (slug: string): Promise<BlogPost | null> => {
