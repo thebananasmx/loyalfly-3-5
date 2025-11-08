@@ -18,13 +18,13 @@ const ToastContainer: React.FC = () => {
     if (!toasts.length) return null;
 
     return (
-        <div className="fixed bottom-0 right-0 p-4 sm:p-6 space-y-3 z-50 w-full max-w-sm" role="status" aria-live="polite">
+        <div className="fixed top-4 inset-x-4 sm:inset-x-auto sm:top-6 sm:right-6 space-y-3 z-50 flex flex-col items-center sm:items-end pointer-events-none" role="status" aria-live="polite">
             {toasts.map(toast => {
                 const config = toastConfig[toast.type];
                 return (
                     <div
                         key={toast.id}
-                        className={`relative flex items-center p-4 rounded-lg shadow-lg text-white ${config.bg} animate-fade-in-up`}
+                        className={`pointer-events-auto w-full max-w-sm relative flex items-center p-4 rounded-lg shadow-lg text-white ${config.bg} animate-fade-in-down`}
                     >
                         <div className="flex-shrink-0">{config.icon}</div>
                         <div className="ml-3 text-base font-medium">{toast.message}</div>
