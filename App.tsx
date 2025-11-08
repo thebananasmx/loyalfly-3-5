@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import { BrowserRouter, HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
@@ -8,6 +9,7 @@ import AppLayout from './components/AppLayout';
 import ProtectedRoute from './components/ProtectedRoute';
 import DocsLayout from './components/DocsLayout';
 import AnalyticsTracker from './components/AnalyticsTracker';
+import ScrollToTop from './components/ScrollToTop';
 
 import LandingPage from './pages/LandingPage';
 import PricingPage from './pages/PricingPage';
@@ -42,6 +44,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
+        <ScrollToTop />
         <AnalyticsTracker />
         <Routes>
           {/* Public & Main Routes */}
