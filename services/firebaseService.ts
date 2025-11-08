@@ -25,6 +25,7 @@ import {
   deleteDoc,
   orderBy,
   limit,
+  startAfter,
 } from "firebase/firestore";
 import type { Customer, Business, BlogPost } from '../types';
 
@@ -202,15 +203,27 @@ export const getPublicCardSettings = async (businessId: string) => {
     }
 }
 
-export const getCustomers = async (businessId: string): Promise<Customer[]> => {
+export const getCustomers = async (businessId: string, pageStartDoc: any = null): Promise<{ customers: Customer[], lastVisibleDoc: any | null }> => {
+    const PAGE_SIZE = 25;
     const customersCol = collection(db, `businesses/${businessId}/customers`);
-    const q = query(customersCol, orderBy("enrollmentDate", "desc"), limit(25));
+    
+    const constraints: any[] = [orderBy("enrollmentDate", "desc"), limit(PAGE_SIZE)];
+    if (pageStartDoc) {
+        constraints.push(startAfter(pageStartDoc));
+    }
+
+    const q = query(customersCol, ...constraints);
     const customerSnapshot = await getDocs(q);
-    return customerSnapshot.docs.map(doc => ({ 
+
+    const customers = customerSnapshot.docs.map(doc => ({ 
         id: doc.id, 
         ...doc.data(),
         enrollmentDate: (doc.data().enrollmentDate as Timestamp)?.toDate().toISOString().split('T')[0] || new Date().toISOString().split('T')[0]
     } as Customer));
+
+    const lastVisibleDoc = customerSnapshot.docs.length > 0 ? customerSnapshot.docs[customerSnapshot.docs.length - 1] : null;
+
+    return { customers, lastVisibleDoc };
 };
 
 export const getAllCustomers = async (businessId: string): Promise<Customer[]> => {

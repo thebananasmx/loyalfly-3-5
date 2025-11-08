@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Html5Qrcode } from 'html5-qrcode';
@@ -31,6 +32,8 @@ const PLAN_LIMITS = {
     Gratis: 100,
     Entrepreneur: 1000,
 };
+
+const PAGE_SIZE = 25;
 
 const AlertBar: React.FC<{ plan: 'Gratis' | 'Entrepreneur' }> = ({ plan }) => {
     return (
@@ -67,11 +70,24 @@ const DashboardPage: React.FC = () => {
     const { user } = useAuth();
     const { showToast } = useToast();
     const navigate = useNavigate();
+    
+    // The state for the currently displayed list. Can be from main list or search results.
     const [customers, setCustomers] = useState<Customer[]>([]);
+
     const [businessData, setBusinessData] = useState<Business | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(true);
     const [isSearching, setIsSearching] = useState(false);
+    const debouncedSearchQuery = useDebounce(searchQuery, 300);
+
+    // SERVER-SIDE PAGINATION STATE (main list)
+    const [mainListPage, setMainListPage] = useState(1);
+    const [pageStartCursors, setPageStartCursors] = useState<any[]>([null]);
+    const [isLastPage, setIsLastPage] = useState(false);
+    
+    // CLIENT-SIDE PAGINATION STATE (search results)
+    const [allSearchResults, setAllSearchResults] = useState<Customer[]>([]);
+    const [searchPage, setSearchPage] = useState(1);
 
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
     const [isStampModalOpen, setIsStampModalOpen] = useState(false);
@@ -79,25 +95,27 @@ const DashboardPage: React.FC = () => {
     const [stampQuantity, setStampQuantity] = useState(1);
     const [isUpdating, setIsUpdating] = useState(false);
     
-    const debouncedSearchQuery = useDebounce(searchQuery, 300);
-
     const [isDownloading, setIsDownloading] = useState(false);
     const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
     const [uploadStep, setUploadStep] = useState<'info' | 'processing' | 'result'>('info');
     const [uploadResult, setUploadResult] = useState<{ success: number; skipped: number; errors: string[], limitReached?: boolean } | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [isScannerOpen, setIsScannerOpen] = useState(false);
+    const isSearchActive = debouncedSearchQuery.length >= 3;
 
-    const fetchDashboardData = async () => {
+    const fetchInitialData = async () => {
         if (!user) return;
         setLoading(true);
         try {
-            const [customersData, businessInfo] = await Promise.all([
-                getCustomers(user.uid),
-                getBusinessData(user.uid)
+            const [businessInfo, { customers: customersData, lastVisibleDoc }] = await Promise.all([
+                getBusinessData(user.uid),
+                getCustomers(user.uid, null)
             ]);
-            setCustomers(customersData);
             setBusinessData(businessInfo);
+            setCustomers(customersData);
+            setPageStartCursors([null, lastVisibleDoc]);
+            setIsLastPage(customersData.length < PAGE_SIZE);
+            setMainListPage(1);
         } catch (error) {
             console.error("Failed to fetch dashboard data:", error);
             showToast('No se pudieron cargar los datos del dashboard.', 'error');
@@ -109,25 +127,22 @@ const DashboardPage: React.FC = () => {
     // Effect for initial load of recent customers
     useEffect(() => {
         document.title = 'Dashboard | Loyalfly App';
-        fetchDashboardData();
-    }, [user, showToast]);
+        if (user) {
+            fetchInitialData();
+        }
+    }, [user]);
 
     // Effect for handling search queries
     useEffect(() => {
         const performSearch = async () => {
             if (!user) return;
-            
-            if (debouncedSearchQuery.length < 3) {
-                if (searchQuery === '') { // Only refetch recents if search is cleared
-                    fetchDashboardData();
-                }
-                return;
-            }
 
             setIsSearching(true);
             try {
                 const results = await searchCustomers(user.uid, debouncedSearchQuery);
-                setCustomers(results);
+                setAllSearchResults(results);
+                setCustomers(results.slice(0, PAGE_SIZE));
+                setSearchPage(1);
             } catch (error) {
                 console.error("Failed to search customers:", error);
                 showToast('Ocurrió un error al buscar.', 'error');
@@ -136,8 +151,16 @@ const DashboardPage: React.FC = () => {
             }
         };
 
-        performSearch();
-    }, [debouncedSearchQuery, user, showToast, searchQuery]);
+        if (isSearchActive) {
+            performSearch();
+        } else {
+             if (searchQuery === '' && allSearchResults.length > 0) {
+                // Was searching, now cleared
+                setAllSearchResults([]);
+                fetchInitialData();
+            }
+        }
+    }, [debouncedSearchQuery, user]);
 
     // Effect for QR Code Scanner
     useEffect(() => {
@@ -372,7 +395,7 @@ const DashboardPage: React.FC = () => {
 
             setUploadResult({ success, skipped, errors, limitReached });
             setUploadStep('result');
-            fetchDashboardData();
+            fetchInitialData();
         };
         reader.readAsText(file);
         
@@ -381,7 +404,65 @@ const DashboardPage: React.FC = () => {
         }
     };
 
+    const handleNextPage = async () => {
+        if (!user || isLastPage || loading) return;
+        setLoading(true);
+        const nextPage = mainListPage + 1;
+        try {
+            const cursor = pageStartCursors[nextPage - 1];
+            const { customers: customersData, lastVisibleDoc } = await getCustomers(user.uid, cursor);
+            setCustomers(customersData);
+            if (customersData.length < PAGE_SIZE) {
+                setIsLastPage(true);
+            }
+            if (nextPage >= pageStartCursors.length) {
+                setPageStartCursors(prev => [...prev, lastVisibleDoc]);
+            }
+            setMainListPage(nextPage);
+        } catch (error) {
+            showToast('Error al cargar la siguiente página.', 'error');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handlePrevPage = async () => {
+        if (!user || mainListPage <= 1 || loading) return;
+        setLoading(true);
+        const prevPage = mainListPage - 1;
+        try {
+            const cursor = pageStartCursors[prevPage - 1];
+            const { customers: customersData } = await getCustomers(user.uid, cursor);
+            setCustomers(customersData);
+            setIsLastPage(false);
+            setMainListPage(prevPage);
+        } catch (error) {
+            showToast('Error al cargar la página anterior.', 'error');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleNextSearchPage = () => {
+        const nextPage = searchPage + 1;
+        const start = (nextPage - 1) * PAGE_SIZE;
+        if (start >= allSearchResults.length) return;
+        
+        setCustomers(allSearchResults.slice(start, start + PAGE_SIZE));
+        setSearchPage(nextPage);
+    };
+
+    const handlePrevSearchPage = () => {
+        const prevPage = searchPage - 1;
+        if (prevPage < 1) return;
+        const start = (prevPage - 1) * PAGE_SIZE;
+        
+        setCustomers(allSearchResults.slice(start, start + PAGE_SIZE));
+        setSearchPage(prevPage);
+    };
+
     const isLimitReached = businessData && businessData.plan && businessData.plan !== 'Pro' && PLAN_LIMITS[businessData.plan] && businessData.customerCount >= PLAN_LIMITS[businessData.plan];
+    const totalSearchPages = Math.ceil(allSearchResults.length / PAGE_SIZE);
 
     const renderTableBody = () => {
         if (loading) {
@@ -449,6 +530,50 @@ const DashboardPage: React.FC = () => {
             </tr>
         );
     };
+
+    const PaginationControls = () => (
+        <div className="flex justify-between items-center mt-4 px-4 py-3 sm:px-6">
+            {isSearchActive ? (
+                <>
+                    <button
+                        onClick={handlePrevSearchPage}
+                        disabled={searchPage === 1}
+                        className="px-4 py-2 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        Anterior
+                    </button>
+                    <span className="text-base text-gray-600">
+                        Página {searchPage} de {totalSearchPages}
+                    </span>
+                    <button
+                        onClick={handleNextSearchPage}
+                        disabled={searchPage >= totalSearchPages}
+                        className="px-4 py-2 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        Siguiente
+                    </button>
+                </>
+            ) : (
+                 <>
+                    <button
+                        onClick={handlePrevPage}
+                        disabled={mainListPage === 1 || loading}
+                        className="px-4 py-2 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        Anterior
+                    </button>
+                    <span className="text-base text-gray-600">Página {mainListPage}</span>
+                    <button
+                        onClick={handleNextPage}
+                        disabled={isLastPage || loading}
+                        className="px-4 py-2 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        Siguiente
+                    </button>
+                </>
+            )}
+        </div>
+    );
 
     return (
         <div>
@@ -543,6 +668,7 @@ const DashboardPage: React.FC = () => {
                             </tbody>
                         </table>
                     </div>
+                     {(!loading && (isSearchActive ? allSearchResults.length > 0 : customers.length > 0)) && <PaginationControls />}
                 </div>
             </div>
             
