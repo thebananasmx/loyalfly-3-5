@@ -118,7 +118,7 @@ const LandingPage: React.FC = () => {
     return (
         <div className="bg-white">
             {/* Hero Section */}
-            <section className="pt-12 md:pt-16 pb-20 md:pb-32">
+            <section className="py-12 md:py-0 md:min-h-[calc(100vh-72px)] md:flex md:items-center">
                 <div className="container mx-auto px-4">
                     <div className="flex flex-col md:flex-row items-center gap-12">
                         {/* Left side: Text content */}
@@ -127,7 +127,7 @@ const LandingPage: React.FC = () => {
                                 Transforma visitantes en clientes fieles.
                             </h1>
                             <p className="mt-6 max-w-2xl mx-auto md:mx-0 text-lg md:text-xl text-gray-600">
-                                Loyalfly es la forma más simple y elegante de crear un programa de lealtad digital que tus clientes amarán. Sin tarjetas de plástico, sin complicaciones.
+                                Loyalfly es la forma más simple y elegante de crear un programa de lealtad digital que tus clientes amarán. Sin tarjetas de cartón, sin complicaciones.
                             </p>
                             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center md:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
                                 <Link
