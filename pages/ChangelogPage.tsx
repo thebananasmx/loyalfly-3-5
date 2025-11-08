@@ -31,6 +31,24 @@ const ChangelogPage: React.FC = () => {
         </div>
         
         <ul className="mt-8 space-y-6">
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Optimización de la Estructura de Slugs en la Base de Datos</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha reestructurado la forma en que se almacenan los 'slugs' (URLs amigables) para negocios y artículos del blog. Ahora residen en colecciones dedicadas (`businessSlugs`, `blogSlugs`), lo que mejora drásticamente la eficiencia de las consultas, garantiza la unicidad de las URLs y optimiza la escalabilidad de la plataforma a largo plazo.
+                  </p>
+              </div>
+          </li>
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Enrutamiento Condicional para Compatibilidad de Entornos</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha implementado una lógica de enrutamiento "inteligente" para resolver el conflicto entre el entorno de vista previa de AI Studio y el sitio en producción. La aplicación ahora detecta la URL: si es un dominio de producción (`loyalfly.com.mx` o `vercel.app`), utiliza `BrowserRouter` para URLs limpias. Para cualquier otro entorno (como la vista previa), usa `HashRouter` por defecto, garantizando que la vista previa siempre funcione sin afectar las URLs del sitio publicado.
+                  </p>
+              </div>
+          </li>
            <li className="flex items-start gap-4">
               <FeatureTag type="improvement" />
               <div>
