@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import CardPreview from '../components/CardPreview';
 import { getPublicCardSettings, createNewCustomer, getBusinessIdBySlug, getCustomerByPhone, getSurveySettings, hasCustomerVoted } from '../services/firebaseService';
@@ -42,6 +42,7 @@ const validateMexicanPhoneNumber = (phone: string): string => {
 
 const PublicCardPage: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
+    const topRef = useRef<HTMLDivElement>(null);
 
     // Business & UI State
     const [settings, setSettings] = useState<CardSettings | null>(null);
@@ -99,6 +100,13 @@ const PublicCardPage: React.FC = () => {
 
         fetchSettings();
     }, [slug]);
+
+    // Scroll to top when the card is displayed using a more robust method
+    useEffect(() => {
+        if (view === 'display') {
+            topRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [view]);
 
     const handlePhoneChange = (setter: React.Dispatch<React.SetStateAction<string>>) => (e: React.ChangeEvent<HTMLInputElement>) => {
         const sanitized = e.target.value.replace(/\D/g, '');
@@ -406,7 +414,7 @@ const PublicCardPage: React.FC = () => {
     }
   
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4 font-sans">
+        <div ref={topRef} className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4 font-sans">
             <div className="w-full max-w-sm mx-auto">
                 {renderContent()}
             </div>
