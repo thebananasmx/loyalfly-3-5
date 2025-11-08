@@ -31,6 +31,33 @@ const ChangelogPage: React.FC = () => {
         </div>
         
         <ul className="mt-8 space-y-6">
+           <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Reposicionamiento Estratégico de Notificaciones (Toasts)</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha reubicado el contenedor de notificaciones (toasts) a la esquina superior derecha en escritorio y a la parte superior central en móviles. Este cambio soluciona un problema de usabilidad donde el widget de chat cubría los mensajes importantes, garantizando ahora su total visibilidad.
+                  </p>
+              </div>
+          </li>
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Validación de Longitud en Campos de Teléfono</h3>
+                  <p className="text-gray-600 mt-1">
+                      Para mejorar la calidad de los datos y la experiencia de usuario, todos los campos de entrada de número de teléfono en la aplicación ahora están limitados a un máximo de 10 dígitos, previniendo errores de formato desde el inicio.
+                  </p>
+              </div>
+          </li>
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Mejora de Usabilidad con Scroll Automático</h3>
+                  <p className="text-gray-600 mt-1">
+                      Al consultar o registrar una tarjeta en la página pública (`/view/:slug`), la vista ahora se desplaza automáticamente a la parte superior de la página. Esto asegura que el cliente vea su tarjeta de lealtad de inmediato, sin necesidad de hacer scroll manual.
+                  </p>
+              </div>
+          </li>
           <li className="flex items-start gap-4">
               <FeatureTag type="improvement" />
               <div>
