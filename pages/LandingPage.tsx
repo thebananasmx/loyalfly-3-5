@@ -118,7 +118,7 @@ const LandingPage: React.FC = () => {
     return (
         <div className="bg-white">
             {/* Hero Section */}
-            <section className="py-12 md:py-0 md:min-h-[calc(100vh-72px)] md:flex md:items-center">
+            <section className="py-12 md:py-0 md:min-h-[66.67vh] md:flex md:items-center">
                 <div className="container mx-auto px-4">
                     <div className="flex flex-col md:flex-row items-center gap-12">
                         {/* Left side: Text content */}
