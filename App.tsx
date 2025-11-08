@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 
 import MainLayout from './components/MainLayout';
@@ -33,9 +34,14 @@ import AdminBlogListPage from './pages/AdminBlogListPage';
 import AdminBlogEditorPage from './pages/AdminBlogEditorPage';
 
 function App() {
+  // Use BrowserRouter for production/Vercel domains and HashRouter for all other environments
+  // (like local development and AI Studio previews) to ensure maximum compatibility.
+  const isProductionLike = window.location.hostname.endsWith('loyalfly.com.mx') || window.location.hostname.includes('vercel.app');
+  const Router = isProductionLike ? BrowserRouter : HashRouter;
+
   return (
     <AuthProvider>
-      <HashRouter>
+      <Router>
         <AnalyticsTracker />
         <Routes>
           {/* Public & Main Routes */}
@@ -95,7 +101,7 @@ function App() {
           </Route>
 
         </Routes>
-      </HashRouter>
+      </Router>
     </AuthProvider>
   );
 }
