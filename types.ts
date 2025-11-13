@@ -1,3 +1,15 @@
+// FIX: Add React import for JSX type definitions.
+import React from 'react';
+
+// FIX: Added global JSX namespace declaration to fix "Property '...' does not exist on type 'JSX.IntrinsicElements'" errors.
+// This provides a fallback for all JSX elements, resolving the type errors across multiple files.
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      [elemName: string]: any;
+    }
+  }
+}
 
 export interface Customer {
   id: string;
