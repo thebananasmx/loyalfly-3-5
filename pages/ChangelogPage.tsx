@@ -34,6 +34,15 @@ const ChangelogPage: React.FC = () => {
            <li className="flex items-start gap-4">
               <FeatureTag type="new" />
               <div>
+                  <h3 className="font-semibold text-black">Nueva Página de Ajustes de Cuenta</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha añadido una nueva sección de "Ajustes de Cuenta", accesible desde el menú desplegable del usuario en la barra lateral. Esta página permite a los dueños de negocios ver la información principal de su cuenta y gestionar la seguridad, incluyendo una funcionalidad segura para cambiar su contraseña de acceso.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
                   <h3 className="font-semibold text-black">Página de KPIs para Super Administrador</h3>
                   <p className="text-gray-600 mt-1">
                       Se ha añadido una nueva página de Indicadores Clave de Rendimiento (KPIs) al panel de Super Administración. Esta sección centraliza métricas globales de la plataforma, como el número total de negocios, clientes, sellos y recompensas. Incluye una gráfica de pastel para visualizar la distribución de negocios por plan de suscripción y una tabla con los negocios más destacados para un análisis estratégico.
