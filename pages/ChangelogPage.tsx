@@ -32,6 +32,15 @@ const ChangelogPage: React.FC = () => {
         
         <ul className="mt-8 space-y-6">
            <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Página de KPIs para Super Administrador</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha implementado una nueva sección "KPIs" en el panel de Super Administración. Esta página ofrece una visión global del rendimiento de la plataforma, incluyendo métricas clave como el total de negocios y clientes, una gráfica de pastel que muestra la distribución de negocios por plan, y un ranking de los negocios más activos.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
               <FeatureTag type="improvement" />
               <div>
                   <h3 className="font-semibold text-black">Rediseño Interactivo y Funcional de la Gráfica de Crecimiento</h3>
@@ -128,7 +137,7 @@ const ChangelogPage: React.FC = () => {
               <div>
                   <h3 className="font-semibold text-black">Corrección en la Carga de Artículos del Blog</h3>
                   <p className="text-gray-600 mt-1">
-                      Se ha solucionado un problema que impedía que los artículos publicados se mostraran en la página del blog. La corrección ajusta la forma en que se consultan los datos en Firestore, garantizando que todos los posts con estado "publicado" se carguen y muestren correctamente sin necesidad de configuraciones manuales en la base de datos.
+                      Se ha solucionado un problema que impedía que los artículos publicados se mostrasen en la página del blog. La corrección ajusta la forma en que se consultan los datos en Firestore, garantizando que todos los posts con estado "publicado" se carguen y muestren correctamente sin necesidad de configuraciones manuales en la base de datos.
                   </p>
               </div>
           </li>
