@@ -32,6 +32,24 @@ const ChangelogPage: React.FC = () => {
         
         <ul className="mt-8 space-y-6">
            <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Panel de Métricas Clave (KPIs)</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha introducido una nueva sección de "Métricas" en el panel de administración. Ahora los dueños de negocios pueden visualizar KPIs fundamentales como el total de clientes, sellos otorgados, recompensas canjeadas y la tasa de redención. Además, incluye una gráfica de crecimiento de clientes y una tabla con los clientes más leales para un análisis rápido y efectivo del programa.
+                  </p>
+              </div>
+          </li>
+          <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Animaciones Suaves en Navegación</h3>
+                  <p className="text-gray-600 mt-1">
+                      Para mejorar la experiencia de usuario, se ha implementado un efecto de difuminado ('fade-in') al navegar entre las diferentes secciones del panel de administración. Este cambio proporciona una sensación de carga más fluida y profesional.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
               <FeatureTag type="improvement" />
               <div>
                   <h3 className="font-semibold text-black">Optimización del Botón de Suscripción en Planes de Pago</h3>
