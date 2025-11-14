@@ -36,7 +36,7 @@ const ChangelogPage: React.FC = () => {
               <div>
                   <h3 className="font-semibold text-black">Página de KPIs para Super Administrador</h3>
                   <p className="text-gray-600 mt-1">
-                      Se ha implementado una nueva sección "KPIs" en el panel de Super Administración. Esta página ofrece una visión global del rendimiento de la plataforma, incluyendo métricas clave como el total de negocios y clientes, una gráfica de pastel que muestra la distribución de negocios por plan, y un ranking de los negocios más activos.
+                      Se ha añadido una nueva página de Indicadores Clave de Rendimiento (KPIs) al panel de Super Administración. Esta sección centraliza métricas globales de la plataforma, como el número total de negocios, clientes, sellos y recompensas. Incluye una gráfica de pastel para visualizar la distribución de negocios por plan de suscripción y una tabla con los negocios más destacados para un análisis estratégico.
                   </p>
               </div>
           </li>
