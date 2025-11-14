@@ -29,8 +29,7 @@ const BarChart: React.FC<{ data: { month: string; count: number }[] }> = ({ data
         setTooltip(null);
     };
 
-    // If all counts are 0, use a default to have a visible axis.
-    const maxCount = Math.max(...data.map(d => d.count), 5); // A minimum of 5 for scale
+    const maxCount = Math.max(...data.map(d => d.count), 5);
     const yAxisLabels = [maxCount, Math.round(maxCount / 2), 0];
 
     return (
@@ -63,32 +62,36 @@ const BarChart: React.FC<{ data: { month: string; count: number }[] }> = ({ data
                     <div className="flex-grow relative">
                         {/* Grid Lines */}
                         <div className="absolute inset-0 grid grid-rows-2">
-                             <div className="border-b border-dashed border-gray-200"></div>
-                             <div className="border-b border-dashed border-gray-200"></div>
+                            <div className="border-b border-dashed border-gray-200"></div>
+                            <div className="border-b border-dashed border-gray-200"></div>
                         </div>
 
-                        {/* Bars */}
-                        <div className="absolute bottom-0 left-0 right-0 h-full flex justify-around items-end px-4">
-                             {data.map(({ month, count }) => (
+                        {/* Columns with bars */}
+                        <div className="absolute bottom-0 left-0 right-0 h-full flex justify-around px-2">
+                            {data.map(({ month, count }) => (
                                 <div
                                     key={month}
-                                    className="w-8 rounded-t-md hover:opacity-90 transition-opacity cursor-pointer"
-                                    style={{ 
-                                        height: `${(count / maxCount) * 100}%`,
-                                        backgroundColor: '#4D17FF'
-                                    }}
+                                    className="flex-1 flex flex-col justify-end items-center group relative pt-4 hover:bg-gray-100 rounded-t-lg transition-colors"
                                     onMouseMove={(e) => handleMouseMove(e, month, count)}
                                     onMouseLeave={handleMouseLeave}
-                                />
+                                >
+                                    <div
+                                        className="w-12 bg-[#4D17FF] rounded-t-md group-hover:opacity-90 transition-opacity"
+                                        style={{ height: `${(count / maxCount) * 100}%` }}
+                                        aria-label={`Clientes en ${month}: ${count}`}
+                                    ></div>
+                                </div>
                             ))}
                         </div>
                     </div>
 
                     {/* X-Axis */}
-                    <div className="h-8 flex justify-around items-center pt-2 border-t border-gray-200">
-                         {data.map(({ month }) => (
-                            <span key={month} className="text-xs text-gray-500">{month}</span>
-                         ))}
+                    <div className="h-8 flex justify-around items-center pt-2 border-t border-gray-200 px-2">
+                        {data.map(({ month }) => (
+                            <div key={month} className="flex-1 text-center">
+                                <span className="text-xs text-gray-500">{month}</span>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
