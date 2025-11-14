@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useAuth } from '../context/AuthContext';
 import { getBusinessData, getBusinessMetrics } from '../services/firebaseService';
 import type { Business, Customer } from '../types';
@@ -12,50 +13,81 @@ const StatCard: React.FC<{ title: string; value: string | number; description: s
     </div>
 );
 
-const BarChart: React.FC<{ data: { month: string; count: number }[]; title: string }> = ({ data, title }) => {
+const BarChart: React.FC<{ data: { month: string; count: number }[] }> = ({ data }) => {
+    const [tooltip, setTooltip] = useState<{ month: string; count: number; top: number; left: number } | null>(null);
+
+    const handleMouseMove = (e: React.MouseEvent, month: string, count: number) => {
+        setTooltip({
+            month,
+            count,
+            top: e.clientY,
+            left: e.clientX,
+        });
+    };
+
+    const handleMouseLeave = () => {
+        setTooltip(null);
+    };
+
     // If all counts are 0, use a default to have a visible axis.
-    const maxCount = Math.max(...data.map(d => d.count), 5);
+    const maxCount = Math.max(...data.map(d => d.count), 5); // A minimum of 5 for scale
     const yAxisLabels = [maxCount, Math.round(maxCount / 2), 0];
 
     return (
-        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-            <h3 className="text-xl font-bold mb-4 text-black">{title}</h3>
-            
+        <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+            {tooltip && createPortal(
+                <div
+                    className="absolute z-50 p-3 text-sm bg-white border border-gray-200 rounded-lg shadow-xl pointer-events-none transition-opacity duration-200"
+                    style={{
+                        top: tooltip.top + 15,
+                        left: tooltip.left + 15,
+                    }}
+                >
+                    <p className="font-bold text-black">{tooltip.month}</p>
+                    <p className="text-gray-600">{tooltip.count} nuevo{tooltip.count !== 1 ? 's' : ''} cliente{tooltip.count !== 1 ? 's' : ''}</p>
+                </div>,
+                document.body
+            )}
+            <h3 className="text-xl font-bold mb-4 text-black">Nuevos Clientes por Mes</h3>
+
             <div className="w-full h-[300px] flex">
-                {/* Y-Axis Labels */}
-                <div className="h-full flex flex-col justify-between text-right pr-4 text-xs text-gray-400 pb-8">
-                    {yAxisLabels.map((label, index) => (
-                        <span key={index}>{label}</span>
+                {/* Y-Axis */}
+                <div className="flex flex-col justify-between h-full pb-8 pr-4 text-right">
+                    {yAxisLabels.map((label) => (
+                        <span key={label} className="text-xs text-gray-500">{label}</span>
                     ))}
                 </div>
 
-                {/* Main Chart Area with Bars and X-Axis */}
                 <div className="w-full h-full flex flex-col">
-                    <div className="w-full flex-grow relative">
+                    {/* Main Chart Area */}
+                    <div className="flex-grow relative">
                         {/* Grid Lines */}
-                        <div className="absolute inset-0 flex flex-col justify-between">
-                            {yAxisLabels.map((_, index) => (
-                                <div key={index} className="w-full border-b border-dashed border-gray-200"></div>
-                            ))}
+                        <div className="absolute inset-0 grid grid-rows-2">
+                             <div className="border-b border-dashed border-gray-200"></div>
+                             <div className="border-b border-dashed border-gray-200"></div>
                         </div>
-                        
+
                         {/* Bars */}
-                        <div className="absolute bottom-0 left-0 right-0 h-full flex justify-around items-end px-1">
-                            {data.map(({ month, count }) => (
-                                <div 
-                                    key={month} 
-                                    className="w-[12%] bg-[#4D17FF] rounded-t-md hover:opacity-90 transition-opacity"
-                                    style={{ height: `${(count / maxCount) * 100}%` }}
-                                    title={`${count} nuevo${count !== 1 ? 's' : ''} cliente${count !== 1 ? 's' : ''}`}
-                                >
-                                </div>
+                        <div className="absolute bottom-0 left-0 right-0 h-full flex justify-around items-end px-4">
+                             {data.map(({ month, count }) => (
+                                <div
+                                    key={month}
+                                    className="w-8 rounded-t-md hover:opacity-90 transition-opacity cursor-pointer"
+                                    style={{ 
+                                        height: `${(count / maxCount) * 100}%`,
+                                        backgroundColor: '#4D17FF'
+                                    }}
+                                    onMouseMove={(e) => handleMouseMove(e, month, count)}
+                                    onMouseLeave={handleMouseLeave}
+                                />
                             ))}
                         </div>
                     </div>
-                    {/* X-Axis Labels */}
-                    <div className="w-full h-8 flex justify-around items-start pt-2 px-1 border-t border-gray-200">
+
+                    {/* X-Axis */}
+                    <div className="h-8 flex justify-around items-center pt-2 border-t border-gray-200">
                          {data.map(({ month }) => (
-                            <span key={month} className="w-[12%] text-center text-xs text-gray-400">{month}</span>
+                            <span key={month} className="text-xs text-gray-500">{month}</span>
                          ))}
                     </div>
                 </div>
@@ -63,7 +95,7 @@ const BarChart: React.FC<{ data: { month: string; count: number }[]; title: stri
 
             {/* Legend */}
             <div className="flex items-center justify-center mt-4">
-                <span className="h-3 w-3 rounded-sm bg-[#4D17FF] mr-2"></span>
+                <span className="h-3 w-3 rounded-sm mr-2" style={{ backgroundColor: '#4D17FF' }}></span>
                 <span className="text-sm text-gray-500">Nuevos Clientes</span>
             </div>
         </div>
@@ -125,7 +157,7 @@ const MetricasPage: React.FC = () => {
                 <StatCard title="Tasa de Redención" value={`${metrics.redemptionRate.toFixed(1)}%`} description="De los sellos para recompensa, cuántos se canjean." />
             </div>
             
-            <BarChart data={metrics.newCustomersByMonth} title="Crecimiento de Nuevos Clientes (Últimos 6 Meses)" />
+            <BarChart data={metrics.newCustomersByMonth} />
 
             <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
                 <h3 className="text-lg font-semibold text-black mb-4">Clientes Más Leales</h3>
