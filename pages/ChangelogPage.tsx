@@ -32,6 +32,15 @@ const ChangelogPage: React.FC = () => {
         
         <ul className="mt-8 space-y-6">
            <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Rediseño Interactivo y Funcional de la Gráfica de Crecimiento</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha rediseñado por completo la gráfica en la página de Métricas. Ahora, con un tema blanco y morado alineado a la marca, muestra el "Crecimiento de Nuevos Clientes por Mes". Se mejoró su usabilidad con barras más anchas y un efecto de resaltado al pasar el cursor sobre la columna del mes. Además, se añadió una tarjeta flotante (`tooltip`) que muestra los datos exactos del mes, unificando la interacción para una experiencia más limpia e intuitiva.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
               <FeatureTag type="new" />
               <div>
                   <h3 className="font-semibold text-black">Panel de Métricas Clave (KPIs)</h3>
