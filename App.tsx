@@ -1,5 +1,6 @@
 
 
+
 import React from 'react';
 import { BrowserRouter, HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
@@ -34,6 +35,7 @@ import BlogPage from './pages/BlogPage';
 import BlogPostPage from './pages/BlogPostPage';
 import AdminBlogListPage from './pages/AdminBlogListPage';
 import AdminBlogEditorPage from './pages/AdminBlogEditorPage';
+import MetricasPage from './pages/MetricasPage';
 
 function App() {
   // Use BrowserRouter for production/Vercel domains and HashRouter for all other environments
@@ -81,6 +83,7 @@ function App() {
             <Route index element={<Navigate to="/app/dashboard" replace />} />
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="tarjeta" element={<CardEditorPage />} />
+            <Route path="metricas" element={<MetricasPage />} />
             <Route path="nuevo-cliente" element={<NewCustomerPage />} />
             <Route path="editar-cliente/:customerId" element={<EditCustomerPage />} />
             <Route path="vote" element={<SurveyPage />} />

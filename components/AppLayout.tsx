@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, Link, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { ToastProvider } from '../context/ToastContext';
 import ToastContainer from './ToastContainer';
@@ -8,6 +8,7 @@ const MenuIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-
 
 const AppLayout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
 
   return (
     <ToastProvider>
@@ -27,7 +28,9 @@ const AppLayout: React.FC = () => {
           </header>
 
           <main className="flex-1 p-4 sm:p-6 lg:p-8">
-            <Outlet />
+            <div key={location.pathname} className="animate-fade-in">
+              <Outlet />
+            </div>
           </main>
         </div>
         <ToastContainer />

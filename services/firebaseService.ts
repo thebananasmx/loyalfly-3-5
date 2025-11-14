@@ -1,5 +1,6 @@
 
 
+
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -673,4 +674,60 @@ export const getBlogPostById = async (postId: string): Promise<BlogPost | null> 
         } as BlogPost;
     }
     return null;
+};
+
+// --- METRICS FUNCTIONS ---
+
+export interface BusinessMetrics {
+  totalStamps: number;
+  totalRewards: number;
+  redemptionRate: number;
+  newCustomersByMonth: { month: string; count: number }[];
+  topCustomers: Customer[];
+}
+
+export const getBusinessMetrics = async (businessId: string): Promise<BusinessMetrics> => {
+    const customers = await getAllCustomers(businessId);
+
+    let totalStamps = 0;
+    let totalRewards = 0;
+    const customerGrowth: { [key: string]: number } = {};
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+
+    customers.forEach(customer => {
+        totalStamps += customer.stamps || 0;
+        totalRewards += customer.rewardsRedeemed || 0;
+        
+        const enrollmentDate = new Date(customer.enrollmentDate);
+        if (enrollmentDate >= sixMonthsAgo) {
+            const month = enrollmentDate.toLocaleString('es-MX', { month: 'long', year: '2-digit' });
+            customerGrowth[month] = (customerGrowth[month] || 0) + 1;
+        }
+    });
+
+    const redemptionRate = totalStamps > 0 ? (totalRewards * 10) / totalStamps * 100 : 0;
+
+    // Format customer growth data for the chart
+    const newCustomersByMonth = Array.from({ length: 6 }).map((_, i) => {
+        const d = new Date();
+        d.setMonth(d.getMonth() - i);
+        return d.toLocaleString('es-MX', { month: 'long', year: '2-digit' });
+    }).reverse().map(monthKey => ({
+        month: monthKey.split(' de ')[0].charAt(0).toUpperCase() + monthKey.split(' de ')[0].slice(1),
+        count: customerGrowth[monthKey] || 0
+    }));
+
+
+    const topCustomers = [...customers]
+        .sort((a, b) => (b.stamps || 0) - (a.stamps || 0))
+        .slice(0, 5);
+
+    return {
+        totalStamps,
+        totalRewards,
+        redemptionRate,
+        newCustomersByMonth,
+        topCustomers
+    };
 };
