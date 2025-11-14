@@ -2,6 +2,8 @@
 
 
 
+
+
 import React from 'react';
 import { BrowserRouter, HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
@@ -38,6 +40,7 @@ import AdminBlogListPage from './pages/AdminBlogListPage';
 import AdminBlogEditorPage from './pages/AdminBlogEditorPage';
 import MetricasPage from './pages/MetricasPage';
 import AdminKpisPage from './pages/AdminKpisPage';
+import AccountSettingsPage from './pages/AccountSettingsPage';
 
 function App() {
   // Use BrowserRouter for production/Vercel domains and HashRouter for all other environments
@@ -89,6 +92,7 @@ function App() {
             <Route path="nuevo-cliente" element={<NewCustomerPage />} />
             <Route path="editar-cliente/:customerId" element={<EditCustomerPage />} />
             <Route path="vote" element={<SurveyPage />} />
+            <Route path="settings" element={<AccountSettingsPage />} />
           </Route>
 
           {/* Super Admin Routes */}

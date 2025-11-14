@@ -1,6 +1,7 @@
 
 
 
+
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -9,6 +10,9 @@ import {
   signOut,
   onAuthStateChanged,
   sendPasswordResetEmail,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  updatePassword
 } from "firebase/auth";
 import {
   getFirestore,
@@ -147,6 +151,22 @@ export const onAuthUserChanged = (callback: (user: any) => void) => onAuthStateC
 
 export const sendPasswordReset = async (email: string) => {
   await sendPasswordResetEmail(auth, email);
+};
+
+export const reauthenticateAndChangePassword = async (currentPassword: string, newPassword: string) => {
+    const user = auth.currentUser;
+    if (!user || !user.email) {
+        throw new Error("No user is currently signed in.");
+    }
+    
+    // Create a credential with the user's email and current password
+    const credential = EmailAuthProvider.credential(user.email, currentPassword);
+    
+    // Re-authenticate the user
+    await reauthenticateWithCredential(user, credential);
+    
+    // If re-authentication is successful, update the password
+    await updatePassword(user, newPassword);
 };
 
 
