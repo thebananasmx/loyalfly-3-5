@@ -479,9 +479,11 @@ export const getAllBusinessesForSuperAdmin = async (): Promise<BusinessAdminData
 
             return {
                 id: business.id,
-                name: business.name as string,
-                email: business.email as string,
-                plan: (business.plan as 'Gratis' | 'Entrepreneur' | 'Pro') || 'Gratis',
+                // FIX: Cast `business` to `any` to access properties from Firestore `doc.data()`
+                // which were not correctly inferred by the TypeScript compiler.
+                name: (business as any).name as string,
+                email: (business as any).email as string,
+                plan: ((business as any).plan as 'Gratis' | 'Entrepreneur' | 'Pro') || 'Gratis',
                 customerCount: customerSnapshot.size,
                 totalStamps,
                 totalRewards,

@@ -12,26 +12,64 @@ const StatCard: React.FC<{ title: string; value: string | number; description: s
     </div>
 );
 
-const LineChart: React.FC<{ data: { month: string; count: number }[]; title: string }> = ({ data, title }) => {
-    const maxCount = Math.max(...data.map(d => d.count), 1); // Avoid division by zero
+const BarChart: React.FC<{ data: { month: string; count: number }[]; title: string }> = ({ data, title }) => {
+    // If all counts are 0, use a default to have a visible axis.
+    const maxCount = Math.max(...data.map(d => d.count), 5);
+    const yAxisLabels = [maxCount, Math.round(maxCount / 2), 0];
+
     return (
-        <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
-            <h3 className="text-lg font-semibold text-black mb-4">{title}</h3>
-            <div className="flex justify-between items-end h-64 border-l border-b border-gray-200 pl-4 pb-4">
-                {data.map(({ month, count }) => (
-                    <div key={month} className="flex-1 flex flex-col items-center justify-end h-full">
-                        <div
-                            className="w-1/2 bg-[#4D17FF] rounded-t-md hover:opacity-80 transition-opacity"
-                            style={{ height: `${(count / maxCount) * 100}%` }}
-                            title={`${count} nuevo${count !== 1 ? 's' : ''} cliente${count !== 1 ? 's' : ''}`}
-                        ></div>
-                        <span className="text-sm text-gray-500 mt-2">{month}</span>
+        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+            <h3 className="text-xl font-bold mb-4 text-black">{title}</h3>
+            
+            <div className="w-full h-[300px] flex">
+                {/* Y-Axis Labels */}
+                <div className="h-full flex flex-col justify-between text-right pr-4 text-xs text-gray-400 pb-8">
+                    {yAxisLabels.map((label, index) => (
+                        <span key={index}>{label}</span>
+                    ))}
+                </div>
+
+                {/* Main Chart Area with Bars and X-Axis */}
+                <div className="w-full h-full flex flex-col">
+                    <div className="w-full flex-grow relative">
+                        {/* Grid Lines */}
+                        <div className="absolute inset-0 flex flex-col justify-between">
+                            {yAxisLabels.map((_, index) => (
+                                <div key={index} className="w-full border-b border-dashed border-gray-200"></div>
+                            ))}
+                        </div>
+                        
+                        {/* Bars */}
+                        <div className="absolute bottom-0 left-0 right-0 h-full flex justify-around items-end px-1">
+                            {data.map(({ month, count }) => (
+                                <div 
+                                    key={month} 
+                                    className="w-[12%] bg-[#4D17FF] rounded-t-md hover:opacity-90 transition-opacity"
+                                    style={{ height: `${(count / maxCount) * 100}%` }}
+                                    title={`${count} nuevo${count !== 1 ? 's' : ''} cliente${count !== 1 ? 's' : ''}`}
+                                >
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                ))}
+                    {/* X-Axis Labels */}
+                    <div className="w-full h-8 flex justify-around items-start pt-2 px-1 border-t border-gray-200">
+                         {data.map(({ month }) => (
+                            <span key={month} className="w-[12%] text-center text-xs text-gray-400">{month}</span>
+                         ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* Legend */}
+            <div className="flex items-center justify-center mt-4">
+                <span className="h-3 w-3 rounded-sm bg-[#4D17FF] mr-2"></span>
+                <span className="text-sm text-gray-500">Nuevos Clientes</span>
             </div>
         </div>
     );
 };
+
 
 const MetricasPage: React.FC = () => {
     const { user } = useAuth();
@@ -87,7 +125,7 @@ const MetricasPage: React.FC = () => {
                 <StatCard title="Tasa de Redención" value={`${metrics.redemptionRate.toFixed(1)}%`} description="De los sellos para recompensa, cuántos se canjean." />
             </div>
             
-            <LineChart data={metrics.newCustomersByMonth} title="Crecimiento de Nuevos Clientes (Últimos 6 Meses)" />
+            <BarChart data={metrics.newCustomersByMonth} title="Crecimiento de Nuevos Clientes (Últimos 6 Meses)" />
 
             <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
                 <h3 className="text-lg font-semibold text-black mb-4">Clientes Más Leales</h3>
