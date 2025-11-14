@@ -76,7 +76,7 @@ const BarChart: React.FC<{ data: { month: string; count: number }[] }> = ({ data
                                     onMouseLeave={handleMouseLeave}
                                 >
                                     <div
-                                        className="w-12 bg-[#4D17FF] rounded-t-md group-hover:opacity-90 transition-opacity"
+                                        className="w-12 bg-[#4D17FF] rounded-t-md"
                                         style={{ height: `${(count / maxCount) * 100}%` }}
                                         aria-label={`Clientes en ${month}: ${count}`}
                                     ></div>
