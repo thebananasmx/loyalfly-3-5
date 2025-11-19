@@ -56,6 +56,15 @@ const RegisterPage: React.FC = () => {
 
         try {
             await register(email, password, businessName);
+            
+            // Google Ads Conversion Tracking
+            // This fires only when registration is successful
+            if (typeof window.gtag === 'function') {
+                window.gtag('event', 'conversion', {
+                    'send_to': 'AW-11539287487/2DR-CL-moMMbEL-brv4q'
+                });
+            }
+
             navigate('/app/dashboard');
         } catch (err: any) {
             let formError = 'Ocurrió un error. Inténtalo de nuevo.';
