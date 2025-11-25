@@ -92,6 +92,7 @@ const PricingPage: React.FC = () => {
                             'Hasta 1000 clientes',
                             'Tarjeta de lealtad digital',
                             'Personalización completa',
+                            'Elimina botón "Únete a Loyalfly"',
                             'Soporte por email'
                         ]}
                         isFeatured={true}
@@ -105,6 +106,7 @@ const PricingPage: React.FC = () => {
                             'Clientes ilimitados',
                             'Tarjeta de lealtad digital',
                             'Personalización completa',
+                            'Elimina botón "Únete a Loyalfly"',
                             'Soporte prioritario'
                         ]}
                         isContact={true}
