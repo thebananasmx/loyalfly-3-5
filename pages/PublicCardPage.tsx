@@ -14,6 +14,7 @@ interface CardSettings {
     color: string;
     textColorScheme: 'dark' | 'light';
     logoUrl?: string;
+    plan?: string;
 }
 
 interface SurveySettings {
@@ -398,6 +399,16 @@ const PublicCardPage: React.FC = () => {
                        >
                            Consultar otro número
                        </button>
+
+                        {settings?.plan === 'Gratis' && (
+                            <Link
+                                to="/"
+                                className="mt-4 w-full py-3 px-4 flex items-center justify-center gap-3 text-base font-bold text-white bg-[#4D17FF] rounded-md shadow-md hover:bg-[#3a11cc] transition-colors"
+                            >
+                                <img src="https://res.cloudinary.com/dg4wbuppq/image/upload/v1762622899/ico_loyalfly_xgfdv8.svg" alt="" className="w-6 h-6" />
+                                <span>Únete a Loyalfly como {settings.name}</span>
+                            </Link>
+                        )}
                     </div>
                 );
         }

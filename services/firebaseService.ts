@@ -1,7 +1,3 @@
-
-
-
-
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -213,13 +209,26 @@ export const getBusinessIdBySlug = async (slug: string): Promise<string | null> 
 }
 
 export const getPublicCardSettings = async (businessId: string) => {
+    const businessDocRef = doc(db, "businesses", businessId);
     const cardConfigRef = doc(db, "businesses", businessId, "config", "card");
-    const cardConfigSnap = await getDoc(cardConfigRef);
 
-    if (cardConfigSnap.exists()) {
-        return cardConfigSnap.data();
+    const [businessSnap, cardConfigSnap] = await Promise.all([
+        getDoc(businessDocRef),
+        getDoc(cardConfigRef)
+    ]);
+
+    if (cardConfigSnap.exists() && businessSnap.exists()) {
+        const businessData = businessSnap.data();
+        const cardData = cardConfigSnap.data();
+        
+        return {
+            ...cardData,
+            plan: businessData.plan || 'Gratis',
+            // Ensure name uses card config name if available, else business name
+            name: cardData.name || businessData.name
+        };
     } else {
-        console.log("No such card configuration!");
+        console.log("No such card configuration or business!");
         return null;
     }
 }
