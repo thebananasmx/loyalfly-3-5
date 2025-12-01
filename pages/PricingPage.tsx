@@ -27,7 +27,7 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan, price, description, fea
     }
     if (isContact) {
       return (
-        <a href="mailto:contacto@loyalfly.app" className={buttonClasses}>
+        <a href="mailto:hector@thebananas.com.mx" className={buttonClasses}>
           Contáctanos
         </a>
       );
@@ -100,7 +100,7 @@ const PricingPage: React.FC = () => {
                     />
                     <PricingCard 
                         plan="Pro"
-                        price="$999 / mes"
+                        price="Cotiza hoy"
                         description="Para negocios establecidos."
                         features={[
                             'Clientes ilimitados',
