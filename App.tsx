@@ -4,6 +4,8 @@
 
 
 
+
+
 import React from 'react';
 import { BrowserRouter, HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
@@ -41,6 +43,7 @@ import AdminBlogEditorPage from './pages/AdminBlogEditorPage';
 import MetricasPage from './pages/MetricasPage';
 import AdminKpisPage from './pages/AdminKpisPage';
 import AccountSettingsPage from './pages/AccountSettingsPage';
+import AdminBusinessDetailPage from './pages/AdminBusinessDetailPage';
 
 function App() {
   // Use BrowserRouter for production/Vercel domains and HashRouter for all other environments
@@ -107,6 +110,7 @@ function App() {
           >
             <Route index element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="dashboard" element={<AdminDashboardPage />} />
+            <Route path="business/:businessId" element={<AdminBusinessDetailPage />} />
             <Route path="kpis" element={<AdminKpisPage />} />
             <Route path="blog" element={<AdminBlogListPage />} />
             <Route path="blog/nuevo" element={<AdminBlogEditorPage />} />

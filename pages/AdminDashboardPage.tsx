@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { getAllBusinessesForSuperAdmin, updateBusinessPlan, deleteBusinessForSuperAdmin } from '../services/firebaseService';
 import { useToast } from '../context/ToastContext';
 import type { BusinessAdminData } from '../services/firebaseService';
@@ -91,7 +92,11 @@ const AdminDashboardPage: React.FC = () => {
         
         return businesses.map((business) => (
              <tr key={business.id} className="bg-white border-b border-gray-200 hover:bg-gray-50">
-                <td className="px-4 py-4 sm:px-6 font-medium text-gray-900 whitespace-nowrap">{business.name}</td>
+                <td className="px-4 py-4 sm:px-6 font-medium text-gray-900 whitespace-nowrap">
+                    <Link to={`/admin/business/${business.id}`} className="hover:text-[#4D17FF] hover:underline">
+                        {business.name}
+                    </Link>
+                </td>
                 <td className="px-4 py-4 sm:px-6 hidden md:table-cell">{business.email}</td>
                 <td className="px-4 py-4 sm:px-6 text-center">{business.customerCount}</td>
                 <td className="px-4 py-4 sm:px-6 text-center">{business.totalStamps}</td>
