@@ -1,5 +1,6 @@
 import React from 'react';
 import QRCode from './QRCode';
+import { useTranslation } from 'react-i18next';
 
 interface CardPreviewProps {
   businessName: string;
@@ -21,6 +22,7 @@ const StarIcon: React.FC = () => (
 );
 
 const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, cardColor, stamps, textColorScheme, logoUrl, customerName, customerPhone, customerId }) => {
+  const { t } = useTranslation();
   const totalStamps = 10;
   const isRewardReady = stamps >= totalStamps;
 
@@ -52,7 +54,7 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
             <div className="text-right flex-grow min-w-0">
                 <h2 className={`text-xl font-bold truncate ${primaryTextColor} transition-colors`}>{businessName || 'Nombre del Negocio'}</h2>
                 <p className={`text-sm mt-1 ${secondaryTextColor} transition-colors`}>
-                    {stamps}/{totalStamps} Sellos para tu recompensa
+                    {stamps}/{totalStamps} {t('card.stampsForReward')}
                 </p>
             </div>
         </div>
@@ -75,11 +77,11 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
         {customerName && customerPhone && (
             <div className="grid grid-cols-2 gap-4">
                 <div>
-                    <p className={`text-xs uppercase tracking-wider font-semibold ${secondaryTextColor}`}>NOMBRE</p>
+                    <p className={`text-xs uppercase tracking-wider font-semibold ${secondaryTextColor}`}>{t('common.name')}</p>
                     <p className={`text-lg font-bold truncate ${primaryTextColor}`}>{customerName}</p>
                 </div>
                 <div className="text-left">
-                    <p className={`text-xs uppercase tracking-wider font-semibold ${secondaryTextColor}`}>NÚMERO TELEFÓNICO</p>
+                    <p className={`text-xs uppercase tracking-wider font-semibold ${secondaryTextColor}`}>{t('common.phone')}</p>
                     <p className={`text-lg font-bold truncate ${primaryTextColor}`}>{customerPhone}</p>
                 </div>
             </div>
@@ -91,7 +93,7 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
         {isRewardReady ? (
             <div>
                 <p className={`text-center font-bold text-lg ${rewardReadyTextColor}`}>
-                    ¡Felicidades! ya tienes:
+                    {t('card.congrats')}
                 </p>
                 <p className={`text-center font-semibold mt-1 ${primaryTextColor}`}>
                     {rewardText}
@@ -100,7 +102,7 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
         ) : (
              <div>
                 <p className={`text-center text-base ${secondaryTextColor}`}>
-                    Tu próxima Recompensa:
+                    {t('card.nextReward')}
                 </p>
                 <p className={`text-center font-semibold mt-1 ${primaryTextColor}`}>
                     {rewardText}

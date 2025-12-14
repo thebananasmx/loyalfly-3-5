@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const CookieConsent: React.FC = () => {
+    const { t } = useTranslation();
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
@@ -32,10 +34,10 @@ const CookieConsent: React.FC = () => {
         <div className="fixed bottom-4 right-4 md:right-auto md:left-4 z-50 w-full max-w-sm p-5 bg-white border border-gray-200 rounded-lg shadow-lg animate-fade-in-up">
             <div className="flex justify-between items-start">
                 <div>
-                    <h3 className="text-lg font-semibold text-black">Uso de Cookies</h3>
+                    <h3 className="text-lg font-semibold text-black">{t('cookieConsent.title')}</h3>
                     <p className="mt-2 text-base text-gray-600">
-                        Utilizamos cookies para mejorar tu experiencia en nuestro sitio. Al continuar, aceptas nuestro uso de cookies.
-                        Lee nuestros <Link to="/terminos" className="font-medium text-[#4D17FF] underline">Términos de Servicio</Link>.
+                        {t('cookieConsent.text')}{' '}
+                        <Link to="/terminos" className="font-medium text-[#4D17FF] underline">{t('cookieConsent.readTerms')}</Link>
                     </p>
                 </div>
                 <button 
@@ -51,13 +53,13 @@ const CookieConsent: React.FC = () => {
                     onClick={() => handleConsent('accepted')}
                     className="flex-1 px-4 py-2 text-base font-medium text-white bg-black rounded-md hover:bg-gray-800 transition-colors"
                 >
-                    Aceptar
+                    {t('cookieConsent.accept')}
                 </button>
                 <button
                     onClick={() => handleConsent('rejected')}
                     className="flex-1 px-4 py-2 text-base font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
                 >
-                    Rechazar
+                    {t('cookieConsent.reject')}
                 </button>
             </div>
         </div>

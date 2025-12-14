@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Html5Qrcode } from 'html5-qrcode';
@@ -18,6 +16,7 @@ import type { Customer, Business } from '../types';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import ConfirmationModal from '../components/ConfirmationModal';
+import { useTranslation } from 'react-i18next';
 
 const UserPlusIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 11a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1v-1z" /></svg>;
 const StampIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd" /></svg>;
@@ -67,6 +66,7 @@ function useDebounce<T>(value: T, delay: number): T {
 }
 
 const DashboardPage: React.FC = () => {
+    const { t } = useTranslation();
     const { user } = useAuth();
     const { showToast } = useToast();
     const navigate = useNavigate();
@@ -471,7 +471,7 @@ const DashboardPage: React.FC = () => {
                     <td colSpan={7} className="text-center px-6 py-12">
                         <div className="flex items-center justify-center">
                             <div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-200 border-t-black" role="status">
-                                <span className="sr-only">Cargando...</span>
+                                <span className="sr-only">{t('common.loading')}</span>
                             </div>
                         </div>
                     </td>
@@ -494,19 +494,19 @@ const DashboardPage: React.FC = () => {
                                 <button
                                     onClick={() => handleOpenRedeemModal(customer)}
                                     className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-white bg-[#00AA00] rounded-md hover:bg-opacity-90 transition-colors"
-                                    title="Redimir Recompensa"
+                                    title={t('dashboard.actions.redeem')}
                                 >
                                     <GiftIcon />
-                                    <span>Redimir</span>
+                                    <span>{t('dashboard.actions.redeem')}</span>
                                 </button>
                             ) : (
                                 <button
                                     onClick={() => handleOpenStampModal(customer)}
                                     className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-white bg-[#4D17FF] rounded-md hover:bg-opacity-90 transition-colors"
-                                    title="Agregar Sello"
+                                    title={t('dashboard.actions.stamp')}
                                 >
                                     <StampIcon />
-                                    <span>Sello</span>
+                                    <span>{t('dashboard.actions.stamp')}</span>
                                 </button>
                             )}
                             <Link
@@ -514,7 +514,7 @@ const DashboardPage: React.FC = () => {
                                 className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
                             >
                                 <EditIcon/>
-                                <span>Editar</span>
+                                <span>{t('common.edit')}</span>
                             </Link>
                         </div>
                     </td>
@@ -525,7 +525,7 @@ const DashboardPage: React.FC = () => {
         return (
             <tr>
                 <td colSpan={7} className="text-center px-6 py-12 text-gray-500">
-                    {searchQuery ? 'No se encontraron clientes que coincidan con tu búsqueda.' : 'Aún no tienes clientes registrados.'}
+                    {t('dashboard.empty')}
                 </td>
             </tr>
         );
@@ -582,7 +582,7 @@ const DashboardPage: React.FC = () => {
             )}
             <div className="space-y-6">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                    <h1 className="text-3xl font-bold text-black tracking-tight">Dashboard de Clientes</h1>
+                    <h1 className="text-3xl font-bold text-black tracking-tight">{t('dashboard.title')}</h1>
                      <div className="flex items-center gap-2 flex-wrap">
                         <button
                             onClick={() => setIsScannerOpen(true)}
@@ -590,7 +590,7 @@ const DashboardPage: React.FC = () => {
                             className="inline-flex items-center justify-center gap-2 px-4 py-2 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <QRIcon />
-                            Escanear QR
+                            {t('dashboard.scanQr')}
                         </button>
                          <button
                             onClick={() => !isLimitReached && navigate('/app/nuevo-cliente')}
@@ -598,7 +598,7 @@ const DashboardPage: React.FC = () => {
                             className="inline-flex items-center justify-center gap-2 px-4 py-2 text-base font-medium text-white bg-black rounded-md hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <UserPlusIcon />
-                            Nuevo Cliente
+                            {t('dashboard.newCustomer')}
                         </button>
                         <button
                             onClick={() => {
@@ -610,7 +610,7 @@ const DashboardPage: React.FC = () => {
                             className="inline-flex items-center justify-center gap-2 px-4 py-2 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <UploadIcon />
-                            Carga Masiva
+                            {t('dashboard.bulkUpload')}
                         </button>
                         <button
                             onClick={handleDownload}
@@ -622,7 +622,7 @@ const DashboardPage: React.FC = () => {
                             ) : (
                                 <DownloadIcon />
                             )}
-                            {isDownloading ? 'Descargando...' : 'Descargar CSV'}
+                            {isDownloading ? t('common.loading') : t('dashboard.downloadCsv')}
                         </button>
                     </div>
                 </div>
@@ -637,7 +637,7 @@ const DashboardPage: React.FC = () => {
                             type="text"
                             id="customer-search"
                             className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm bg-white placeholder-gray-500 focus:outline-none focus:ring-black focus:border-black sm:text-base"
-                            placeholder="Buscar por nombre, teléfono o email (3+ caracteres)"
+                            placeholder={t('dashboard.searchPlaceholder')}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -654,13 +654,13 @@ const DashboardPage: React.FC = () => {
                         <table className="w-full text-base text-left text-gray-600">
                             <thead className="text-base text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
                                 <tr>
-                                    <th scope="col" className="px-4 py-3 sm:px-6">Nombre</th>
-                                    <th scope="col" className="px-4 py-3 sm:px-6">Teléfono</th>
-                                    <th scope="col" className="px-4 py-3 sm:px-6 hidden md:table-cell">Email</th>
-                                    <th scope="col" className="px-4 py-3 sm:px-6 hidden lg:table-cell">Fecha de Inscripción</th>
-                                    <th scope="col" className="px-4 py-3 sm:px-6 text-center">Sellos</th>
-                                    <th scope="col" className="px-4 py-3 sm:px-6 text-center">Recompensas</th>
-                                    <th scope="col" className="px-4 py-3 sm:px-6 text-right">Acciones</th>
+                                    <th scope="col" className="px-4 py-3 sm:px-6">{t('common.name')}</th>
+                                    <th scope="col" className="px-4 py-3 sm:px-6">{t('common.phone')}</th>
+                                    <th scope="col" className="px-4 py-3 sm:px-6 hidden md:table-cell">{t('common.email')}</th>
+                                    <th scope="col" className="px-4 py-3 sm:px-6 hidden lg:table-cell">{t('dashboard.table.joined')}</th>
+                                    <th scope="col" className="px-4 py-3 sm:px-6 text-center">{t('dashboard.table.stamps')}</th>
+                                    <th scope="col" className="px-4 py-3 sm:px-6 text-center">{t('dashboard.table.rewards')}</th>
+                                    <th scope="col" className="px-4 py-3 sm:px-6 text-right">{t('common.actions')}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -731,7 +731,7 @@ const DashboardPage: React.FC = () => {
             {isUploadModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4" aria-modal="true" role="dialog">
                     <div className="bg-white rounded-lg shadow-xl w-full max-w-lg p-6">
-                        <h2 className="text-xl font-bold text-black mb-4">Carga Masiva de Clientes</h2>
+                        <h2 className="text-xl font-bold text-black mb-4">{t('dashboard.bulkUpload')}</h2>
                         {uploadStep === 'info' && (
                             <div>
                                 <p className="text-base text-gray-700">Sube un archivo .csv con los datos de tus clientes. El sistema omitirá automáticamente los clientes cuyo número de teléfono ya esté registrado.</p>
@@ -751,7 +751,7 @@ const DashboardPage: React.FC = () => {
                                     </button>
                                 </div>
                                 <div className="mt-6 flex justify-end space-x-4">
-                                    <button onClick={() => setIsUploadModalOpen(false)} className="px-4 py-2 text-base font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">Cancelar</button>
+                                    <button onClick={() => setIsUploadModalOpen(false)} className="px-4 py-2 text-base font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">{t('common.cancel')}</button>
                                     <button onClick={() => fileInputRef.current?.click()} className="px-4 py-2 text-base font-medium text-white bg-black rounded-md hover:bg-gray-800">Seleccionar Archivo</button>
                                     <input type="file" ref={fileInputRef} onChange={handleFileSelect} accept=".csv" className="hidden" />
                                 </div>
@@ -800,7 +800,7 @@ const DashboardPage: React.FC = () => {
                             onClick={() => setIsScannerOpen(false)}
                             className="mt-4 w-full px-4 py-2 text-base font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
                         >
-                            Cancelar
+                            {t('common.cancel')}
                         </button>
                     </div>
                 </div>

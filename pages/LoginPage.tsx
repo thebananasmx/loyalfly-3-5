@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { sendPasswordReset } from '../services/firebaseService';
 import ErrorMessage from '../components/ErrorMessage';
 import ExclamationCircleIcon from '../components/icons/ExclamationCircleIcon';
+import { useTranslation } from 'react-i18next';
 
 const validateEmail = (email: string) => {
   if (!email) return "El email es requerido.";
@@ -12,6 +13,7 @@ const validateEmail = (email: string) => {
 };
 
 const LoginPage: React.FC = () => {
+    const { t } = useTranslation();
     const [view, setView] = useState<'login' | 'reset'>('login');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -23,7 +25,7 @@ const LoginPage: React.FC = () => {
     const { login } = useAuth();
 
     useEffect(() => {
-        document.title = 'Iniciar Sesión | Loyalfly';
+        document.title = 'Loyalfly';
     }, []);
 
     const handleLogin = async (e: React.FormEvent) => {
@@ -90,13 +92,13 @@ const LoginPage: React.FC = () => {
     const renderLoginView = () => (
         <>
             <div className="text-center mb-8">
-                <h1 className="text-3xl font-bold text-black tracking-tight">Bienvenido de nuevo</h1>
-                <p className="text-gray-500 mt-2">Inicia sesión en tu cuenta de negocio.</p>
+                <h1 className="text-3xl font-bold text-black tracking-tight">{t('auth.loginTitle')}</h1>
+                <p className="text-gray-500 mt-2">{t('auth.loginSubtitle')}</p>
             </div>
 
             <form onSubmit={handleLogin} className="space-y-6">
                 <div>
-                    <label htmlFor="email" className="block text-base font-medium text-gray-700">Email</label>
+                    <label htmlFor="email" className="block text-base font-medium text-gray-700">{t('common.email')}</label>
                     <div className="relative mt-1">
                         <input 
                             id="email"
@@ -119,7 +121,7 @@ const LoginPage: React.FC = () => {
                 </div>
 
                 <div>
-                    <label htmlFor="password" className="block text-base font-medium text-gray-700">Contraseña</label>
+                    <label htmlFor="password" className="block text-base font-medium text-gray-700">{t('auth.password')}</label>
                     <div className="relative mt-1">
                         <input 
                             id="password"
@@ -149,15 +151,15 @@ const LoginPage: React.FC = () => {
                         disabled={loading}
                         className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black disabled:bg-gray-400"
                     >
-                        {loading ? 'Iniciando...' : 'Iniciar Sesión'}
+                        {loading ? t('common.loading') : t('header.login')}
                     </button>
                 </div>
             </form>
              <div className="text-center mt-6 space-y-3">
                  <p className="text-base text-gray-500">
-                    ¿No tienes una cuenta?{' '}
+                    {t('auth.noAccount')}{' '}
                     <Link to="/register" className="font-medium text-[#4D17FF] hover:underline">
-                        Regístrate
+                        {t('header.register')}
                     </Link>
                 </p>
                 <button 
@@ -165,7 +167,7 @@ const LoginPage: React.FC = () => {
                     onClick={switchToResetView}
                     className="text-sm font-medium text-[#4D17FF] hover:underline focus:outline-none"
                 >
-                    ¿Olvidaste tu contraseña?
+                    {t('auth.forgotPassword')}
                 </button>
              </div>
         </>
@@ -174,8 +176,8 @@ const LoginPage: React.FC = () => {
     const renderResetView = () => (
         <>
             <div className="text-center mb-8">
-                <h1 className="text-3xl font-bold text-black tracking-tight">Restablecer Contraseña</h1>
-                <p className="text-gray-500 mt-2">Ingresa tu email para recibir un enlace de restablecimiento.</p>
+                <h1 className="text-3xl font-bold text-black tracking-tight">{t('auth.resetTitle')}</h1>
+                <p className="text-gray-500 mt-2">{t('auth.resetSubtitle')}</p>
             </div>
             
             {message ? (
@@ -185,7 +187,7 @@ const LoginPage: React.FC = () => {
             ) : (
                 <form onSubmit={handleResetPassword} className="space-y-6">
                     <div>
-                        <label htmlFor="email-reset" className="block text-base font-medium text-gray-700">Email</label>
+                        <label htmlFor="email-reset" className="block text-base font-medium text-gray-700">{t('common.email')}</label>
                         <div className="relative mt-1">
                             <input 
                                 id="email-reset"
@@ -215,7 +217,7 @@ const LoginPage: React.FC = () => {
                             disabled={loading}
                             className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black disabled:bg-gray-400"
                         >
-                            {loading ? 'Enviando...' : 'Enviar enlace'}
+                            {loading ? t('common.loading') : t('auth.sendLink')}
                         </button>
                     </div>
                 </form>
@@ -224,7 +226,7 @@ const LoginPage: React.FC = () => {
              <div className="text-center mt-6">
                  <p className="text-base text-gray-500">
                     <button onClick={switchToLoginView} className="font-medium text-[#4D17FF] hover:underline focus:outline-none">
-                        Volver a Iniciar Sesión
+                        {t('auth.backToLogin')}
                     </button>
                 </p>
              </div>

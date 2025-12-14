@@ -5,6 +5,8 @@ import { getPublicCardSettings, createNewCustomer, getBusinessIdBySlug, getCusto
 import type { Customer } from '../types';
 import ErrorMessage from '../components/ErrorMessage';
 import ExclamationCircleIcon from '../components/icons/ExclamationCircleIcon';
+import LanguageSelector from '../components/LanguageSelector';
+import { useTranslation } from 'react-i18next';
 
 type ViewState = 'lookup' | 'register' | 'display';
 
@@ -27,7 +29,7 @@ interface SurveySettings {
 }
 
 const validateMexicanPhoneNumber = (phone: string): string => {
-    if (!phone) return "El número de teléfono es requerido.";
+    if (!phone) return ""; // Let basic required check handle empty
     let cleaned = phone.trim();
 
     if (cleaned.startsWith('+521')) {
@@ -42,6 +44,7 @@ const validateMexicanPhoneNumber = (phone: string): string => {
 };
 
 const PublicCardPage: React.FC = () => {
+    const { t } = useTranslation();
     const { slug } = useParams<{ slug: string }>();
     const topRef = useRef<HTMLDivElement>(null);
 
@@ -65,12 +68,11 @@ const PublicCardPage: React.FC = () => {
     const [userEmail, setUserEmail] = useState('');
 
     useEffect(() => {
-        document.title = 'Cargando Tarjeta... | Loyalfly';
+        document.title = 'Loyalfly';
         const fetchSettings = async () => {
             if (!slug) {
                 setErrors({ form: 'No se ha especificado un negocio.' });
                 setLoading(false);
-                document.title = 'Error | Loyalfly';
                 return;
             }
             try {
@@ -78,22 +80,19 @@ const PublicCardPage: React.FC = () => {
                 if (!id) {
                     setErrors({ form: 'No se pudo encontrar el negocio.' });
                     setLoading(false);
-                    document.title = 'Negocio no encontrado | Loyalfly';
                     return;
                 }
                 setBusinessId(id);
                 const data = await getPublicCardSettings(id);
                 if (data) {
                     setSettings(data as CardSettings);
-                    document.title = `Tu Tarjeta de Lealtad de ${data.name} | Loyalfly`;
+                    document.title = `${data.name} | Loyalfly`;
                 } else {
                     setErrors({ form: 'No se pudo encontrar la configuración para este negocio.' });
-                    document.title = 'Tarjeta no encontrada | Loyalfly';
                 }
             } catch (err) {
                 console.error(err);
                 setErrors({ form: 'Ocurrió un error al cargar la información del negocio.' });
-                document.title = 'Error de Carga | Loyalfly';
             } finally {
                 setLoading(false);
             }
@@ -200,7 +199,7 @@ const PublicCardPage: React.FC = () => {
         if (errors.form && !settings) { // Show fatal error if settings couldn't load
             return (
                 <div className="text-center">
-                    <h1 className="text-2xl font-bold text-red-600">Error</h1>
+                    <h1 className="text-2xl font-bold text-red-600">{t('common.error')}</h1>
                     <p className="text-gray-700 mt-2">{errors.form}</p>
                 </div>
             )
@@ -225,11 +224,11 @@ const PublicCardPage: React.FC = () => {
                     <div>
                         {businessHeader}
                         <div className="animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-                            <h2 className="text-xl font-semibold text-black tracking-tight text-center mb-4">Consulta tu tarjeta</h2>
+                            <h2 className="text-xl font-semibold text-black tracking-tight text-center mb-4">{t('publicView.lookupTitle')}</h2>
                             <div className="bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
                                 <form onSubmit={handleLookup} className="space-y-4">
                                     <div>
-                                        <label htmlFor="phoneLookup" className="sr-only">Número de Teléfono</label>
+                                        <label htmlFor="phoneLookup" className="sr-only">{t('common.phone')}</label>
                                         <div className="relative">
                                             <input
                                                 id="phoneLookup"
@@ -239,7 +238,7 @@ const PublicCardPage: React.FC = () => {
                                                 maxLength={10}
                                                 required
                                                 className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.phoneLookup ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
-                                                placeholder="Tu número de teléfono (10 dígitos)"
+                                                placeholder={t('publicView.lookupSubtitle')}
                                                 aria-invalid={!!errors.phoneLookup}
                                                 aria-describedby="phoneLookup-error"
                                             />
@@ -257,13 +256,13 @@ const PublicCardPage: React.FC = () => {
                                         disabled={isSubmitting}
                                         className="w-full py-2.5 px-4 font-semibold text-white bg-black hover:bg-gray-800 rounded-md transition-colors disabled:bg-gray-400"
                                     >
-                                        {isSubmitting ? 'Consultando...' : 'Consultar'}
+                                        {isSubmitting ? t('common.loading') : t('publicView.lookupBtn')}
                                     </button>
                                 </form>
                                 <p className="text-center text-sm text-gray-500 mt-4">
-                                    ¿Eres nuevo?{' '}
+                                    {t('publicView.newHere')}{' '}
                                     <button onClick={() => setView('register')} className="font-medium text-[#4D17FF] hover:underline focus:outline-none">
-                                        Regístrate aquí
+                                        {t('publicView.registerLink')}
                                     </button>
                                 </p>
                             </div>
@@ -276,11 +275,11 @@ const PublicCardPage: React.FC = () => {
                     <div>
                         {businessHeader}
                         <div className="animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-                           <h2 className="text-xl font-semibold text-black tracking-tight text-center mb-4">Regístrate</h2>
+                           <h2 className="text-xl font-semibold text-black tracking-tight text-center mb-4">{t('publicView.registerTitle')}</h2>
                              <div className="bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
                                 <form onSubmit={handleRegister} className="space-y-4">
                                     <div>
-                                        <label htmlFor="userName" className="block text-base font-medium text-gray-700 sr-only">Nombre</label>
+                                        <label htmlFor="userName" className="block text-base font-medium text-gray-700 sr-only">{t('common.name')}</label>
                                         <div className="relative">
                                             <input
                                                 id="userName"
@@ -289,7 +288,7 @@ const PublicCardPage: React.FC = () => {
                                                 onChange={(e) => setUserName(e.target.value)}
                                                 required
                                                 className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.userName ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
-                                                placeholder="Tu nombre completo"
+                                                placeholder={t('common.name')}
                                                 aria-invalid={!!errors.userName}
                                                 aria-describedby="userName-error"
                                             />
@@ -302,7 +301,7 @@ const PublicCardPage: React.FC = () => {
                                         <ErrorMessage message={errors.userName} id="userName-error" />
                                     </div>
                                     <div>
-                                        <label htmlFor="userPhone" className="block text-base font-medium text-gray-700 sr-only">Teléfono</label>
+                                        <label htmlFor="userPhone" className="block text-base font-medium text-gray-700 sr-only">{t('common.phone')}</label>
                                          <div className="relative">
                                             <input
                                                 id="userPhone"
@@ -312,7 +311,7 @@ const PublicCardPage: React.FC = () => {
                                                 maxLength={10}
                                                 required
                                                 className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.userPhone ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
-                                                placeholder="Tu número de teléfono (10 dígitos)"
+                                                placeholder={t('common.phone')}
                                                 aria-invalid={!!errors.userPhone}
                                                 aria-describedby="userPhone-error"
                                             />
@@ -326,7 +325,7 @@ const PublicCardPage: React.FC = () => {
                                     </div>
                                     <div>
                                         <label htmlFor="userEmail" className="block text-base font-medium text-gray-700 sr-only">
-                                            Email (Opcional)
+                                            {t('common.email')}
                                         </label>
                                         <div className="relative">
                                             <input
@@ -335,7 +334,7 @@ const PublicCardPage: React.FC = () => {
                                                 value={userEmail}
                                                 onChange={(e) => setUserEmail(e.target.value)}
                                                 className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.userEmail ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
-                                                placeholder="tu@email.com (opcional)"
+                                                placeholder={`${t('common.email')} (opcional)`}
                                                 aria-invalid={!!errors.userEmail}
                                                 aria-describedby="userEmail-error"
                                             />
@@ -353,12 +352,12 @@ const PublicCardPage: React.FC = () => {
                                         disabled={isSubmitting}
                                         className="w-full py-2.5 px-4 font-semibold text-white bg-black hover:bg-gray-800 rounded-md transition-colors disabled:bg-gray-400"
                                     >
-                                        {isSubmitting ? 'Registrando...' : 'Registrarme'}
+                                        {isSubmitting ? t('common.loading') : t('publicView.registerBtn')}
                                     </button>
                                     <p className="text-center text-sm text-gray-500 mt-2">
-                                        ¿Ya tienes cuenta?{' '}
+                                        {t('auth.haveAccount')}{' '}
                                         <button onClick={() => { setView('lookup'); setErrors({}); }} className="font-medium text-[#4D17FF] hover:underline focus:outline-none">
-                                            Consulta tus sellos
+                                            {t('publicView.checkPoints')}
                                         </button>
                                     </p>
                                 </form>
@@ -397,7 +396,7 @@ const PublicCardPage: React.FC = () => {
                            }}
                            className="mt-6 w-full py-2.5 px-4 text-base font-medium text-gray-700 bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
                        >
-                           Consultar otro número
+                           {t('publicView.consultOther')}
                        </button>
 
                         {settings?.plan === 'Gratis' && (
@@ -406,7 +405,7 @@ const PublicCardPage: React.FC = () => {
                                 className="mt-4 w-full py-3 px-4 flex items-center justify-center gap-3 text-base font-bold text-white bg-[#4D17FF] rounded-md shadow-md hover:bg-[#3a11cc] transition-colors"
                             >
                                 <img src="https://res.cloudinary.com/dg4wbuppq/image/upload/v1762622899/ico_loyalfly_xgfdv8.svg" alt="" className="w-6 h-6" />
-                                <span>Únete a Loyalfly como {settings.name}</span>
+                                <span>{t('card.join')} {settings.name}</span>
                             </Link>
                         )}
                     </div>
@@ -426,12 +425,15 @@ const PublicCardPage: React.FC = () => {
   
     return (
         <div ref={topRef} className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4 font-sans">
+            <div className="absolute top-4 right-4">
+                <LanguageSelector />
+            </div>
             <div className="w-full max-w-sm mx-auto">
                 {renderContent()}
             </div>
             <div className="text-center text-sm text-gray-500 mt-8 space-y-1">
-              <p>Powered by Loyalfly</p>
-              <Link to="/terminos" className="hover:underline">Términos y Condiciones</Link>
+              <p>{t('common.poweredBy')}</p>
+              <Link to="/terminos" className="hover:underline">{t('header.terms')}</Link>
             </div>
         </div>
       );

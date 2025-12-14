@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const CheckIcon = () => <svg className="w-5 h-5 text-[#00AA00]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>;
 
@@ -11,9 +12,10 @@ interface PricingCardProps {
   isFeatured?: boolean;
   isContact?: boolean;
   stripeLink?: string;
+  buttonText: string;
 }
 
-const PricingCard: React.FC<PricingCardProps> = ({ plan, price, description, features, isFeatured = false, isContact = false, stripeLink }) => {
+const PricingCard: React.FC<PricingCardProps> = ({ plan, price, description, features, isFeatured = false, isContact = false, stripeLink, buttonText }) => {
   const cardClasses = `border rounded-lg p-6 sm:p-8 flex flex-col h-full ${isFeatured ? 'border-[#4D17FF] border-2' : 'border-gray-200'}`;
   const buttonClasses = `w-full mt-8 py-3 font-semibold rounded-md transition-colors text-center ${isFeatured ? 'bg-[#4D17FF] text-white hover:bg-opacity-90' : 'bg-black text-white hover:bg-gray-800'}`;
 
@@ -21,20 +23,20 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan, price, description, fea
     if (stripeLink) {
       return (
         <a href={stripeLink} target="_blank" rel="noopener noreferrer" className={buttonClasses}>
-          Suscribirse
+          {buttonText}
         </a>
       );
     }
     if (isContact) {
       return (
         <a href="mailto:hector@thebananas.com.mx" className={buttonClasses}>
-          Contáctanos
+          {buttonText}
         </a>
       );
     }
     return (
       <Link to="/register" className={buttonClasses}>
-        Empezar
+        {buttonText}
       </Link>
     );
   };
@@ -59,55 +61,59 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan, price, description, fea
 
 
 const PricingPage: React.FC = () => {
+    const { t } = useTranslation();
     useEffect(() => {
-        document.title = 'Precios y Planes | Loyalfly';
+        document.title = 'Loyalfly';
     }, []);
 
     return (
         <div className="py-16 sm:py-24">
             <div className="container mx-auto px-4">
                 <div className="text-center">
-                    <h1 className="text-4xl font-extrabold text-black tracking-tight">Planes simples y transparentes</h1>
+                    <h1 className="text-4xl font-extrabold text-black tracking-tight">{t('pricing.title')}</h1>
                     <p className="mt-4 max-w-2xl mx-auto text-lg text-gray-600">
-                        Elige el plan que se adapte al tamaño de tu negocio. Sin contratos, cancela cuando quieras.
+                        {t('pricing.subtitle')}
                     </p>
                 </div>
 
                 <div className="mt-16 max-w-5xl mx-auto grid lg:grid-cols-3 gap-8">
                     <PricingCard 
-                        plan="Gratis"
+                        plan={t('pricing.free.name')}
                         price="$0"
-                        description="Para empezar y probar."
+                        description={t('pricing.free.desc')}
+                        buttonText={t('pricing.cta.start')}
                         features={[
-                            'Hasta 100 clientes',
-                            'Tarjeta de lealtad digital',
-                            'Personalización básica'
+                            t('pricing.features.customers100'),
+                            t('pricing.features.digitalCard'),
+                            t('pricing.features.basicCustom')
                         ]}
                     />
                     <PricingCard 
-                        plan="Entrepreneur"
+                        plan={t('pricing.entrepreneur.name')}
                         price="$299 / mes"
-                        description="Ideal para negocios en crecimiento."
+                        description={t('pricing.entrepreneur.desc')}
+                        buttonText={t('pricing.cta.subscribe')}
                         features={[
-                            'Hasta 1000 clientes',
-                            'Tarjeta de lealtad digital',
-                            'Personalización completa',
-                            'Elimina botón "Únete a Loyalfly"',
-                            'Soporte por email'
+                            t('pricing.features.customers1000'),
+                            t('pricing.features.digitalCard'),
+                            t('pricing.features.fullCustom'),
+                            t('pricing.features.removeBranding'),
+                            t('pricing.features.emailSupport')
                         ]}
                         isFeatured={true}
                         stripeLink="https://buy.stripe.com/3cI6oI2dX1Rrfpy9XP5c400"
                     />
                     <PricingCard 
-                        plan="Pro"
+                        plan={t('pricing.pro.name')}
                         price="Cotiza hoy"
-                        description="Para negocios establecidos."
+                        description={t('pricing.pro.desc')}
+                        buttonText={t('pricing.cta.contact')}
                         features={[
-                            'Clientes ilimitados',
-                            'Tarjeta de lealtad digital',
-                            'Personalización completa',
-                            'Elimina botón "Únete a Loyalfly"',
-                            'Soporte prioritario'
+                            t('pricing.features.customersUnlimited'),
+                            t('pricing.features.digitalCard'),
+                            t('pricing.features.fullCustom'),
+                            t('pricing.features.removeBranding'),
+                            t('pricing.features.prioritySupport')
                         ]}
                         isContact={true}
                     />

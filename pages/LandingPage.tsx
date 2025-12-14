@@ -22,80 +22,79 @@ const Feature: React.FC<{ title: string; description: string }> = ({ title, desc
     </div>
 );
 
-const slides = [
-    {
-        industry: "Cafeterías",
-        title: "Aroma a lealtad en cada taza.",
-        description: "Premia a tus clientes frecuentes con un café gratis y haz que cada visita cuente. Loyalfly es el ingrediente secreto para que vuelvan por más.",
-        color: "bg-yellow-100 text-yellow-800",
-        imageUrl: "https://res.cloudinary.com/dg4wbuppq/image/upload/v1762011139/coffee_loyalfly_mg9r2p.png"
-    },
-    {
-        industry: "Restaurantes",
-        title: "El platillo principal es la fidelidad.",
-        description: "Desde postres de cortesía hasta descuentos especiales, crea un programa de recompensas que deje a tus comensales con un excelente sabor de boca.",
-        color: "bg-red-100 text-red-800",
-        imageUrl: "https://res.cloudinary.com/dg4wbuppq/image/upload/v1762011138/restaurant_loyalfly_hs7cwc.png"
-    },
-    {
-        industry: "Emprendedores",
-        title: "Construye una comunidad, no solo clientes.",
-        description: "Si tienes una tienda local o un pequeño negocio, Loyalfly te ayuda a crear conexiones duraderas y a convertir compradores ocasionales en tus fans número uno.",
-        color: "bg-blue-100 text-blue-800",
-        imageUrl: "https://res.cloudinary.com/dg4wbuppq/image/upload/v1762011139/paint_loyalfly_aqcand.png"
-    },
-    {
-        industry: "Nail & Makeup Artists",
-        title: "Belleza que recompensa.",
-        description: "Ofrece un servicio gratuito o un descuento exclusivo después de varias visitas. Es la manera perfecta de agradecer a tus clientas por su confianza y lealtad.",
-        color: "bg-pink-100 text-pink-800",
-        imageUrl: "https://res.cloudinary.com/dg4wbuppq/image/upload/v1762011141/makeup_loyalfly_s0yta0.png"
-    },
-    {
-        industry: "Estilistas y Barberos",
-        title: "Un corte por encima de la competencia.",
-        description: "Fideliza a tu clientela con un programa de lealtad tan impecable como tus cortes. Un servicio gratuito cada ciertos cortes es un incentivo que funciona.",
-        color: "bg-gray-200 text-gray-800",
-        imageUrl: "https://res.cloudinary.com/dg4wbuppq/image/upload/v1762011138/barber_loyalfly_r8ymwd.png"
-    }
-];
-
-const tabs = [
-  {
-    id: 'emprendedores',
-    title: 'Emprendedores',
-    icon: <StoreIcon />,
-    description: 'Una tarjeta versátil y moderna, perfecta para cualquier tipo de negocio que está comenzando a construir una base de clientes leales.',
-    imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1762055851/card_loyalfly_tmx9vh.png'
-  },
-  {
-    id: 'cafeterias',
-    title: 'Cafeterías',
-    icon: <CoffeeIcon />,
-    description: 'Un diseño cálido y acogedor que invita a tus clientes a volver por su próxima taza de café o su platillo favorito.',
-    imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1762057146/card_cafe_mzjj0q.png'
-  },
-  {
-    id: 'barberias',
-    title: 'Barberías',
-    icon: <ScissorsIcon />,
-    description: 'Estilo y sofisticación en una tarjeta que refleja la calidad de tus cortes y servicios. Ideal para salones y barberías.',
-    imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1762057493/card_barber_ftfyxa.png'
-  },
-  {
-    id: 'belleza',
-    title: 'Belleza',
-    icon: <SparklesIcon />,
-    description: 'Un toque de elegancia y glamour para recompensar la fidelidad de tus clientas y hacer que se sientan especiales en cada visita.',
-    imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1762057298/card_beauty_cu1r3n.png'
-  }
-];
-
-
 const LandingPage: React.FC = () => {
     const { t } = useTranslation();
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [activeTab, setActiveTab] = useState(tabs[0].id);
+    const [activeTab, setActiveTab] = useState('emprendedores');
+
+    const slides = [
+        {
+            industry: t('landing.industries.slides.cafe.industry'),
+            title: t('landing.industries.slides.cafe.title'),
+            description: t('landing.industries.slides.cafe.desc'),
+            color: "bg-yellow-100 text-yellow-800",
+            imageUrl: "https://res.cloudinary.com/dg4wbuppq/image/upload/v1762011139/coffee_loyalfly_mg9r2p.png"
+        },
+        {
+            industry: t('landing.industries.slides.restaurant.industry'),
+            title: t('landing.industries.slides.restaurant.title'),
+            description: t('landing.industries.slides.restaurant.desc'),
+            color: "bg-red-100 text-red-800",
+            imageUrl: "https://res.cloudinary.com/dg4wbuppq/image/upload/v1762011138/restaurant_loyalfly_hs7cwc.png"
+        },
+        {
+            industry: t('landing.industries.slides.entrepreneur.industry'),
+            title: t('landing.industries.slides.entrepreneur.title'),
+            description: t('landing.industries.slides.entrepreneur.desc'),
+            color: "bg-blue-100 text-blue-800",
+            imageUrl: "https://res.cloudinary.com/dg4wbuppq/image/upload/v1762011139/paint_loyalfly_aqcand.png"
+        },
+        {
+            industry: t('landing.industries.slides.makeup.industry'),
+            title: t('landing.industries.slides.makeup.title'),
+            description: t('landing.industries.slides.makeup.desc'),
+            color: "bg-pink-100 text-pink-800",
+            imageUrl: "https://res.cloudinary.com/dg4wbuppq/image/upload/v1762011141/makeup_loyalfly_s0yta0.png"
+        },
+        {
+            industry: t('landing.industries.slides.barber.industry'),
+            title: t('landing.industries.slides.barber.title'),
+            description: t('landing.industries.slides.barber.desc'),
+            color: "bg-gray-200 text-gray-800",
+            imageUrl: "https://res.cloudinary.com/dg4wbuppq/image/upload/v1762011138/barber_loyalfly_r8ymwd.png"
+        }
+    ];
+
+    const tabs = [
+      {
+        id: 'emprendedores',
+        title: t('landing.designs.tabs.entrepreneur.title'),
+        icon: <StoreIcon />,
+        description: t('landing.designs.tabs.entrepreneur.desc'),
+        imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1762055851/card_loyalfly_tmx9vh.png'
+      },
+      {
+        id: 'cafeterias',
+        title: t('landing.designs.tabs.cafe.title'),
+        icon: <CoffeeIcon />,
+        description: t('landing.designs.tabs.cafe.desc'),
+        imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1762057146/card_cafe_mzjj0q.png'
+      },
+      {
+        id: 'barberias',
+        title: t('landing.designs.tabs.barber.title'),
+        icon: <ScissorsIcon />,
+        description: t('landing.designs.tabs.barber.desc'),
+        imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1762057493/card_barber_ftfyxa.png'
+      },
+      {
+        id: 'belleza',
+        title: t('landing.designs.tabs.beauty.title'),
+        icon: <SparklesIcon />,
+        description: t('landing.designs.tabs.beauty.desc'),
+        imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1762057298/card_beauty_cu1r3n.png'
+      }
+    ];
 
     useEffect(() => {
         document.title = 'Loyalfly | Programa de Lealtad Digital para Negocios';
@@ -105,7 +104,7 @@ const LandingPage: React.FC = () => {
         }, 7000);
 
         return () => clearInterval(interval);
-    }, []);
+    }, [slides.length]);
 
     const goToPrevious = () => {
         setCurrentIndex((prevIndex) => (prevIndex - 1 + slides.length) % slides.length);
@@ -163,8 +162,8 @@ const LandingPage: React.FC = () => {
             <section className="py-20 bg-gray-50">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-12">
-                        <h2 className="text-3xl font-bold text-black">Diseños que enamoran a tus clientes</h2>
-                        <p className="mt-4 max-w-2xl mx-auto text-gray-600">Elige un estilo que represente tu marca y personalízalo a tu gusto en segundos.</p>
+                        <h2 className="text-3xl font-bold text-black">{t('landing.designs.title')}</h2>
+                        <p className="mt-4 max-w-2xl mx-auto text-gray-600">{t('landing.designs.subtitle')}</p>
                     </div>
 
                     <div className="max-w-4xl mx-auto">
@@ -208,25 +207,25 @@ const LandingPage: React.FC = () => {
             <section className="py-20 bg-white">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-12">
-                        <h2 className="text-3xl font-bold text-black">Todo lo que necesitas para crecer</h2>
-                        <p className="mt-4 text-gray-600">Simple para ti, mágico para tus clientes.</p>
+                        <h2 className="text-3xl font-bold text-black">{t('landing.features.title')}</h2>
+                        <p className="mt-4 text-gray-600">{t('landing.features.subtitle')}</p>
                     </div>
                     <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-10">
                         <Feature 
-                            title="100% Digital"
-                            description="Tus clientes solo necesitan su número de teléfono. Olvídate de las tarjetas físicas para siempre."
+                            title={t('landing.features.list.digital.title')}
+                            description={t('landing.features.list.digital.desc')}
                         />
                         <Feature 
-                            title="Fácil de Personalizar"
-                            description="Adapta el diseño de tu tarjeta de lealtad con tu marca, colores y recompensas en segundos."
+                            title={t('landing.features.list.custom.title')}
+                            description={t('landing.features.list.custom.desc')}
                         />
                         <Feature 
-                            title="Análisis Sencillos"
-                            description="Visualiza quiénes son tus clientes más leales y entiende su comportamiento de compra."
+                            title={t('landing.features.list.analytics.title')}
+                            description={t('landing.features.list.analytics.desc')}
                         />
                         <Feature 
-                            title="Resultados Reales"
-                            description="Incrementa la frecuencia de visita y el gasto promedio de tus clientes más valiosos."
+                            title={t('landing.features.list.results.title')}
+                            description={t('landing.features.list.results.desc')}
                         />
                     </div>
                 </div>
@@ -236,8 +235,8 @@ const LandingPage: React.FC = () => {
             <section className="py-20 bg-gray-50">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-12">
-                        <h2 className="text-3xl font-bold text-black">Perfecto para tu Negocio</h2>
-                        <p className="mt-4 max-w-2xl mx-auto text-gray-600">Desde cafeterías hasta salones de belleza, Loyalfly se adapta a ti.</p>
+                        <h2 className="text-3xl font-bold text-black">{t('landing.industries.title')}</h2>
+                        <p className="mt-4 max-w-2xl mx-auto text-gray-600">{t('landing.industries.subtitle')}</p>
                     </div>
                     
                     <div className="relative max-w-5xl mx-auto md:px-16">
