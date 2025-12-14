@@ -62,6 +62,12 @@ export const es = {
       viewPlans: "Ver Planes",
       login: "Iniciar Sesión"
     },
+    stats: {
+      title: "Nuestra comunidad sigue creciendo gracias a todos",
+      businesses: "Negocios Confían en Nosotros",
+      stamps: "Momentos de Lealtad (Sellos)",
+      rewards: "Recompensas Entregadas"
+    },
     designs: {
       title: "Diseños que enamoran a tus clientes",
       subtitle: "Elige un estilo que represente tu marca y personalízalo a tu gusto en segundos.",
@@ -301,6 +307,12 @@ export const en = {
       subtitle: "Loyalfly is the simplest and most elegant way to create a digital loyalty program your customers will love. No paper cards, no hassle.",
       viewPlans: "View Plans",
       login: "Log In"
+    },
+    stats: {
+      title: "Our community keeps growing thanks to everyone",
+      businesses: "Businesses Trust Us",
+      stamps: "Loyalty Moments (Stamps)",
+      rewards: "Rewards Delivered"
     },
     designs: {
       title: "Designs your customers will love",
@@ -542,11 +554,17 @@ export const pt = {
       viewPlans: "Ver Planos",
       login: "Entrar"
     },
+    stats: {
+      title: "Nossa comunidade continua crescendo graças a todos",
+      businesses: "Negócios Confiam em Nós",
+      stamps: "Momentos de Fidelidade (Selos)",
+      rewards: "Recompensas Entregues"
+    },
     designs: {
       title: "Designs que seus clientes vão adorar",
       subtitle: "Escolha um estilo que represente sua marca e personalize-o ao seu gosto em segundos.",
       tabs: {
-        entrepreneur: { title: "Empreendedores", desc: "Um cartão versátil e moderno, perfeito para qualquer tipo de negócio que está começando a construir uma base de clientes fiéis." },
+        entrepreneur: { title: "Empreendedores", desc: "Um cartão versátil e moderno, perfeito para qualquer tipo de negocio que está começando a construir uma base de clientes fiéis." },
         cafe: { title: "Cafeterias", desc: "Um design acolhedor e convidativo que incentiva seus clientes a voltarem para sua próxima xícara de café ou prato favorito." },
         barber: { title: "Barbearias", desc: "Estilo e sofisticação em um cartão que reflete a qualidade de seus cortes e serviços. Ideal para salões e barbearias." },
         beauty: { title: "Beleza", desc: "Um toque de elegância e glamour para recompensar a fidelidade de suas clientes e fazê-las se sentirem especiais em cada visita." }
@@ -697,7 +715,7 @@ export const pt = {
     },
     pro: {
       name: "Pro",
-      desc: "Para negócios estabelecidos."
+      desc: "Para negocios estabelecidos."
     },
     features: {
       customers100: "Até 100 clientes",

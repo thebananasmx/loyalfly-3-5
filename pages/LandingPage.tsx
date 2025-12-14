@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import StatsBanner from '../components/StatsBanner';
 
 const CheckCircleIcon = () => <svg className="w-6 h-6 text-[#00AA00]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>;
 
@@ -119,7 +120,7 @@ const LandingPage: React.FC = () => {
     return (
         <div className="bg-white">
             {/* Hero Section */}
-            <section className="py-12 md:py-0 md:min-h-[66.67vh] md:flex md:items-center xl:min-h-0 xl:py-24">
+            <section className="py-12 md:py-24 lg:py-32">
                 <div className="container mx-auto px-4 max-w-7xl">
                     <div className="flex flex-col md:flex-row items-center gap-12">
                         {/* Left side: Text content */}
@@ -157,6 +158,9 @@ const LandingPage: React.FC = () => {
                     </div>
                 </div>
             </section>
+
+            {/* Stats Banner Section */}
+            <StatsBanner />
 
             {/* Designs Tab Section */}
             <section className="py-20 bg-gray-50">

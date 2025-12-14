@@ -523,6 +523,38 @@ export const getAllBusinessesForSuperAdmin = async (): Promise<BusinessAdminData
     return businessesWithData;
 };
 
+// Function for Landing Page - Aggregate Stats (Read-Only)
+export const getGlobalStats = async (): Promise<{ totalBusinesses: number; totalStamps: number; totalRewards: number }> => {
+    const businessCol = collection(db, "businesses");
+    const businessSnapshot = await getDocs(businessCol);
+    const businesses = businessSnapshot.docs.map(doc => doc.id);
+
+    let totalStamps = 0;
+    let totalRewards = 0;
+
+    // Use Promise.all to fetch customer collections in parallel
+    // Note: In a production environment with thousands of businesses, this should be a cached cloud function.
+    // For MVP, this client-side aggregation is acceptable.
+    await Promise.all(
+        businesses.map(async (businessId) => {
+            const customersCol = collection(db, `businesses/${businessId}/customers`);
+            const customerSnapshot = await getDocs(customersCol);
+            
+            customerSnapshot.docs.forEach(doc => {
+                const data = doc.data();
+                totalStamps += data.stamps || 0;
+                totalRewards += data.rewardsRedeemed || 0;
+            });
+        })
+    );
+
+    return {
+        totalBusinesses: businesses.length,
+        totalStamps,
+        totalRewards
+    };
+};
+
 export const updateBusinessPlan = async (businessId: string, plan: 'Gratis' | 'Entrepreneur' | 'Pro') => {
     const businessDocRef = doc(db, "businesses", businessId);
     await updateDoc(businessDocRef, { plan });
