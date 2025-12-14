@@ -32,6 +32,15 @@ const ChangelogPage: React.FC = () => {
         
         <ul className="mt-8 space-y-6">
            <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Vista de Detalle de Negocio para Super Admin</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha habilitado una página de detalle en el panel de administración global. Al seleccionar un negocio, el administrador puede visualizar la configuración de la tarjeta de lealtad renderizada con datos reales del primer cliente, así como consultar la lista completa de clientes registrados (nombre, teléfono, email y sellos) en modo de solo lectura.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
               <FeatureTag type="improvement" />
               <div>
                   <h3 className="font-semibold text-black">Actualización en Página de Precios</h3>

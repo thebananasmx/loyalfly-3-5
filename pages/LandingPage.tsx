@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const CheckCircleIcon = () => <svg className="w-6 h-6 text-[#00AA00]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>;
 
@@ -92,6 +93,7 @@ const tabs = [
 
 
 const LandingPage: React.FC = () => {
+    const { t } = useTranslation();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [activeTab, setActiveTab] = useState(tabs[0].id);
 
@@ -124,23 +126,23 @@ const LandingPage: React.FC = () => {
                         {/* Left side: Text content */}
                         <div className="md:w-1/2 text-center md:text-left">
                             <h1 className="text-4xl md:text-6xl font-extrabold text-black tracking-tight">
-                                Transforma visitantes en clientes fieles.
+                                {t('landing.hero.title')}
                             </h1>
                             <p className="mt-6 max-w-2xl mx-auto md:mx-0 text-lg md:text-xl text-gray-600">
-                                Loyalfly es la forma más simple y elegante de crear un programa de lealtad digital que tus clientes amarán. Sin tarjetas de cartón, sin complicaciones.
+                                {t('landing.hero.subtitle')}
                             </p>
                             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center md:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
                                 <Link
                                     to="/pricing"
                                     className="px-8 py-3 w-full sm:w-auto text-base md:text-lg font-medium text-white bg-[#4D17FF] rounded-md hover:bg-opacity-90 transition-transform hover:scale-105"
                                 >
-                                    Ver Planes
+                                    {t('landing.hero.viewPlans')}
                                 </Link>
                                 <Link
                                     to="/login"
                                     className="px-8 py-3 w-full sm:w-auto text-base md:text-lg font-medium text-black bg-gray-100 rounded-md hover:bg-gray-200 transition-transform hover:scale-105"
                                 >
-                                    Iniciar Sesión
+                                    {t('landing.hero.login')}
                                 </Link>
                             </div>
                         </div>

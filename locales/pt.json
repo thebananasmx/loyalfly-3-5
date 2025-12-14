@@ -1,0 +1,30 @@
+{
+  "common": {
+    "loading": "Carregando..."
+  },
+  "header": {
+    "pricing": "Preços",
+    "blog": "Blog",
+    "terms": "Termos",
+    "login": "Entrar",
+    "register": "Começar",
+    "openMenu": "Abrir menu",
+    "closeMenu": "Fechar menu"
+  },
+  "sidebar": {
+    "dashboard": "Painel",
+    "myCard": "Meu Cartão",
+    "metrics": "Métricas",
+    "survey": "Pesquisa",
+    "settings": "Configurações",
+    "logout": "Sair"
+  },
+  "landing": {
+    "hero": {
+      "title": "Transforme visitantes em clientes fiéis.",
+      "subtitle": "Loyalfly é a maneira mais simples e elegante de criar um programa de fidelidade digital que seus clientes vão adorar. Sem cartões de papel, sem complicações.",
+      "viewPlans": "Ver Planos",
+      "login": "Entrar"
+    }
+  }
+}

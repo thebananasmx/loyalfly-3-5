@@ -1,0 +1,30 @@
+{
+  "common": {
+    "loading": "Loading..."
+  },
+  "header": {
+    "pricing": "Pricing",
+    "blog": "Blog",
+    "terms": "Terms",
+    "login": "Log In",
+    "register": "Get Started",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "myCard": "My Card",
+    "metrics": "Metrics",
+    "survey": "Survey",
+    "settings": "Settings",
+    "logout": "Log Out"
+  },
+  "landing": {
+    "hero": {
+      "title": "Turn visitors into loyal customers.",
+      "subtitle": "Loyalfly is the simplest and most elegant way to create a digital loyalty program your customers will love. No paper cards, no hassle.",
+      "viewPlans": "View Plans",
+      "login": "Log In"
+    }
+  }
+}

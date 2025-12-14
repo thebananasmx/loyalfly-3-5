@@ -3,6 +3,8 @@ import { NavLink, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getBusinessData } from '../services/firebaseService';
 import type { Business } from '../types';
+import { useTranslation } from 'react-i18next';
+import LanguageSelector from './LanguageSelector';
 
 const DashboardIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>;
 const CardIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>;
@@ -18,6 +20,7 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
+    const { t } = useTranslation();
     const { user, logout } = useAuth();
     const navigate = useNavigate();
     const [businessName, setBusinessName] = useState('');
@@ -91,7 +94,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                                 className={({isActive}) => `${navLinkClasses} mx-2 ${isActive ? activeClass : inactiveClass}`}
                             >
                                 <SettingsIcon />
-                                <span>Ajustes</span>
+                                <span>{t('sidebar.settings')}</span>
                             </NavLink>
                         </div>
                     )}
@@ -104,7 +107,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                         className={({isActive}) => `${navLinkClasses} ${isActive ? activeClass : inactiveClass}`}
                     >
                         <DashboardIcon />
-                        <span>Dashboard</span>
+                        <span>{t('sidebar.dashboard')}</span>
                     </NavLink>
                     <NavLink 
                         to="/app/tarjeta"
@@ -112,7 +115,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                         className={({isActive}) => `${navLinkClasses} ${isActive ? activeClass : inactiveClass}`}
                     >
                         <CardIcon />
-                        <span>Mi Tarjeta</span>
+                        <span>{t('sidebar.myCard')}</span>
                     </NavLink>
                     <NavLink 
                         to="/app/metricas"
@@ -120,7 +123,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                         className={({isActive}) => `${navLinkClasses} ${isActive ? activeClass : inactiveClass}`}
                     >
                         <MetricsIcon />
-                        <span>Métricas</span>
+                        <span>{t('sidebar.metrics')}</span>
                     </NavLink>
                     <NavLink 
                         to="/app/vote"
@@ -128,16 +131,19 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                         className={({isActive}) => `${navLinkClasses} ${isActive ? activeClass : inactiveClass}`}
                     >
                         <SurveyIcon />
-                        <span>Encuesta</span>
+                        <span>{t('sidebar.survey')}</span>
                     </NavLink>
                 </nav>
-                <div className="p-4 border-t border-gray-200">
+                <div className="border-t border-gray-200">
+                    <LanguageSelector variant="sidebar" />
+                </div>
+                <div className="p-4">
                     <button
                         onClick={handleLogout}
                         className={`${navLinkClasses} w-full ${inactiveClass}`}
                     >
                         <LogoutIcon />
-                        <span>Cerrar Sesión</span>
+                        <span>{t('sidebar.logout')}</span>
                     </button>
                 </div>
             </aside>
