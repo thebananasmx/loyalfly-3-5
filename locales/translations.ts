@@ -15,7 +15,8 @@ export const es = {
     phone: "Teléfono",
     email: "Email",
     date: "Fecha",
-    poweredBy: "Powered by Loyalfly"
+    poweredBy: "Powered by Loyalfly",
+    backToDashboard: "Volver al Dashboard"
   },
   header: {
     pricing: "Precios",
@@ -25,6 +26,13 @@ export const es = {
     register: "Registrarse",
     openMenu: "Abrir menú",
     closeMenu: "Cerrar menú"
+  },
+  footer: {
+    rights: "Todos los derechos reservados.",
+    terms: "Términos de Servicio",
+    pricing: "Precios",
+    blog: "Blog",
+    docs: "Docs"
   },
   infoBar: {
     prefix: "✨ ¡Regístrate",
@@ -100,7 +108,9 @@ export const es = {
     resetTitle: "Restablecer Contraseña",
     resetSubtitle: "Ingresa tu email para recibir un enlace.",
     sendLink: "Enviar enlace",
-    backToLogin: "Volver a Iniciar Sesión"
+    backToLogin: "Volver a Iniciar Sesión",
+    createAccount: "Crear Cuenta",
+    creating: "Creando cuenta..."
   },
   dashboard: {
     title: "Dashboard de Clientes",
@@ -128,7 +138,60 @@ export const es = {
     join: "Únete a Loyalfly como",
     viewRegistration: "Ver Registro",
     copyUrl: "Copiar URL",
-    shareTitle: "Comparte con tus clientes"
+    shareTitle: "Comparte con tus clientes",
+    editorTitle: "Editor de Tarjeta",
+    businessNameLabel: "Nombre del Negocio",
+    logoUrlLabel: "URL del Logo (Opcional)",
+    rewardTextLabel: "Texto de la Recompensa",
+    cardColorLabel: "Color de Fondo",
+    textColorLabel: "Patrón de color del texto",
+    dark: "Oscuro",
+    light: "Claro",
+    sampleStamps: "Sellos de Muestra",
+    shareText: "Tus clientes pueden usar el siguiente enlace para unirse.",
+    generateQr: "Genera QR",
+    copied: "¡URL copiada!"
+  },
+  cardEditor: {
+    saveSuccess: "¡Cambios guardados con éxito!",
+    saveError: "No se pudieron guardar los cambios.",
+    loadError: "Error al cargar los datos de la tarjeta."
+  },
+  metrics: {
+    title: "Métricas de Lealtad",
+    subtitle: "Un resumen del rendimiento de tu programa de lealtad.",
+    totalCustomers: "Total de Clientes",
+    totalCustomersDesc: "Miembros activos en tu programa.",
+    stampsGiven: "Sellos Otorgados",
+    stampsGivenDesc: "Total de sellos entregados a clientes.",
+    rewardsRedeemed: "Recompensas Canjeadas",
+    rewardsRedeemedDesc: "Clientes que completaron su tarjeta.",
+    redemptionRate: "Tasa de Redención",
+    redemptionRateDesc: "De los sellos para recompensa, cuántos se canjean.",
+    chartTitle: "Nuevos Clientes por Mes",
+    newCustomers: "Nuevos Clientes",
+    topCustomersTitle: "Clientes Más Leales",
+    emptyTopCustomers: "No hay suficientes datos de clientes."
+  },
+  survey: {
+    title: "Gestionar Encuesta",
+    subtitle: "Configura la encuesta que verán tus clientes y revisa los resultados.",
+    configTitle: "Configuración",
+    active: "Activada",
+    inactive: "Desactivada",
+    bannerLabel: "Mensaje del Banner",
+    questionLabel: "Pregunta",
+    questionPlaceholder: "Ej: ¿Qué te pareció el servicio?",
+    option1Label: "Opción 1",
+    option1Placeholder: "Ej: Excelente",
+    option2Label: "Opción 2",
+    option2Placeholder: "Ej: Puede mejorar",
+    resultsTitle: "Resultados de la Encuesta Actual",
+    totalResponses: "Total de respuestas",
+    emptyResponses: "Aún no hay respuestas para esta encuesta. Si acabas de crearla, las respuestas aparecerán aquí a medida que los clientes voten.",
+    saveSuccess: "Configuración de encuesta guardada.",
+    saveError: "No se pudo guardar la configuración.",
+    requiredError: "La pregunta y ambas opciones son requeridas."
   },
   publicView: {
     lookupTitle: "Consulta tu tarjeta",
@@ -192,7 +255,8 @@ export const en = {
     phone: "Phone",
     email: "Email",
     date: "Date",
-    poweredBy: "Powered by Loyalfly"
+    poweredBy: "Powered by Loyalfly",
+    backToDashboard: "Back to Dashboard"
   },
   header: {
     pricing: "Pricing",
@@ -202,6 +266,13 @@ export const en = {
     register: "Get Started",
     openMenu: "Open menu",
     closeMenu: "Close menu"
+  },
+  footer: {
+    rights: "All rights reserved.",
+    terms: "Terms of Service",
+    pricing: "Pricing",
+    blog: "Blog",
+    docs: "Docs"
   },
   infoBar: {
     prefix: "✨ Sign up for",
@@ -277,7 +348,9 @@ export const en = {
     resetTitle: "Reset Password",
     resetSubtitle: "Enter your email to receive a link.",
     sendLink: "Send link",
-    backToLogin: "Back to Log In"
+    backToLogin: "Back to Log In",
+    createAccount: "Create Account",
+    creating: "Creating account..."
   },
   dashboard: {
     title: "Customer Dashboard",
@@ -305,7 +378,60 @@ export const en = {
     join: "Join Loyalfly as",
     viewRegistration: "View Registration",
     copyUrl: "Copy URL",
-    shareTitle: "Share with your customers"
+    shareTitle: "Share with your customers",
+    editorTitle: "Card Editor",
+    businessNameLabel: "Business Name",
+    logoUrlLabel: "Logo URL (Optional)",
+    rewardTextLabel: "Reward Text",
+    cardColorLabel: "Background Color",
+    textColorLabel: "Text Color Scheme",
+    dark: "Dark",
+    light: "Light",
+    sampleStamps: "Sample Stamps",
+    shareText: "Your customers can use the following link to join.",
+    generateQr: "Generate QR",
+    copied: "URL copied!"
+  },
+  cardEditor: {
+    saveSuccess: "Changes saved successfully!",
+    saveError: "Could not save changes.",
+    loadError: "Error loading card data."
+  },
+  metrics: {
+    title: "Loyalty Metrics",
+    subtitle: "A summary of your loyalty program performance.",
+    totalCustomers: "Total Customers",
+    totalCustomersDesc: "Active members in your program.",
+    stampsGiven: "Stamps Given",
+    stampsGivenDesc: "Total stamps given to customers.",
+    rewardsRedeemed: "Rewards Redeemed",
+    rewardsRedeemedDesc: "Customers who completed their card.",
+    redemptionRate: "Redemption Rate",
+    redemptionRateDesc: "Percentage of rewards earned that are redeemed.",
+    chartTitle: "New Customers by Month",
+    newCustomers: "New Customers",
+    topCustomersTitle: "Most Loyal Customers",
+    emptyTopCustomers: "Not enough customer data."
+  },
+  survey: {
+    title: "Manage Survey",
+    subtitle: "Configure the survey your customers will see and review the results.",
+    configTitle: "Configuration",
+    active: "Active",
+    inactive: "Inactive",
+    bannerLabel: "Banner Message",
+    questionLabel: "Question",
+    questionPlaceholder: "Ex: How was the service?",
+    option1Label: "Option 1",
+    option1Placeholder: "Ex: Excellent",
+    option2Label: "Option 2",
+    option2Placeholder: "Ex: Needs improvement",
+    resultsTitle: "Current Survey Results",
+    totalResponses: "Total responses",
+    emptyResponses: "No responses yet for this survey. If you just created it, responses will appear here as customers vote.",
+    saveSuccess: "Survey configuration saved.",
+    saveError: "Could not save configuration.",
+    requiredError: "The question and both options are required."
   },
   publicView: {
     lookupTitle: "Check your card",
@@ -369,7 +495,8 @@ export const pt = {
     phone: "Telefone",
     email: "Email",
     date: "Data",
-    poweredBy: "Desenvolvido por Loyalfly"
+    poweredBy: "Desenvolvido por Loyalfly",
+    backToDashboard: "Voltar para o Painel"
   },
   header: {
     pricing: "Preços",
@@ -379,6 +506,13 @@ export const pt = {
     register: "Começar",
     openMenu: "Abrir menu",
     closeMenu: "Fechar menu"
+  },
+  footer: {
+    rights: "Todos os direitos reservados.",
+    terms: "Termos de Serviço",
+    pricing: "Preços",
+    blog: "Blog",
+    docs: "Docs"
   },
   infoBar: {
     prefix: "✨ Cadastre-se",
@@ -454,7 +588,9 @@ export const pt = {
     resetTitle: "Redefinir Senha",
     resetSubtitle: "Digite seu email para receber um link.",
     sendLink: "Enviar link",
-    backToLogin: "Voltar para Entrar"
+    backToLogin: "Voltar para Entrar",
+    createAccount: "Criar Conta",
+    creating: "Criando conta..."
   },
   dashboard: {
     title: "Painel de Clientes",
@@ -482,7 +618,60 @@ export const pt = {
     join: "Junte-se ao Loyalfly como",
     viewRegistration: "Ver Registro",
     copyUrl: "Copiar URL",
-    shareTitle: "Compartilhe com seus clientes"
+    shareTitle: "Compartilhe com seus clientes",
+    editorTitle: "Editor de Cartão",
+    businessNameLabel: "Nome do Negócio",
+    logoUrlLabel: "URL do Logo (Opcional)",
+    rewardTextLabel: "Texto da Recompensa",
+    cardColorLabel: "Cor de Fundo",
+    textColorLabel: "Esquema de cor do texto",
+    dark: "Escuro",
+    light: "Claro",
+    sampleStamps: "Selos de Exemplo",
+    shareText: "Seus clientes podem usar o seguinte link para participar.",
+    generateQr: "Gerar QR",
+    copied: "URL copiada!"
+  },
+  cardEditor: {
+    saveSuccess: "Alterações salvas com sucesso!",
+    saveError: "Não foi possível salvar as alterações.",
+    loadError: "Erro ao carregar dados do cartão."
+  },
+  metrics: {
+    title: "Métricas de Fidelidade",
+    subtitle: "Um resumo do desempenho do seu programa de fidelidade.",
+    totalCustomers: "Total de Clientes",
+    totalCustomersDesc: "Membros ativos em seu programa.",
+    stampsGiven: "Selos Concedidos",
+    stampsGivenDesc: "Total de selos entregues aos clientes.",
+    rewardsRedeemed: "Recompensas Resgatadas",
+    rewardsRedeemedDesc: "Clientes que completaram o cartão.",
+    redemptionRate: "Taxa de Resgate",
+    redemptionRateDesc: "Porcentagem de recompensas ganhas que são resgatadas.",
+    chartTitle: "Novos Clientes por Mês",
+    newCustomers: "Novos Clientes",
+    topCustomersTitle: "Clientes Mais Fiéis",
+    emptyTopCustomers: "Não há dados suficientes de clientes."
+  },
+  survey: {
+    title: "Gerenciar Pesquisa",
+    subtitle: "Configure a pesquisa que seus clientes verão e revise os resultados.",
+    configTitle: "Configuração",
+    active: "Ativada",
+    inactive: "Desativada",
+    bannerLabel: "Mensagem do Banner",
+    questionLabel: "Pergunta",
+    questionPlaceholder: "Ex: O que achou do serviço?",
+    option1Label: "Opção 1",
+    option1Placeholder: "Ex: Excelente",
+    option2Label: "Opção 2",
+    option2Placeholder: "Ex: Pode melhorar",
+    resultsTitle: "Resultados da Pesquisa Atual",
+    totalResponses: "Total de respostas",
+    emptyResponses: "Ainda não há respostas para esta pesquisa. Se você acabou de criá-la, as respostas aparecerão aqui conforme os clientes votarem.",
+    saveSuccess: "Configuração da pesquisa salva.",
+    saveError: "Não foi possível salvar a configuração.",
+    requiredError: "A pergunta e ambas as opções são obrigatórias."
   },
   publicView: {
     lookupTitle: "Consulte seu cartão",

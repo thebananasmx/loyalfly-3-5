@@ -4,6 +4,7 @@ import CardPreview from '../components/CardPreview';
 import { useAuth } from '../context/AuthContext';
 import { updateCardSettings, getBusinessData } from '../services/firebaseService';
 import { useToast } from '../context/ToastContext';
+import { useTranslation } from 'react-i18next';
 
 const CopyIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>;
 const CheckIconSuccess = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#00AA00]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>;
@@ -13,6 +14,7 @@ const QRIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5"
 
 
 const CardEditorPage: React.FC = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { showToast } = useToast();
   const [businessName, setBusinessName] = useState('');
@@ -47,14 +49,14 @@ const CardEditorPage: React.FC = () => {
               }
           } catch (error) {
               console.error("Failed to fetch business data", error);
-              showToast('Error al cargar los datos de la tarjeta.', 'error');
+              showToast(t('cardEditor.loadError'), 'error');
           } finally {
               setIsLoadingData(false);
           }
       };
 
       fetchBusinessData();
-  }, [user]);
+  }, [user, showToast, t]);
 
   const publicCardUrl = slug ? `${window.location.origin}/view/${slug}` : '';
 
@@ -69,10 +71,10 @@ const CardEditorPage: React.FC = () => {
             textColorScheme: textColorScheme,
             logoUrl: logoUrl
         });
-        showToast('¡Cambios guardados con éxito!', 'success');
+        showToast(t('cardEditor.saveSuccess'), 'success');
     } catch (error) {
         console.error("Failed to save settings", error);
-        showToast('No se pudieron guardar los cambios.', 'error');
+        showToast(t('cardEditor.saveError'), 'error');
     } finally {
         setIsSaving(false);
     }
@@ -81,7 +83,7 @@ const CardEditorPage: React.FC = () => {
   const handleCopyUrl = () => {
     navigator.clipboard.writeText(publicCardUrl).then(() => {
         setCopied(true);
-        showToast('¡URL copiada al portapapeles!', 'success');
+        showToast(t('card.copied'), 'success');
         setTimeout(() => setCopied(false), 2000);
     });
   };
@@ -90,7 +92,7 @@ const CardEditorPage: React.FC = () => {
       return (
           <div className="flex items-center justify-center py-20">
               <div className="animate-spin rounded-full h-12 w-12 border-2 border-gray-200 border-t-black" role="status">
-                <span className="sr-only">Cargando...</span>
+                <span className="sr-only">{t('common.loading')}</span>
               </div>
           </div>
       );
@@ -104,16 +106,16 @@ const CardEditorPage: React.FC = () => {
             <Link
                 to="/app/dashboard"
                 className="inline-flex items-center justify-center p-2 text-gray-600 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
-                title="Volver al Dashboard"
+                title={t('common.backToDashboard')}
             >
                 <ArrowLeftIcon />
             </Link>
-            <h1 className="text-3xl font-bold text-black tracking-tight">Editor de Tarjeta</h1>
+            <h1 className="text-3xl font-bold text-black tracking-tight">{t('card.editorTitle')}</h1>
         </div>
         <div className="p-6 bg-white border border-gray-200 rounded-lg space-y-6">
           <div>
             <label htmlFor="businessName" className="block text-base font-medium text-gray-700 mb-1">
-              Nombre del Negocio
+              {t('card.businessNameLabel')}
             </label>
             <input
               id="businessName"
@@ -125,7 +127,7 @@ const CardEditorPage: React.FC = () => {
           </div>
           <div>
             <label htmlFor="logoUrl" className="block text-base font-medium text-gray-700 mb-1">
-              URL del Logo (Opcional)
+              {t('card.logoUrlLabel')}
             </label>
             <input
               id="logoUrl"
@@ -138,7 +140,7 @@ const CardEditorPage: React.FC = () => {
           </div>
           <div>
             <label htmlFor="rewardText" className="block text-base font-medium text-gray-700 mb-1">
-              Texto de la Recompensa
+              {t('card.rewardTextLabel')}
             </label>
             <input
               id="rewardText"
@@ -150,7 +152,7 @@ const CardEditorPage: React.FC = () => {
           </div>
           <div>
             <label htmlFor="cardColorHex" className="block text-base font-medium text-gray-700 mb-1">
-                Color de Fondo
+                {t('card.cardColorLabel')}
             </label>
             <div className="mt-1 flex items-center gap-3">
                 <div className="relative w-12 h-10">
@@ -178,7 +180,7 @@ const CardEditorPage: React.FC = () => {
           </div>
            <div>
             <label className="block text-base font-medium text-gray-700 mb-1">
-              Patrón de color del texto
+              {t('card.textColorLabel')}
             </label>
             <div className="mt-1 grid grid-cols-2 gap-2 p-1 bg-gray-100 rounded-md">
                 <button
@@ -187,7 +189,7 @@ const CardEditorPage: React.FC = () => {
                         textColorScheme === 'dark' ? 'bg-white shadow-sm text-black' : 'text-gray-600 hover:bg-white/50'
                     }`}
                 >
-                    Oscuro
+                    {t('card.dark')}
                 </button>
                 <button
                     onClick={() => setTextColorScheme('light')}
@@ -195,13 +197,13 @@ const CardEditorPage: React.FC = () => {
                         textColorScheme === 'light' ? 'bg-white shadow-sm text-black' : 'text-gray-600 hover:bg-white/50'
                     }`}
                 >
-                    Claro
+                    {t('card.light')}
                 </button>
             </div>
           </div>
            <div>
             <label htmlFor="stamps" className="block text-base font-medium text-gray-700 mb-1">
-              Sellos de Muestra ({stamps})
+              {t('card.sampleStamps')} ({stamps})
             </label>
             <input
               id="stamps"
@@ -218,15 +220,15 @@ const CardEditorPage: React.FC = () => {
             disabled={isSaving}
             className="w-full py-2.5 px-4 font-semibold text-white rounded-md transition-colors bg-black hover:bg-gray-800 disabled:bg-gray-400"
           >
-            {isSaving ? 'Guardando...' : 'Guardar Cambios'}
+            {isSaving ? t('common.saving') : t('common.save')}
           </button>
         </div>
 
         <div className="p-6 bg-white border border-gray-200 rounded-lg">
-          <h3 className="text-lg font-semibold text-black mb-4">Comparte con tus clientes</h3>
+          <h3 className="text-lg font-semibold text-black mb-4">{t('card.shareTitle')}</h3>
           <div>
               <p className="text-base text-gray-600 mb-2">
-                  Tus clientes pueden usar el siguiente enlace para unirse.
+                  {t('card.shareText')}
               </p>
               <div className="flex items-center">
                   <input 
@@ -238,7 +240,7 @@ const CardEditorPage: React.FC = () => {
                   <button
                       onClick={handleCopyUrl}
                       className="px-3 py-2 bg-gray-200 text-gray-700 rounded-r-md hover:bg-gray-300 transition-colors flex items-center"
-                      title="Copiar URL"
+                      title={t('card.copyUrl')}
                   >
                       {copied ? <CheckIconSuccess /> : <CopyIcon />}
                   </button>
@@ -251,7 +253,7 @@ const CardEditorPage: React.FC = () => {
                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
                 >
                     <ExternalLinkIcon />
-                    Ver Registro
+                    {t('card.viewRegistration')}
                 </a>
                 <a
                     href="https://loyalfly-qr-1-0.vercel.app/"
@@ -260,7 +262,7 @@ const CardEditorPage: React.FC = () => {
                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
                 >
                     <QRIcon />
-                    Genera QR
+                    {t('card.generateQr')}
                 </a>
               </div>
           </div>
@@ -269,7 +271,7 @@ const CardEditorPage: React.FC = () => {
       
       {/* Card Preview */}
       <div className="lg:sticky lg:top-8 h-full">
-         <h2 className="text-xl font-bold text-black mb-4 text-center">Previsualización</h2>
+         <h2 className="text-xl font-bold text-black mb-4 text-center">{t('card.previewTitle')}</h2>
          <CardPreview 
             businessName={businessName}
             rewardText={rewardText}

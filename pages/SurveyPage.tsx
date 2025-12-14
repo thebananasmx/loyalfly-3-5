@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { getBusinessData, updateSurveySettings, getSurveyResponses } from '../services/firebaseService';
+import { useTranslation } from 'react-i18next';
 
 const SurveyPage: React.FC = () => {
+    const { t } = useTranslation();
     const { user } = useAuth();
     const { showToast } = useToast();
 
@@ -51,13 +53,13 @@ const SurveyPage: React.FC = () => {
                     }
                 }
             } catch (error) {
-                showToast('Error al cargar la configuración de la encuesta.', 'error');
+                showToast(t('survey.saveError'), 'error');
             } finally {
                 setIsLoading(false);
             }
         };
         fetchData();
-    }, [user, showToast]);
+    }, [user, showToast, t]);
 
     useEffect(() => {
         if (responses.length > 0 && option1 && option2) {
@@ -78,7 +80,7 @@ const SurveyPage: React.FC = () => {
     const handleSave = async () => {
         if (!user) return;
         if (!question || !option1 || !option2) {
-            showToast('La pregunta y ambas opciones son requeridas.', 'alert');
+            showToast(t('survey.requiredError'), 'alert');
             return;
         }
 
@@ -108,9 +110,9 @@ const SurveyPage: React.FC = () => {
             if (isNewSurvey) {
               setResponses([]);
             }
-            showToast('Configuración de encuesta guardada.', 'success');
+            showToast(t('survey.saveSuccess'), 'success');
         } catch (error) {
-            showToast('No se pudo guardar la configuración.', 'error');
+            showToast(t('survey.saveError'), 'error');
         } finally {
             setIsSaving(false);
         }
@@ -120,7 +122,7 @@ const SurveyPage: React.FC = () => {
         return (
             <div className="flex items-center justify-center py-20">
                 <div className="animate-spin rounded-full h-12 w-12 border-2 border-gray-200 border-t-black" role="status">
-                    <span className="sr-only">Cargando...</span>
+                    <span className="sr-only">{t('common.loading')}</span>
                 </div>
             </div>
         );
@@ -131,15 +133,15 @@ const SurveyPage: React.FC = () => {
     return (
         <div className="space-y-8 max-w-4xl mx-auto">
             <div>
-                <h1 className="text-3xl font-bold text-black tracking-tight">Gestionar Encuesta</h1>
-                <p className="text-gray-600 mt-1">Configura la encuesta que verán tus clientes y revisa los resultados.</p>
+                <h1 className="text-3xl font-bold text-black tracking-tight">{t('survey.title')}</h1>
+                <p className="text-gray-600 mt-1">{t('survey.subtitle')}</p>
             </div>
 
             <div className="p-6 bg-white border border-gray-200 rounded-lg space-y-6">
                 <div className="flex justify-between items-center">
-                    <h2 className="text-xl font-bold text-black">Configuración</h2>
+                    <h2 className="text-xl font-bold text-black">{t('survey.configTitle')}</h2>
                      <div className="flex items-center">
-                        <span className="mr-3 text-base font-medium text-gray-700">{isEnabled ? 'Activada' : 'Desactivada'}</span>
+                        <span className="mr-3 text-base font-medium text-gray-700">{isEnabled ? t('survey.active') : t('survey.inactive')}</span>
                         <button
                             onClick={() => setIsEnabled(!isEnabled)}
                             className={`${isEnabled ? 'bg-black' : 'bg-gray-200'} relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black`}
@@ -151,35 +153,35 @@ const SurveyPage: React.FC = () => {
                 </div>
                 
                 <div>
-                    <label htmlFor="bannerMessage" className="block text-base font-medium text-gray-700 mb-1">Mensaje del Banner</label>
+                    <label htmlFor="bannerMessage" className="block text-base font-medium text-gray-700 mb-1">{t('survey.bannerLabel')}</label>
                     <input id="bannerMessage" type="text" value={bannerMessage} onChange={e => setBannerMessage(e.target.value)} className={inputClasses} />
                 </div>
                 <div>
-                    <label htmlFor="question" className="block text-base font-medium text-gray-700 mb-1">Pregunta</label>
-                    <input id="question" type="text" value={question} onChange={e => setQuestion(e.target.value)} className={inputClasses} placeholder="Ej: ¿Qué te pareció el servicio?" />
+                    <label htmlFor="question" className="block text-base font-medium text-gray-700 mb-1">{t('survey.questionLabel')}</label>
+                    <input id="question" type="text" value={question} onChange={e => setQuestion(e.target.value)} className={inputClasses} placeholder={t('survey.questionPlaceholder')} />
                 </div>
                 <div className="grid sm:grid-cols-2 gap-4">
                      <div>
-                        <label htmlFor="option1" className="block text-base font-medium text-gray-700 mb-1">Opción 1</label>
-                        <input id="option1" type="text" value={option1} onChange={e => setOption1(e.target.value)} className={inputClasses} placeholder="Ej: Excelente"/>
+                        <label htmlFor="option1" className="block text-base font-medium text-gray-700 mb-1">{t('survey.option1Label')}</label>
+                        <input id="option1" type="text" value={option1} onChange={e => setOption1(e.target.value)} className={inputClasses} placeholder={t('survey.option1Placeholder')}/>
                     </div>
                      <div>
-                        <label htmlFor="option2" className="block text-base font-medium text-gray-700 mb-1">Opción 2</label>
-                        <input id="option2"  type="text" value={option2} onChange={e => setOption2(e.target.value)} className={inputClasses} placeholder="Ej: Puede mejorar"/>
+                        <label htmlFor="option2" className="block text-base font-medium text-gray-700 mb-1">{t('survey.option2Label')}</label>
+                        <input id="option2"  type="text" value={option2} onChange={e => setOption2(e.target.value)} className={inputClasses} placeholder={t('survey.option2Placeholder')}/>
                     </div>
                 </div>
                 <div className="text-right">
                     <button onClick={handleSave} disabled={isSaving} className="px-6 py-2 bg-black text-white font-semibold rounded-md hover:bg-gray-800 disabled:bg-gray-400">
-                        {isSaving ? 'Guardando...' : 'Guardar Cambios'}
+                        {isSaving ? t('common.saving') : t('common.save')}
                     </button>
                 </div>
             </div>
 
             <div className="p-6 bg-white border border-gray-200 rounded-lg">
-                <h2 className="text-xl font-bold text-black">Resultados de la Encuesta Actual</h2>
+                <h2 className="text-xl font-bold text-black">{t('survey.resultsTitle')}</h2>
                 {responses.length > 0 ? (
                     <div className="mt-4 space-y-4">
-                        <p className="text-gray-600">Total de respuestas: <strong>{stats.total}</strong></p>
+                        <p className="text-gray-600">{t('survey.totalResponses')}: <strong>{stats.total}</strong></p>
                         <div className="space-y-3">
                             <div>
                                 <div className="flex justify-between items-center mb-1">
@@ -202,7 +204,7 @@ const SurveyPage: React.FC = () => {
                         </div>
                     </div>
                 ) : (
-                    <p className="mt-4 text-gray-500">Aún no hay respuestas para esta encuesta. Si acabas de crearla, las respuestas aparecerán aquí a medida que los clientes voten.</p>
+                    <p className="mt-4 text-gray-500">{t('survey.emptyResponses')}</p>
                 )}
             </div>
         </div>

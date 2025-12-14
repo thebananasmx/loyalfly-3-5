@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { getBusinessData, getBusinessMetrics } from '../services/firebaseService';
 import type { Business, Customer } from '../types';
 import type { BusinessMetrics } from '../services/firebaseService';
+import { useTranslation } from 'react-i18next';
 
 const StatCard: React.FC<{ title: string; value: string | number; description: string }> = ({ title, value, description }) => (
     <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
@@ -14,6 +15,7 @@ const StatCard: React.FC<{ title: string; value: string | number; description: s
 );
 
 const BarChart: React.FC<{ data: { month: string; count: number }[] }> = ({ data }) => {
+    const { t } = useTranslation();
     const [tooltip, setTooltip] = useState<{ month: string; count: number; top: number; left: number } | null>(null);
 
     const handleMouseMove = (e: React.MouseEvent, month: string, count: number) => {
@@ -43,11 +45,11 @@ const BarChart: React.FC<{ data: { month: string; count: number }[] }> = ({ data
                     }}
                 >
                     <p className="font-bold text-black">{tooltip.month}</p>
-                    <p className="text-gray-600">{tooltip.count} nuevo{tooltip.count !== 1 ? 's' : ''} cliente{tooltip.count !== 1 ? 's' : ''}</p>
+                    <p className="text-gray-600">{tooltip.count} {t('metrics.newCustomers')}</p>
                 </div>,
                 document.body
             )}
-            <h3 className="text-xl font-bold mb-4 text-black">Nuevos Clientes por Mes</h3>
+            <h3 className="text-xl font-bold mb-4 text-black">{t('metrics.chartTitle')}</h3>
 
             <div className="w-full h-[300px] flex">
                 {/* Y-Axis */}
@@ -99,7 +101,7 @@ const BarChart: React.FC<{ data: { month: string; count: number }[] }> = ({ data
             {/* Legend */}
             <div className="flex items-center justify-center mt-4">
                 <span className="h-3 w-3 rounded-sm mr-2" style={{ backgroundColor: '#4D17FF' }}></span>
-                <span className="text-sm text-gray-500">Nuevos Clientes</span>
+                <span className="text-sm text-gray-500">{t('metrics.newCustomers')}</span>
             </div>
         </div>
     );
@@ -107,6 +109,7 @@ const BarChart: React.FC<{ data: { month: string; count: number }[] }> = ({ data
 
 
 const MetricasPage: React.FC = () => {
+    const { t } = useTranslation();
     const { user } = useAuth();
     const [businessData, setBusinessData] = useState<Business | null>(null);
     const [metrics, setMetrics] = useState<BusinessMetrics | null>(null);
@@ -136,7 +139,7 @@ const MetricasPage: React.FC = () => {
         return (
             <div className="flex items-center justify-center py-20">
                 <div className="animate-spin rounded-full h-12 w-12 border-2 border-gray-200 border-t-black" role="status">
-                    <span className="sr-only">Cargando...</span>
+                    <span className="sr-only">{t('common.loading')}</span>
                 </div>
             </div>
         );
@@ -149,28 +152,28 @@ const MetricasPage: React.FC = () => {
     return (
         <div className="space-y-8">
             <div>
-                <h1 className="text-3xl font-bold text-black tracking-tight">Métricas de Lealtad</h1>
-                <p className="text-gray-600 mt-1">Un resumen del rendimiento de tu programa de lealtad.</p>
+                <h1 className="text-3xl font-bold text-black tracking-tight">{t('metrics.title')}</h1>
+                <p className="text-gray-600 mt-1">{t('metrics.subtitle')}</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <StatCard title="Total de Clientes" value={businessData.customerCount} description="Miembros activos en tu programa." />
-                <StatCard title="Sellos Otorgados" value={metrics.totalStamps} description="Total de sellos entregados a clientes." />
-                <StatCard title="Recompensas Canjeadas" value={metrics.totalRewards} description="Clientes que completaron su tarjeta." />
-                <StatCard title="Tasa de Redención" value={`${metrics.redemptionRate.toFixed(1)}%`} description="De los sellos para recompensa, cuántos se canjean." />
+                <StatCard title={t('metrics.totalCustomers')} value={businessData.customerCount} description={t('metrics.totalCustomersDesc')} />
+                <StatCard title={t('metrics.stampsGiven')} value={metrics.totalStamps} description={t('metrics.stampsGivenDesc')} />
+                <StatCard title={t('metrics.rewardsRedeemed')} value={metrics.totalRewards} description={t('metrics.rewardsRedeemedDesc')} />
+                <StatCard title={t('metrics.redemptionRate')} value={`${metrics.redemptionRate.toFixed(1)}%`} description={t('metrics.redemptionRateDesc')} />
             </div>
             
             <BarChart data={metrics.newCustomersByMonth} />
 
             <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
-                <h3 className="text-lg font-semibold text-black mb-4">Clientes Más Leales</h3>
+                <h3 className="text-lg font-semibold text-black mb-4">{t('metrics.topCustomersTitle')}</h3>
                 <div className="overflow-x-auto">
                     <table className="w-full text-base text-left text-gray-600">
                         <thead className="text-base text-gray-700 uppercase bg-gray-50">
                             <tr>
-                                <th scope="col" className="px-4 py-3">Nombre</th>
-                                <th scope="col" className="px-4 py-3 text-center">Sellos</th>
-                                <th scope="col" className="px-4 py-3 text-center">Recompensas</th>
+                                <th scope="col" className="px-4 py-3">{t('common.name')}</th>
+                                <th scope="col" className="px-4 py-3 text-center">{t('dashboard.table.stamps')}</th>
+                                <th scope="col" className="px-4 py-3 text-center">{t('dashboard.table.rewards')}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -184,7 +187,7 @@ const MetricasPage: React.FC = () => {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan={3} className="text-center py-8 text-gray-500">No hay suficientes datos de clientes.</td>
+                                    <td colSpan={3} className="text-center py-8 text-gray-500">{t('metrics.emptyTopCustomers')}</td>
                                 </tr>
                             )}
                         </tbody>
