@@ -32,6 +32,15 @@ const ChangelogPage: React.FC = () => {
         
         <ul className="mt-8 space-y-6">
            <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Banner de Confianza y Estadísticas Globales</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha incorporado un nuevo componente "Trust Banner" en la página de inicio. Este banner muestra en tiempo real estadísticas agregadas de la plataforma (total de negocios, sellos otorgados y recompensas entregadas) para generar confianza y mostrar el crecimiento de la comunidad Loyalfly.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
               <FeatureTag type="improvement" />
               <div>
                   <h3 className="font-semibold text-black">Internacionalización Completa (ES, EN, PT)</h3>
