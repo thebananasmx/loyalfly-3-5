@@ -425,15 +425,17 @@ const PublicCardPage: React.FC = () => {
   
     return (
         <div ref={topRef} className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4 font-sans">
-            <div className="absolute top-4 right-4">
-                <LanguageSelector />
-            </div>
             <div className="w-full max-w-sm mx-auto">
                 {renderContent()}
             </div>
-            <div className="text-center text-sm text-gray-500 mt-8 space-y-1">
-              <p>{t('common.poweredBy')}</p>
-              <Link to="/terminos" className="hover:underline">{t('header.terms')}</Link>
+            <div className="text-center text-sm text-gray-500 mt-8 flex flex-col items-center gap-4">
+              <div>
+                <p>{t('common.poweredBy')}</p>
+                <Link to="/terminos" className="hover:underline">{t('header.terms')}</Link>
+              </div>
+              <div className="my-4">
+                 <LanguageSelector />
+              </div>
             </div>
         </div>
       );
