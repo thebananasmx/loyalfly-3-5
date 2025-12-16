@@ -1,37 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { getGlobalStats } from '../services/firebaseService';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 const StatsBanner: React.FC = () => {
     const { t } = useTranslation();
-    const [stats, setStats] = useState({ businesses: 0, stamps: 0, rewards: 0 });
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchStats = async () => {
-            try {
-                const data = await getGlobalStats();
-                setStats({
-                    businesses: data.totalBusinesses,
-                    stamps: data.totalStamps,
-                    rewards: data.totalRewards
-                });
-            } catch (error) {
-                console.error("Failed to fetch global stats", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchStats();
-    }, []);
-
-    if (loading) {
-        return (
-            <div className="w-full bg-gradient-to-r from-[#4D17FF] to-[#3a11cc] py-12 flex justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-2 border-white border-t-transparent"></div>
-            </div>
-        );
-    }
+    
+    // Static values to reduce Firestore reads on public landing page
+    const stats = { 
+        businesses: 50, 
+        stamps: 190, 
+        rewards: 90 
+    };
 
     return (
         <section className="w-full bg-gradient-to-r from-[#4D17FF] to-[#3a11cc] py-12 lg:py-16 text-white shadow-lg">
