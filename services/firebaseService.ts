@@ -485,6 +485,8 @@ export interface BusinessAdminData {
   customerCount: number;
   totalStamps: number;
   totalRewards: number;
+  createdAt?: string; // Formatted date for display
+  rawCreatedAt?: number; // Timestamp for sorting
 }
 
 export const getAllBusinessesForSuperAdmin = async (): Promise<BusinessAdminData[]> => {
@@ -506,16 +508,19 @@ export const getAllBusinessesForSuperAdmin = async (): Promise<BusinessAdminData
                 totalRewards += data.rewardsRedeemed || 0;
             });
 
+            const rawCreatedAt = (business as any).createdAt;
+            const dateObj = rawCreatedAt instanceof Timestamp ? rawCreatedAt.toDate() : (rawCreatedAt ? new Date(rawCreatedAt) : null);
+
             return {
                 id: business.id,
-                // FIX: Cast `business` to `any` to access properties from Firestore `doc.data()`
-                // which were not correctly inferred by the TypeScript compiler.
                 name: (business as any).name as string,
                 email: (business as any).email as string,
                 plan: ((business as any).plan as 'Gratis' | 'Entrepreneur' | 'Pro') || 'Gratis',
                 customerCount: customerSnapshot.size,
                 totalStamps,
                 totalRewards,
+                createdAt: dateObj ? dateObj.toISOString().split('T')[0] : '-',
+                rawCreatedAt: dateObj ? dateObj.getTime() : 0
             };
         })
     );
