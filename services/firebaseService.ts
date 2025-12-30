@@ -487,6 +487,7 @@ export interface BusinessAdminData {
   totalRewards: number;
   createdAt?: string; // Formatted date for display
   rawCreatedAt?: number; // Timestamp for sorting
+  customerEnrollmentDates?: number[]; // Array of customer enrollment timestamps
 }
 
 export const getAllBusinessesForSuperAdmin = async (): Promise<BusinessAdminData[]> => {
@@ -501,11 +502,19 @@ export const getAllBusinessesForSuperAdmin = async (): Promise<BusinessAdminData
             
             let totalStamps = 0;
             let totalRewards = 0;
+            const customerEnrollmentDates: number[] = [];
 
             customerSnapshot.docs.forEach(doc => {
                 const data = doc.data();
                 totalStamps += data.stamps || 0;
                 totalRewards += data.rewardsRedeemed || 0;
+                
+                const enrollDate = data.enrollmentDate;
+                if (enrollDate instanceof Timestamp) {
+                    customerEnrollmentDates.push(enrollDate.toMillis());
+                } else if (enrollDate) {
+                    customerEnrollmentDates.push(new Date(enrollDate).getTime());
+                }
             });
 
             const rawCreatedAt = (business as any).createdAt;
@@ -520,7 +529,8 @@ export const getAllBusinessesForSuperAdmin = async (): Promise<BusinessAdminData
                 totalStamps,
                 totalRewards,
                 createdAt: dateObj ? dateObj.toISOString().split('T')[0] : '-',
-                rawCreatedAt: dateObj ? dateObj.getTime() : 0
+                rawCreatedAt: dateObj ? dateObj.getTime() : 0,
+                customerEnrollmentDates
             };
         })
     );
