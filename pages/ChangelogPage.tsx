@@ -22,6 +22,44 @@ const ChangelogPage: React.FC = () => {
       <p className="text-lg text-gray-600 mb-12">
         Un historial de todas las mejoras y nuevas funcionalidades que hemos agregado a Loyalfly para ayudarte a crecer.
       </p>
+
+      {/* --- VERSION v3.5.0.20 --- */}
+      <section className="mb-12">
+        <div className="pb-4 border-b border-gray-200">
+          <h2 className="text-3xl font-bold text-black">Versión 3.5.0.20</h2>
+          <p className="text-base text-gray-500 mt-1">Lanzada el 30 de Diciembre de 2025</p>
+        </div>
+        
+        <ul className="mt-8 space-y-6">
+           <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Selector de Rango de Fechas Inteligente (Estilo Google Analytics)</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha reemplazado el selector de granularidad fija por un selector de rango de fechas dinámico. El sistema ajusta automáticamente la visualización (por Día o por Mes) basándose en la amplitud del periodo seleccionado para mantener la claridad de los datos.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Sincronización Total y Eliminación de Deformación en Gráficas</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha implementado un sistema de coordenadas unificado basado en porcentajes que garantiza que los puntos y las líneas de la gráfica coincidan con precisión matemática. Además, se migraron los marcadores a elementos independientes para asegurar que los círculos se mantengan perfectamente redondos y sólidos en cualquier resolución o dispositivo.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Orden Cronológico Estricto</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se optimizó la lógica de procesamiento de datos para asegurar que la línea de tiempo siempre fluya correctamente de pasado a presente (izquierda a derecha), eliminando inconsistencias visuales en el eje X.
+                  </p>
+              </div>
+          </li>
+        </ul>
+      </section>
       
       {/* --- VERSION v3.5.0.19 --- */}
       <section className="mb-12">
