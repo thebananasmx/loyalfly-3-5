@@ -72,6 +72,7 @@ const GrowthLineChart: React.FC<{ businesses: BusinessAdminData[], granularity: 
                 key = date.toISOString().split('T')[0];
                 sortKey = new Date(key).getTime();
             } else if (granularity === 'month') {
+                // Formatting key to ensure correct localized sorting
                 key = date.toLocaleString('es-MX', { month: 'short', year: 'numeric' });
                 sortKey = new Date(date.getFullYear(), date.getMonth(), 1).getTime();
             } else {
@@ -91,12 +92,12 @@ const GrowthLineChart: React.FC<{ businesses: BusinessAdminData[], granularity: 
             businesses.forEach(b => b.customerEnrollmentDates?.forEach(ts => processDate(ts)));
         }
 
-        // Sort chronologically (Oldest to Newest)
+        // IMPORTANT: Sort chronologically (Oldest to Newest)
         const sorted = Object.entries(groups)
             .map(([label, data]) => ({ label, ...data }))
             .sort((a, b) => a.timestamp - b.timestamp);
 
-        // Limit data points for readability but keep chronological order
+        // Limit range for display but keep order
         if (granularity === 'day') return sorted.slice(-15);
         if (granularity === 'month') return sorted.slice(-12);
         return sorted;
@@ -105,16 +106,20 @@ const GrowthLineChart: React.FC<{ businesses: BusinessAdminData[], granularity: 
     const maxCount = Math.max(...chartData.map(d => d.count), 1);
     const yAxisLabels = [maxCount, Math.round(maxCount / 2), 0];
     
-    // SVG coordinate system
     const chartHeight = 300;
-    const chartWidth = 1000;
+    const internalWidth = 1000; // Reference width for SVG path
     
-    const getX = (idx: number) => (idx / (chartData.length - 1 || 1)) * chartWidth;
-    const getY = (count: number) => chartHeight - (count / maxCount) * chartHeight;
+    const getXPercent = (idx: number) => (idx / (chartData.length - 1 || 1)) * 100;
+    const getYPixel = (count: number) => chartHeight - (count / maxCount) * chartHeight;
 
-    const points = chartData.map((d, i) => ({ x: getX(i), y: getY(d.count) }));
+    // SVG coordinates for the line and area (using viewBox units 1000x300)
+    const points = chartData.map((d, i) => ({ 
+        x: (i / (chartData.length - 1 || 1)) * internalWidth, 
+        y: getYPixel(d.count) 
+    }));
+    
     const pathData = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
-    const areaData = `${pathData} L ${points[points.length - 1]?.x || chartWidth} ${chartHeight} L ${points[0]?.x || 0} ${chartHeight} Z`;
+    const areaData = `${pathData} L ${points[points.length - 1]?.x || internalWidth} ${chartHeight} L ${points[0]?.x || 0} ${chartHeight} Z`;
 
     const handleMouseMove = (e: React.MouseEvent, label: string, count: number) => {
         setTooltip({ label, count, top: e.clientY, left: e.clientX });
@@ -128,7 +133,7 @@ const GrowthLineChart: React.FC<{ businesses: BusinessAdminData[], granularity: 
                     style={{ top: tooltip.top + 15, left: tooltip.left + 15 }}
                 >
                     <p className="font-bold text-black">{tooltip.label}</p>
-                    <p className="text-gray-600 font-medium">{tooltip.count} Nuevos {metric === 'businesses' ? 'Negocios' : 'Clientes'}</p>
+                    <p className="text-[#4D17FF] font-semibold">{tooltip.count} {metric === 'businesses' ? 'Negocios' : 'Clientes'}</p>
                 </div>,
                 document.body
             )}
@@ -136,12 +141,10 @@ const GrowthLineChart: React.FC<{ businesses: BusinessAdminData[], granularity: 
             <div className="flex justify-between items-center mb-8">
                 <div>
                     <h3 className="text-xl font-bold text-black">Tendencia de Crecimiento</h3>
-                    <p className="text-sm text-gray-500 font-medium mt-1">
-                        Mostrando nuevos {metric === 'businesses' ? 'registros de negocios' : 'clientes inscritos'}
-                    </p>
+                    <p className="text-sm text-gray-500 font-medium">Cronología de {metric === 'businesses' ? 'nuevos negocios' : 'nuevos clientes registrados'}</p>
                 </div>
-                <div className="text-xs text-gray-400 uppercase tracking-widest font-bold bg-gray-50 px-3 py-1 rounded-full border border-gray-100">
-                    {granularity === 'day' ? 'Diario' : granularity === 'month' ? 'Mensual' : 'Anual'}
+                <div className="text-[10px] text-gray-400 uppercase tracking-[0.2em] font-black bg-gray-50 px-3 py-1 rounded-md border border-gray-100">
+                    Histórico {granularity === 'day' ? 'D' : granularity === 'month' ? 'M' : 'A'}
                 </div>
             </div>
 
@@ -149,70 +152,66 @@ const GrowthLineChart: React.FC<{ businesses: BusinessAdminData[], granularity: 
                 {/* Y-Axis Labels */}
                 <div className="flex flex-col justify-between h-[300px] pr-4 text-right min-w-[40px]">
                     {yAxisLabels.map((label) => (
-                        <span key={label} className="text-xs text-gray-400 font-bold">{label}</span>
+                        <span key={label} className="text-[11px] text-gray-400 font-bold">{label}</span>
                     ))}
                 </div>
 
-                <div className="w-full h-full flex flex-col">
-                    <div className="h-[300px] relative border-l border-b border-gray-200 group">
-                        {/* Horizontal Grid Lines */}
+                <div className="w-full h-full flex flex-col relative">
+                    <div className="h-[300px] relative border-l border-b border-gray-100">
+                        {/* Grid Lines */}
                         <div className="absolute inset-0 grid grid-rows-2 pointer-events-none">
                             <div className="border-b border-dashed border-gray-100"></div>
                             <div className="border-b border-dashed border-gray-100"></div>
                         </div>
 
                         {chartData.length > 1 ? (
-                            <svg 
-                                className="absolute inset-0 w-full h-full overflow-visible" 
-                                viewBox={`0 0 ${chartWidth} ${chartHeight}`} 
-                                preserveAspectRatio="none"
-                            >
-                                <defs>
-                                    <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="0%" stopColor="#4D17FF" stopOpacity="0.15" />
-                                        <stop offset="100%" stopColor="#4D17FF" stopOpacity="0" />
-                                    </linearGradient>
-                                </defs>
-                                
-                                {/* Area fill */}
-                                <path d={areaData} fill="url(#areaGradient)" className="transition-all duration-500" />
-                                
-                                {/* Connection Line */}
-                                <path 
-                                    d={pathData} 
-                                    fill="none" 
-                                    stroke="#4D17FF" 
-                                    strokeWidth="4" 
-                                    strokeLinecap="round" 
-                                    strokeLinejoin="round" 
-                                    className="transition-all duration-500"
-                                />
-                                
-                                {/* Data Points */}
-                                {points.map((p, i) => (
-                                    <circle
+                            <>
+                                {/* SVG for the Line & Area - Scalable */}
+                                <svg 
+                                    className="absolute inset-0 w-full h-full overflow-visible" 
+                                    viewBox={`0 0 ${internalWidth} ${chartHeight}`} 
+                                    preserveAspectRatio="none"
+                                >
+                                    <defs>
+                                        <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stopColor="#4D17FF" stopOpacity="0.1" />
+                                            <stop offset="100%" stopColor="#4D17FF" stopOpacity="0" />
+                                        </linearGradient>
+                                    </defs>
+                                    <path d={areaData} fill="url(#areaGradient)" />
+                                    <path d={pathData} fill="none" stroke="#4D17FF" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+
+                                {/* Markers as DIVs - Prevents Distortion */}
+                                {chartData.map((d, i) => (
+                                    <div
                                         key={i}
-                                        cx={p.x}
-                                        cy={p.y}
-                                        r="6"
-                                        className="fill-white stroke-[#4D17FF] stroke-[3px] hover:r-8 transition-all cursor-crosshair shadow-sm"
-                                        onMouseMove={(e) => handleMouseMove(e as any, chartData[i].label, chartData[i].count)}
+                                        className="absolute z-10 w-3 h-3 bg-[#4D17FF] border-2 border-white rounded-full shadow-sm cursor-crosshair transform -translate-x-1/2 -translate-y-1/2 hover:scale-150 transition-transform"
+                                        style={{ 
+                                            left: `${getXPercent(i)}%`, 
+                                            top: `${getYPixel(d.count)}px` 
+                                        }}
+                                        onMouseMove={(e) => handleMouseMove(e, d.label, d.count)}
                                         onMouseLeave={() => setTooltip(null)}
-                                    />
+                                    ></div>
                                 ))}
-                            </svg>
+                            </>
                         ) : (
                             <div className="w-full h-full flex items-center justify-center text-gray-400 italic text-sm">
-                                Se necesitan más datos para trazar la línea de tiempo
+                                Se necesitan más registros para mostrar la línea temporal
                             </div>
                         )}
                     </div>
 
                     {/* X-Axis Labels */}
-                    <div className="h-10 flex justify-around items-center pt-3 px-1">
+                    <div className="h-10 flex justify-between items-center pt-3 px-0">
                         {chartData.map(({ label }, idx) => (
-                            <div key={idx} className="flex-1 text-center overflow-hidden">
-                                <span className="text-[10px] sm:text-xs text-gray-400 font-bold truncate block">
+                            <div 
+                                key={idx} 
+                                className="text-center overflow-hidden"
+                                style={{ width: `${100 / chartData.length}%` }}
+                            >
+                                <span className="text-[10px] text-gray-400 font-bold truncate block">
                                     {label}
                                 </span>
                             </div>
