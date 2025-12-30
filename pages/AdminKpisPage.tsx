@@ -61,50 +61,60 @@ const GrowthLineChart: React.FC<{ businesses: BusinessAdminData[], granularity: 
     const [tooltip, setTooltip] = useState<{ label: string; count: number; top: number; left: number } | null>(null);
 
     const chartData = useMemo(() => {
-        const groups: { [key: string]: number } = {};
+        const groups: { [key: string]: { count: number, timestamp: number } } = {};
         
+        const processDate = (ts: number) => {
+            const date = new Date(ts);
+            let key = '';
+            let sortKey = 0;
+            
+            if (granularity === 'day') {
+                key = date.toISOString().split('T')[0];
+                sortKey = new Date(key).getTime();
+            } else if (granularity === 'month') {
+                key = date.toLocaleString('es-MX', { month: 'short', year: 'numeric' });
+                sortKey = new Date(date.getFullYear(), date.getMonth(), 1).getTime();
+            } else {
+                key = date.getFullYear().toString();
+                sortKey = new Date(date.getFullYear(), 0, 1).getTime();
+            }
+            
+            if (!groups[key]) {
+                groups[key] = { count: 0, timestamp: sortKey };
+            }
+            groups[key].count += 1;
+        };
+
         if (metric === 'businesses') {
-            businesses.forEach(b => {
-                if (!b.rawCreatedAt) return;
-                const date = new Date(b.rawCreatedAt);
-                let key = '';
-                if (granularity === 'day') key = date.toISOString().split('T')[0];
-                else if (granularity === 'month') key = date.toLocaleString('es-MX', { month: 'short', year: 'numeric' });
-                else key = date.getFullYear().toString();
-                groups[key] = (groups[key] || 0) + 1;
-            });
+            businesses.forEach(b => b.rawCreatedAt && processDate(b.rawCreatedAt));
         } else {
-            // Aggregate all customer enrollment dates
-            businesses.forEach(b => {
-                b.customerEnrollmentDates?.forEach(ts => {
-                    const date = new Date(ts);
-                    let key = '';
-                    if (granularity === 'day') key = date.toISOString().split('T')[0];
-                    else if (granularity === 'month') key = date.toLocaleString('es-MX', { month: 'short', year: 'numeric' });
-                    else key = date.getFullYear().toString();
-                    groups[key] = (groups[key] || 0) + 1;
-                });
-            });
+            businesses.forEach(b => b.customerEnrollmentDates?.forEach(ts => processDate(ts)));
         }
 
-        let sortedKeys = Object.keys(groups).sort();
-        if (granularity === 'day' && sortedKeys.length > 20) sortedKeys = sortedKeys.slice(-20);
-        else if (granularity === 'month' && sortedKeys.length > 12) sortedKeys = sortedKeys.slice(-12);
+        // Sort chronologically (Oldest to Newest)
+        const sorted = Object.entries(groups)
+            .map(([label, data]) => ({ label, ...data }))
+            .sort((a, b) => a.timestamp - b.timestamp);
 
-        return sortedKeys.map(key => ({ label: key, count: groups[key] }));
+        // Limit data points for readability but keep chronological order
+        if (granularity === 'day') return sorted.slice(-15);
+        if (granularity === 'month') return sorted.slice(-12);
+        return sorted;
     }, [businesses, granularity, metric]);
 
     const maxCount = Math.max(...chartData.map(d => d.count), 1);
     const yAxisLabels = [maxCount, Math.round(maxCount / 2), 0];
     
-    // SVG line helpers
+    // SVG coordinate system
     const chartHeight = 300;
-    const chartWidth = 800; // Arbitrary internal units
-    const getX = (idx: number) => (idx / (chartData.length - 1 || 1)) * 100; // In %
+    const chartWidth = 1000;
+    
+    const getX = (idx: number) => (idx / (chartData.length - 1 || 1)) * chartWidth;
     const getY = (count: number) => chartHeight - (count / maxCount) * chartHeight;
 
-    const pathData = chartData.map((d, i) => `${i === 0 ? 'M' : 'L'} ${getX(i)}% ${getY(d.count)}`).join(' ');
-    const areaData = `${pathData} L 100% ${chartHeight} L 0% ${chartHeight} Z`;
+    const points = chartData.map((d, i) => ({ x: getX(i), y: getY(d.count) }));
+    const pathData = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+    const areaData = `${pathData} L ${points[points.length - 1]?.x || chartWidth} ${chartHeight} L ${points[0]?.x || 0} ${chartHeight} Z`;
 
     const handleMouseMove = (e: React.MouseEvent, label: string, count: number) => {
         setTooltip({ label, count, top: e.clientY, left: e.clientX });
@@ -118,67 +128,93 @@ const GrowthLineChart: React.FC<{ businesses: BusinessAdminData[], granularity: 
                     style={{ top: tooltip.top + 15, left: tooltip.left + 15 }}
                 >
                     <p className="font-bold text-black">{tooltip.label}</p>
-                    <p className="text-gray-600">{tooltip.count} Nuevos {metric === 'businesses' ? 'Negocios' : 'Clientes'}</p>
+                    <p className="text-gray-600 font-medium">{tooltip.count} Nuevos {metric === 'businesses' ? 'Negocios' : 'Clientes'}</p>
                 </div>,
                 document.body
             )}
 
             <div className="flex justify-between items-center mb-8">
-                <h3 className="text-xl font-bold text-black">Tendencia de Crecimiento</h3>
-                <div className="text-xs text-gray-500 uppercase tracking-widest font-semibold">
-                    Global por {granularity === 'day' ? 'Día' : granularity === 'month' ? 'Mes' : 'Año'}
+                <div>
+                    <h3 className="text-xl font-bold text-black">Tendencia de Crecimiento</h3>
+                    <p className="text-sm text-gray-500 font-medium mt-1">
+                        Mostrando nuevos {metric === 'businesses' ? 'registros de negocios' : 'clientes inscritos'}
+                    </p>
+                </div>
+                <div className="text-xs text-gray-400 uppercase tracking-widest font-bold bg-gray-50 px-3 py-1 rounded-full border border-gray-100">
+                    {granularity === 'day' ? 'Diario' : granularity === 'month' ? 'Mensual' : 'Anual'}
                 </div>
             </div>
 
-            <div className="w-full h-[300px] flex">
-                <div className="flex flex-col justify-between h-full pb-8 pr-4 text-right min-w-[30px]">
+            <div className="w-full h-[320px] flex">
+                {/* Y-Axis Labels */}
+                <div className="flex flex-col justify-between h-[300px] pr-4 text-right min-w-[40px]">
                     {yAxisLabels.map((label) => (
-                        <span key={label} className="text-xs text-gray-400 font-medium">{label}</span>
+                        <span key={label} className="text-xs text-gray-400 font-bold">{label}</span>
                     ))}
                 </div>
 
                 <div className="w-full h-full flex flex-col">
-                    <div className="flex-grow relative border-l border-b border-gray-100 group">
-                        {/* Grid Lines */}
+                    <div className="h-[300px] relative border-l border-b border-gray-200 group">
+                        {/* Horizontal Grid Lines */}
                         <div className="absolute inset-0 grid grid-rows-2 pointer-events-none">
                             <div className="border-b border-dashed border-gray-100"></div>
                             <div className="border-b border-dashed border-gray-100"></div>
                         </div>
 
                         {chartData.length > 1 ? (
-                            <svg className="absolute inset-0 w-full h-full overflow-visible" preserveAspectRatio="none">
+                            <svg 
+                                className="absolute inset-0 w-full h-full overflow-visible" 
+                                viewBox={`0 0 ${chartWidth} ${chartHeight}`} 
+                                preserveAspectRatio="none"
+                            >
                                 <defs>
                                     <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="0%" stopColor="#4D17FF" stopOpacity="0.2" />
+                                        <stop offset="0%" stopColor="#4D17FF" stopOpacity="0.15" />
                                         <stop offset="100%" stopColor="#4D17FF" stopOpacity="0" />
                                     </linearGradient>
                                 </defs>
-                                <path d={areaData} fill="url(#areaGradient)" />
-                                <path d={pathData} fill="none" stroke="#4D17FF" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
                                 
-                                {chartData.map((d, i) => (
+                                {/* Area fill */}
+                                <path d={areaData} fill="url(#areaGradient)" className="transition-all duration-500" />
+                                
+                                {/* Connection Line */}
+                                <path 
+                                    d={pathData} 
+                                    fill="none" 
+                                    stroke="#4D17FF" 
+                                    strokeWidth="4" 
+                                    strokeLinecap="round" 
+                                    strokeLinejoin="round" 
+                                    className="transition-all duration-500"
+                                />
+                                
+                                {/* Data Points */}
+                                {points.map((p, i) => (
                                     <circle
                                         key={i}
-                                        cx={`${getX(i)}%`}
-                                        cy={getY(d.count)}
-                                        r="5"
-                                        className="fill-white stroke-[#4D17FF] stroke-[3px] hover:r-7 transition-all cursor-pointer"
-                                        onMouseMove={(e) => handleMouseMove(e as any, d.label, d.count)}
+                                        cx={p.x}
+                                        cy={p.y}
+                                        r="6"
+                                        className="fill-white stroke-[#4D17FF] stroke-[3px] hover:r-8 transition-all cursor-crosshair shadow-sm"
+                                        onMouseMove={(e) => handleMouseMove(e as any, chartData[i].label, chartData[i].count)}
                                         onMouseLeave={() => setTooltip(null)}
                                     />
                                 ))}
                             </svg>
                         ) : (
                             <div className="w-full h-full flex items-center justify-center text-gray-400 italic text-sm">
-                                Se necesitan al menos 2 puntos para dibujar la línea
+                                Se necesitan más datos para trazar la línea de tiempo
                             </div>
                         )}
                     </div>
 
-                    <div className="h-10 flex justify-around items-center pt-2 px-2">
+                    {/* X-Axis Labels */}
+                    <div className="h-10 flex justify-around items-center pt-3 px-1">
                         {chartData.map(({ label }, idx) => (
                             <div key={idx} className="flex-1 text-center overflow-hidden">
-                                <span className="text-[10px] sm:text-xs text-gray-500 font-medium truncate block px-1">{label}</span>
+                                <span className="text-[10px] sm:text-xs text-gray-400 font-bold truncate block">
+                                    {label}
+                                </span>
                             </div>
                         ))}
                     </div>
@@ -253,7 +289,7 @@ const AdminKpisPage: React.FC = () => {
                 
                 <div className="flex flex-wrap items-center gap-4">
                     {/* Metric Selector */}
-                    <div className="flex items-center bg-gray-100 p-1 rounded-lg">
+                    <div className="flex items-center bg-gray-100 p-1 rounded-lg border border-gray-200">
                         <button
                             onClick={() => setActiveMetric('businesses')}
                             className={`px-4 py-1.5 text-sm font-bold rounded-md transition-all ${
@@ -277,12 +313,12 @@ const AdminKpisPage: React.FC = () => {
                     </div>
 
                     {/* Granularity Selectors */}
-                    <div className="flex items-center bg-gray-200 p-1 rounded-lg">
+                    <div className="flex items-center bg-gray-200 p-1 rounded-lg border border-gray-300">
                         {(['day', 'month', 'year'] as Granularity[]).map((g) => (
                             <button
                                 key={g}
                                 onClick={() => setGranularity(g)}
-                                className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
+                                className={`px-4 py-1.5 text-sm font-bold rounded-md transition-all ${
                                     granularity === g 
                                     ? 'bg-white text-black shadow-sm' 
                                     : 'text-gray-500 hover:text-black'
