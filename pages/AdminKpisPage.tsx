@@ -4,7 +4,6 @@ import { getAllBusinessesForSuperAdmin } from '../services/firebaseService';
 import type { BusinessAdminData } from '../services/firebaseService';
 import { useToast } from '../context/ToastContext';
 
-type Granularity = 'day' | 'month' | 'year';
 type Metric = 'businesses' | 'customers';
 
 const StatCard: React.FC<{ title: string; value: string | number; description?: string }> = ({ title, value, description }) => (
@@ -57,32 +56,43 @@ const PieChart: React.FC<{ data: { name: string; value: number; color: string }[
 
 // --- CHART COMPONENT ---
 
-const GrowthLineChart: React.FC<{ businesses: BusinessAdminData[], granularity: Granularity, metric: Metric }> = ({ businesses, granularity, metric }) => {
+const CalendarIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2v12a2 2 0 002 2z" /></svg>;
+
+const GrowthLineChart: React.FC<{ businesses: BusinessAdminData[], metric: Metric, startDate: string, endDate: string }> = ({ businesses, metric, startDate, endDate }) => {
     const [tooltip, setTooltip] = useState<{ label: string; count: number; top: number; left: number } | null>(null);
 
     const chartData = useMemo(() => {
-        const groups: { [key: string]: { count: number, timestamp: number } } = {};
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        const diffDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
         
+        // Intelligent Granularity: Day for short ranges, Month for long ones
+        const granularity: 'day' | 'month' = diffDays > 62 ? 'month' : 'day';
+        
+        const groups: { [key: string]: number } = {};
+        
+        // Initialize all periods in the range with 0 to ensure continuity
+        let current = new Date(start);
+        while (current <= end) {
+            const key = granularity === 'day' 
+                ? current.toISOString().split('T')[0]
+                : current.toLocaleString('es-MX', { month: 'short', year: 'numeric' });
+            
+            if (!groups[key]) groups[key] = 0;
+            
+            if (granularity === 'day') current.setDate(current.getDate() + 1);
+            else current.setMonth(current.getMonth() + 1);
+        }
+
+        // Fill counts from real data
         const processDate = (ts: number) => {
             const date = new Date(ts);
-            let key = '';
-            let sortKey = 0;
-            
-            if (granularity === 'day') {
-                key = date.toISOString().split('T')[0];
-                sortKey = new Date(key).getTime();
-            } else if (granularity === 'month') {
-                key = date.toLocaleString('es-MX', { month: 'short', year: 'numeric' });
-                sortKey = new Date(date.getFullYear(), date.getMonth(), 1).getTime();
-            } else {
-                key = date.getFullYear().toString();
-                sortKey = new Date(date.getFullYear(), 0, 1).getTime();
+            if (date >= start && date <= end) {
+                const key = granularity === 'day' 
+                    ? date.toISOString().split('T')[0]
+                    : date.toLocaleString('es-MX', { month: 'short', year: 'numeric' });
+                if (groups[key] !== undefined) groups[key]++;
             }
-            
-            if (!groups[key]) {
-                groups[key] = { count: 0, timestamp: sortKey };
-            }
-            groups[key].count += 1;
         };
 
         if (metric === 'businesses') {
@@ -91,21 +101,13 @@ const GrowthLineChart: React.FC<{ businesses: BusinessAdminData[], granularity: 
             businesses.forEach(b => b.customerEnrollmentDates?.forEach(ts => processDate(ts)));
         }
 
-        // Sort chronologically (Oldest to Newest)
-        const sorted = Object.entries(groups)
-            .map(([label, data]) => ({ label, ...data }))
-            .sort((a, b) => a.timestamp - b.timestamp);
-
-        // Limit range for better visibility
-        if (granularity === 'day') return sorted.slice(-15);
-        if (granularity === 'month') return sorted.slice(-12);
-        return sorted;
-    }, [businesses, granularity, metric]);
+        return Object.entries(groups).map(([label, count]) => ({ label, count }));
+    }, [businesses, metric, startDate, endDate]);
 
     const maxCount = Math.max(...chartData.map(d => d.count), 1);
     const yAxisLabels = [maxCount, Math.round(maxCount * 0.66), Math.round(maxCount * 0.33), 0];
     
-    // Calculate normalized positions (0-100) for BOTH SVG and Div Markers
+    // Normalized Positions (Percentage-based for perfect sync)
     const points = chartData.map((d, i) => ({
         x: (i / (chartData.length - 1 || 1)) * 100,
         y: 100 - (d.count / maxCount) * 100,
@@ -136,15 +138,11 @@ const GrowthLineChart: React.FC<{ businesses: BusinessAdminData[], granularity: 
             <div className="flex justify-between items-center mb-8">
                 <div>
                     <h3 className="text-xl font-bold text-black">Tendencia de Crecimiento</h3>
-                    <p className="text-sm text-gray-500 font-medium">Histórico de {metric === 'businesses' ? 'negocios registrados' : 'clientes activos'}</p>
-                </div>
-                <div className="text-[10px] text-gray-400 uppercase tracking-widest font-black bg-gray-50 px-3 py-1 rounded border border-gray-100">
-                    {granularity === 'day' ? 'Día' : granularity === 'month' ? 'Mes' : 'Año'}
+                    <p className="text-sm text-gray-500 font-medium">Nuevos {metric === 'businesses' ? 'registros' : 'clientes'} en el periodo seleccionado</p>
                 </div>
             </div>
 
             <div className="w-full h-[320px] flex">
-                {/* Y-Axis Labels */}
                 <div className="flex flex-col justify-between h-[300px] pr-4 text-right min-w-[40px]">
                     {yAxisLabels.map((label) => (
                         <span key={label} className="text-[11px] text-gray-400 font-bold">{label}</span>
@@ -153,21 +151,15 @@ const GrowthLineChart: React.FC<{ businesses: BusinessAdminData[], granularity: 
 
                 <div className="w-full h-full flex flex-col relative">
                     <div className="h-[300px] relative border-l border-b border-gray-100 overflow-visible">
-                        {/* Horizontal Grid Lines */}
                         <div className="absolute inset-0 grid grid-rows-3 pointer-events-none">
                             <div className="border-b border-dashed border-gray-100"></div>
                             <div className="border-b border-dashed border-gray-100"></div>
                             <div className="border-b border-dashed border-gray-100"></div>
                         </div>
 
-                        {chartData.length > 1 ? (
+                        {chartData.length > 0 ? (
                             <>
-                                {/* SVG using 0-100 viewBox for perfect sync */}
-                                <svg 
-                                    className="absolute inset-0 w-full h-full overflow-visible" 
-                                    viewBox="0 0 100 100" 
-                                    preserveAspectRatio="none"
-                                >
+                                <svg className="absolute inset-0 w-full h-full overflow-visible" viewBox="0 0 100 100" preserveAspectRatio="none">
                                     <defs>
                                         <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
                                             <stop offset="0%" stopColor="#4D17FF" stopOpacity="0.1" />
@@ -178,15 +170,11 @@ const GrowthLineChart: React.FC<{ businesses: BusinessAdminData[], granularity: 
                                     <path d={pathData} fill="none" stroke="#4D17FF" strokeWidth="1" vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
 
-                                {/* Markers as DIVs - Posicionados en % para coincidir exactos con el SVG */}
                                 {points.map((p, i) => (
                                     <div
                                         key={i}
                                         className="absolute z-10 w-2.5 h-2.5 bg-[#4D17FF] border-2 border-white rounded-full shadow-sm cursor-crosshair transform -translate-x-1/2 -translate-y-1/2 hover:scale-150 transition-all"
-                                        style={{ 
-                                            left: `${p.x}%`, 
-                                            top: `${p.y}%` 
-                                        }}
+                                        style={{ left: `${p.x}%`, top: `${p.y}%` }}
                                         onMouseMove={(e) => handleMouseMove(e, p.label, p.count)}
                                         onMouseLeave={() => setTooltip(null)}
                                     ></div>
@@ -194,20 +182,15 @@ const GrowthLineChart: React.FC<{ businesses: BusinessAdminData[], granularity: 
                             </>
                         ) : (
                             <div className="w-full h-full flex items-center justify-center text-gray-400 italic text-sm">
-                                Se necesitan más datos para mostrar la línea de tiempo
+                                Selecciona un rango de fechas con datos
                             </div>
                         )}
                     </div>
 
-                    {/* X-Axis Labels */}
                     <div className="h-10 flex justify-between items-center pt-3 px-0">
                         {chartData.map(({ label }, idx) => (
-                            <div 
-                                key={idx} 
-                                className="text-center overflow-hidden"
-                                style={{ width: `${100 / chartData.length}%` }}
-                            >
-                                <span className="text-[10px] text-gray-400 font-bold truncate block">
+                            <div key={idx} className="text-center overflow-hidden" style={{ width: `${100 / chartData.length}%` }}>
+                                <span className="text-[10px] text-gray-400 font-bold truncate block px-1">
                                     {label}
                                 </span>
                             </div>
@@ -222,9 +205,16 @@ const GrowthLineChart: React.FC<{ businesses: BusinessAdminData[], granularity: 
 const AdminKpisPage: React.FC = () => {
     const [businesses, setBusinesses] = useState<BusinessAdminData[]>([]);
     const [loading, setLoading] = useState(true);
-    const [granularity, setGranularity] = useState<Granularity>('month');
     const [activeMetric, setActiveMetric] = useState<Metric>('businesses');
     const { showToast } = useToast();
+
+    // Date Range State (Last 30 days by default)
+    const [startDate, setStartDate] = useState<string>(() => {
+        const d = new Date();
+        d.setMonth(d.getMonth() - 1);
+        return d.toISOString().split('T')[0];
+    });
+    const [endDate, setEndDate] = useState<string>(() => new Date().toISOString().split('T')[0]);
 
     useEffect(() => {
         document.title = 'KPIs | Super Admin | Loyalfly';
@@ -282,7 +272,27 @@ const AdminKpisPage: React.FC = () => {
                     <p className="text-gray-600 mt-1">Supervisión integral del crecimiento y adopción.</p>
                 </div>
                 
-                <div className="flex flex-wrap items-center gap-4">
+                <div className="flex flex-wrap items-center gap-6">
+                    {/* Date Range Selector - Google Analytics Style */}
+                    <div className="flex items-center bg-white border border-gray-200 p-2 rounded-lg shadow-sm gap-2">
+                        <CalendarIcon />
+                        <div className="flex items-center gap-2">
+                            <input 
+                                type="date" 
+                                value={startDate}
+                                onChange={(e) => setStartDate(e.target.value)}
+                                className="text-sm font-bold text-gray-700 bg-transparent focus:outline-none border-b border-transparent hover:border-gray-200"
+                            />
+                            <span className="text-gray-400 font-bold">−</span>
+                            <input 
+                                type="date" 
+                                value={endDate}
+                                onChange={(e) => setEndDate(e.target.value)}
+                                className="text-sm font-bold text-gray-700 bg-transparent focus:outline-none border-b border-transparent hover:border-gray-200"
+                            />
+                        </div>
+                    </div>
+
                     {/* Metric Selector */}
                     <div className="flex items-center bg-gray-100 p-1 rounded-lg border border-gray-200">
                         <button
@@ -306,23 +316,6 @@ const AdminKpisPage: React.FC = () => {
                             Clientes
                         </button>
                     </div>
-
-                    {/* Granularity Selectors */}
-                    <div className="flex items-center bg-gray-200 p-1 rounded-lg border border-gray-300">
-                        {(['day', 'month', 'year'] as Granularity[]).map((g) => (
-                            <button
-                                key={g}
-                                onClick={() => setGranularity(g)}
-                                className={`px-4 py-1.5 text-sm font-bold rounded-md transition-all ${
-                                    granularity === g 
-                                    ? 'bg-white text-black shadow-sm' 
-                                    : 'text-gray-500 hover:text-black'
-                                }`}
-                            >
-                                {g === 'day' ? 'Día' : g === 'month' ? 'Mes' : 'Año'}
-                            </button>
-                        ))}
-                    </div>
                 </div>
             </div>
             
@@ -334,7 +327,7 @@ const AdminKpisPage: React.FC = () => {
             </div>
 
             {/* Growth Line Chart Section */}
-            <GrowthLineChart businesses={businesses} granularity={granularity} metric={activeMetric} />
+            <GrowthLineChart businesses={businesses} metric={activeMetric} startDate={startDate} endDate={endDate} />
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col">
