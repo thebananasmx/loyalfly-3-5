@@ -3,13 +3,13 @@
   "name": "Loyalfly - Programa de Lealtad Digital",
   "icons": [
     {
-      "src": "/public/icon-192.png",
+      "src": "https://res.cloudinary.com/dg4wbuppq/image/upload/v1767634073/icon-192_mxoqbg.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any maskable"
     },
     {
-      "src": "/public/icon-512.png",
+      "src": "https://res.cloudinary.com/dg4wbuppq/image/upload/v1767634073/icon-512_vwbe6a.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any maskable"
