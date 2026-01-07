@@ -95,7 +95,6 @@ const AdminBusinessDetailPage: React.FC = () => {
                                 customerName={previewCustomer?.name || 'Juan Pérez'}
                                 customerPhone={previewCustomer?.phone || '5512345678'}
                                 customerId={previewCustomer?.id}
-                                totalStamps={cardSettings.stampsGoal || 10}
                             />
                         </div>
                     </div>
