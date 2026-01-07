@@ -12,6 +12,7 @@ interface CardPreviewProps {
   customerName?: string;
   customerPhone?: string;
   customerId?: string;
+  totalStamps?: number; // Added dynamic total stamps
 }
 
 // Increased size of the star icon itself
@@ -21,9 +22,19 @@ const StarIcon: React.FC = () => (
     </svg>
 );
 
-const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, cardColor, stamps, textColorScheme, logoUrl, customerName, customerPhone, customerId }) => {
+const CardPreview: React.FC<CardPreviewProps> = ({ 
+    businessName, 
+    rewardText, 
+    cardColor, 
+    stamps, 
+    textColorScheme, 
+    logoUrl, 
+    customerName, 
+    customerPhone, 
+    customerId,
+    totalStamps = 10 
+}) => {
   const { t } = useTranslation();
-  const totalStamps = 10;
   const isRewardReady = stamps >= totalStamps;
 
   const isLight = textColorScheme === 'light';
@@ -59,7 +70,7 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
             </div>
         </div>
 
-        {/* Stamps Grid - Space between elements reduced */}
+        {/* Stamps Grid - Fixed 5 columns, dynamic rows (1 or 2 based on totalStamps) */}
         <div className="grid grid-cols-5 gap-3 mt-6 mb-4">
             {Array.from({ length: totalStamps }).map((_, index) => (
                 <div

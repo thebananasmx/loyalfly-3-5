@@ -28,7 +28,14 @@ export interface Business {
   slug: string;
   plan?: 'Gratis' | 'Entrepreneur' | 'Pro';
   customerCount: number;
-  cardSettings: any;
+  cardSettings: {
+    name: string;
+    reward: string;
+    color: string;
+    textColorScheme: 'dark' | 'light';
+    logoUrl?: string;
+    stampsGoal?: number;
+  };
   surveySettings: any;
 }
 

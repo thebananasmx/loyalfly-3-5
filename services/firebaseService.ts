@@ -110,7 +110,8 @@ export const registerBusiness = async (email: string, password:string, businessN
     reward: 'Tu Recompensa',
     color: '#FEF3C7',
     textColorScheme: 'dark',
-    logoUrl: ''
+    logoUrl: '',
+    stampsGoal: 10 // Default goal
   });
 
   // --- ZAPIER TRIGGER ---
@@ -225,7 +226,8 @@ export const getPublicCardSettings = async (businessId: string) => {
             ...cardData,
             plan: businessData.plan || 'Gratis',
             // Ensure name uses card config name if available, else business name
-            name: cardData.name || businessData.name
+            name: cardData.name || businessData.name,
+            stampsGoal: cardData.stampsGoal || 10
         };
     } else {
         console.log("No such card configuration or business!");
@@ -322,7 +324,7 @@ export const searchCustomers = async (businessId: string, searchQuery: string): 
     return Array.from(customersMap.values());
 };
 
-export const updateCardSettings = async (businessId: string, settings: { name: string; reward: string; color: string; textColorScheme: string; logoUrl?: string; }) => {
+export const updateCardSettings = async (businessId: string, settings: { name: string; reward: string; color: string; textColorScheme: string; logoUrl?: string; stampsGoal?: number; }) => {
     const cardConfigRef = doc(db, "businesses", businessId, "config", "card");
     await setDoc(cardConfigRef, settings, { merge: true });
     return { success: true, settings };
@@ -366,17 +368,24 @@ export const addStampToCustomer = async (businessId: string, customerId: string,
 
 export const redeemRewardForCustomer = async (businessId: string, customerId: string): Promise<Customer> => {
     const customerDocRef = doc(db, `businesses/${businessId}/customers`, customerId);
-    const customerSnap = await getDoc(customerDocRef);
+    const cardConfigRef = doc(db, "businesses", businessId, "config", "card");
+    
+    const [customerSnap, cardSnap] = await Promise.all([
+        getDoc(customerDocRef),
+        getDoc(cardConfigRef)
+    ]);
+
     if (customerSnap.exists()) {
         const currentStamps = customerSnap.data().stamps || 0;
         const currentRewards = customerSnap.data().rewardsRedeemed || 0;
+        const stampsGoal = cardSnap.exists() ? (cardSnap.data().stampsGoal || 10) : 10;
 
-        if (currentStamps < 10) {
+        if (currentStamps < stampsGoal) {
             throw new Error("Customer does not have enough stamps for a reward.");
         }
 
         await updateDoc(customerDocRef, {
-            stamps: currentStamps - 10,
+            stamps: currentStamps - stampsGoal,
             rewardsRedeemed: currentRewards + 1
         });
 
@@ -766,6 +775,9 @@ export interface BusinessMetrics {
 
 export const getBusinessMetrics = async (businessId: string): Promise<BusinessMetrics> => {
     const customers = await getAllCustomers(businessId);
+    const cardConfigRef = doc(db, "businesses", businessId, "config", "card");
+    const cardSnap = await getDoc(cardConfigRef);
+    const stampsGoal = cardSnap.exists() ? (cardSnap.data().stampsGoal || 10) : 10;
 
     let totalStamps = 0;
     let totalRewards = 0;
@@ -784,7 +796,7 @@ export const getBusinessMetrics = async (businessId: string): Promise<BusinessMe
         }
     });
 
-    const redemptionRate = totalStamps > 0 ? (totalRewards * 10) / totalStamps * 100 : 0;
+    const redemptionRate = totalStamps > 0 ? (totalRewards * stampsGoal) / totalStamps * 100 : 0;
 
     // Format customer growth data for the chart
     const newCustomersByMonth = Array.from({ length: 6 }).map((_, i) => {

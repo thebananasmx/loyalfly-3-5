@@ -154,6 +154,7 @@ export const es = {
     dark: "Oscuro",
     light: "Claro",
     sampleStamps: "Sellos de Muestra",
+    stampsGoalLabel: "Objetivo de Sellos",
     shareText: "Tus clientes pueden usar el siguiente enlace para unirse.",
     generateQr: "Genera QR",
     copied: "¡URL copiada!"
@@ -400,6 +401,7 @@ export const en = {
     dark: "Dark",
     light: "Light",
     sampleStamps: "Sample Stamps",
+    stampsGoalLabel: "Stamps Goal",
     shareText: "Your customers can use the following link to join.",
     generateQr: "Generate QR",
     copied: "URL copied!"
@@ -555,7 +557,7 @@ export const pt = {
       login: "Entrar"
     },
     stats: {
-      title: "Nossa comunidade continua crescendo graças a todos",
+      title: "Nuestra comunidad continua creciendo gracias a todos",
       businesses: "Negócios Confiam em Nós",
       stamps: "Momentos de Fidelidade (Selos)",
       rewards: "Recompensas Entregues"
@@ -586,7 +588,7 @@ export const pt = {
       slides: {
         cafe: { industry: "Cafeterias", title: "Aroma de lealdade em cada xícara.", desc: "Recompense seus clientes frequentes com um café grátis e faça cada visita valer a pena. Loyalfly é o ingrediente secreto para fazê-los voltar para mais." },
         restaurant: { industry: "Restaurantes", title: "A fidelidade é o prato principal.", desc: "De sobremesas de cortesia a descontos especiais, crie um programa de recompensas que deixe seus clientes com um ótimo gosto na boca." },
-        entrepreneur: { industry: "Empreendedores", title: "Construa uma comunidade, não apenas clientes.", desc: "Se você tem uma loja local ou um pequeno negócio, o Loyalfly ajuda a criar conexões duradouras e transformar compradores ocasionais em seus fãs número um." },
+        entrepreneur: { industry: "Empreendedores", title: "Construa una comunidad, no apenas clientes.", desc: "Se você tem uma loja local ou um pequeno negócio, o Loyalfly ajuda a criar conexões duradouras e transformar compradores ocasionais em seus fãs número um." },
         makeup: { industry: "Nail & Makeup Artists", title: "Beleza que recompensa.", desc: "Ofereça um serviço gratuito ou desconto exclusivo após várias visitas. É a maneira perfeita de agradecer suas clientes por sua confiança e lealdade." },
         barber: { industry: "Estilistas e Barbeiros", title: "Um corte acima da concorrência.", desc: "Fidelize sua clientela com um programa de fidelidade tão impecável quanto seus cortes. Um serviço gratuito a cada poucos cortes é um incentivo que funciona." }
       }
@@ -646,6 +648,7 @@ export const pt = {
     dark: "Escuro",
     light: "Claro",
     sampleStamps: "Selos de Exemplo",
+    stampsGoalLabel: "Objetivo de Selos",
     shareText: "Seus clientes podem usar o seguinte link para participar.",
     generateQr: "Gerar QR",
     copied: "URL copiada!"
@@ -666,7 +669,7 @@ export const pt = {
     rewardsRedeemedDesc: "Clientes que completaram o cartão.",
     redemptionRate: "Taxa de Resgate",
     redemptionRateDesc: "Porcentagem de recompensas ganhas que são resgatadas.",
-    chartTitle: "Novos Clientes por Mês",
+    chartTitle: "Novos Clientes por Mes",
     newCustomers: "Novos Clientes",
     topCustomersTitle: "Clientes Mais Fiéis",
     emptyTopCustomers: "Não há dados suficientes de clientes."
@@ -682,7 +685,7 @@ export const pt = {
     questionPlaceholder: "Ex: O que achou do serviço?",
     option1Label: "Opção 1",
     option1Placeholder: "Ex: Excelente",
-    option2Label: "Opção 2",
+    option2Label: "Opción 2",
     option2Placeholder: "Ex: Pode melhorar",
     resultsTitle: "Resultados da Pesquisa Atual",
     totalResponses: "Total de respostas",
@@ -715,7 +718,7 @@ export const pt = {
     },
     pro: {
       name: "Pro",
-      desc: "Para negocios estabelecidos."
+      desc: "Para negócios estabelecidos."
     },
     features: {
       customers100: "Até 100 clientes",

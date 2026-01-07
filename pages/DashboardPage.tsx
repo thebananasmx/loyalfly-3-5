@@ -461,8 +461,9 @@ const DashboardPage: React.FC = () => {
         setSearchPage(prevPage);
     };
 
-    const isLimitReached = businessData && businessData.plan && businessData.plan !== 'Pro' && PLAN_LIMITS[businessData.plan] && businessData.customerCount >= PLAN_LIMITS[businessData.plan];
+    const isLimitReached = businessData && businessData.plan && businessData.plan !== 'Pro' && PLAN_LIMITS[businessData.plan as keyof typeof PLAN_LIMITS] && businessData.customerCount >= PLAN_LIMITS[businessData.plan as keyof typeof PLAN_LIMITS];
     const totalSearchPages = Math.ceil(allSearchResults.length / PAGE_SIZE);
+    const stampsGoal = businessData?.cardSettings?.stampsGoal || 10;
 
     const renderTableBody = () => {
         if (loading) {
@@ -490,7 +491,7 @@ const DashboardPage: React.FC = () => {
                     <td className="px-4 py-4 sm:px-6 text-center">{customer.rewardsRedeemed}</td>
                     <td className="px-4 py-4 sm:px-6 text-right">
                         <div className="flex justify-end items-center gap-2">
-                            {customer.stamps >= 10 ? (
+                            {customer.stamps >= stampsGoal ? (
                                 <button
                                     onClick={() => handleOpenRedeemModal(customer)}
                                     className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-white bg-[#00AA00] rounded-md hover:bg-opacity-90 transition-colors"
@@ -577,7 +578,7 @@ const DashboardPage: React.FC = () => {
 
     return (
         <div>
-            {isLimitReached && businessData?.plan && businessData.plan !== 'Pro' && (
+            {isLimitReached && businessData?.plan && (businessData.plan === 'Gratis' || businessData.plan === 'Entrepreneur') && (
                 <AlertBar plan={businessData.plan} />
             )}
             <div className="space-y-6">
@@ -724,7 +725,7 @@ const DashboardPage: React.FC = () => {
                     confirmText={isUpdating ? 'Redimiendo...' : 'Sí, Redimir'}
                 >
                     <p>Estás a punto de redimir la recompensa para <strong>{selectedCustomer.name}</strong>.</p>
-                    <p className="mt-2">Su contador de sellos se reducirá en 10. ¿Estás seguro?</p>
+                    <p className="mt-2">Su contador de sellos se reducirá en {stampsGoal}. ¿Estás seguro?</p>
                 </ConfirmationModal>
             )}
 

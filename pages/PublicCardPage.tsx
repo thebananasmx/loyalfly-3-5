@@ -17,6 +17,7 @@ interface CardSettings {
     textColorScheme: 'dark' | 'light';
     logoUrl?: string;
     plan?: string;
+    stampsGoal?: number;
 }
 
 interface SurveySettings {
@@ -386,6 +387,7 @@ const PublicCardPage: React.FC = () => {
                           customerName={customer?.name}
                           customerPhone={customer?.phone}
                           customerId={customer?.id}
+                          totalStamps={settings!.stampsGoal}
                         />
                         <button
                            onClick={() => {
