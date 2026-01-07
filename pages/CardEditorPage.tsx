@@ -163,7 +163,7 @@ const CardEditorPage: React.FC = () => {
           <div>
             <div className="flex justify-between items-center mb-1">
                 <label htmlFor="stampsGoal" className="block text-base font-medium text-gray-700">
-                    {t('card.stampsGoalLabel')}
+                    {t('card.stampsGoalLabel')} ({stampsGoal})
                 </label>
                 {!isEntrepreneur && (
                     <span className="flex items-center text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">
@@ -174,19 +174,13 @@ const CardEditorPage: React.FC = () => {
             </div>
             <input
               id="stampsGoal"
-              type="number"
-              min="1"
+              type="range"
+              min="5"
               max="10"
               value={stampsGoal}
               disabled={!isEntrepreneur}
-              onChange={(e) => {
-                let val = Number(e.target.value);
-                if (val > 10) val = 10;
-                if (val < 1 && e.target.value !== '') val = 1;
-                setStampsGoal(val);
-                if (stampsPreview > val) setStampsPreview(val);
-              }}
-              className={`mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black disabled:bg-gray-100 ${!isEntrepreneur ? 'opacity-50 cursor-not-allowed' : ''}`}
+              onChange={(e) => setStampsGoal(Number(e.target.value))}
+              className={`w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#4D17FF] ${!isEntrepreneur ? 'opacity-50 cursor-not-allowed' : ''}`}
             />
             {!isEntrepreneur && (
                 <p className="mt-2 text-xs text-gray-500 italic">
