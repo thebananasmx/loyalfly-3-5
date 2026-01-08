@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createNewCustomer, getBusinessData } from '../services/firebaseService';
@@ -118,6 +119,8 @@ const NewCustomerPage: React.FC = () => {
         }
     };
 
+    const isFreePlan = businessData?.plan === 'Gratis';
+
     return (
         <div className="max-w-2xl mx-auto">
             <h1 className="text-3xl font-bold text-black tracking-tight mb-6">Registrar Nuevo Cliente</h1>
@@ -125,7 +128,21 @@ const NewCustomerPage: React.FC = () => {
             {isLimitReached && businessData?.plan && (
                 <div className="p-4 mb-6 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700">
                     <p className="font-bold">Límite de Clientes Alcanzado</p>
-                    <p>Has alcanzado el máximo de {PLAN_LIMITS[businessData.plan as keyof typeof PLAN_LIMITS]} clientes para tu plan. <a href="mailto:contacto@loyalfly.app" className="font-semibold underline">Contacta a soporte</a> para mejorar.</p>
+                    <p className="mb-3">Has alcanzado el máximo de {PLAN_LIMITS[businessData.plan as keyof typeof PLAN_LIMITS]} clientes para tu plan.</p>
+                    {isFreePlan ? (
+                        <a 
+                            href="https://buy.stripe.com/3cI6oI2dX1Rrfpy9XP5c400" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="inline-block px-4 py-2 bg-yellow-500 text-white font-bold rounded-md hover:bg-yellow-600 transition-colors"
+                        >
+                            Suscríbete al Plan Entrepreneur
+                        </a>
+                    ) : (
+                        <p>
+                            <a href="mailto:contacto@loyalfly.app" className="font-semibold underline">Contacta a soporte</a> para mejorar a un plan Pro.
+                        </p>
+                    )}
                 </div>
             )}
 

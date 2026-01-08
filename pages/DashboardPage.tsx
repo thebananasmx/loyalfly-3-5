@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Html5Qrcode } from 'html5-qrcode';
@@ -35,15 +36,24 @@ const PLAN_LIMITS = {
 const PAGE_SIZE = 25;
 
 const AlertBar: React.FC<{ plan: 'Gratis' | 'Entrepreneur' }> = ({ plan }) => {
+    const isFreePlan = plan === 'Gratis';
+    const buttonText = isFreePlan ? 'Suscríbete al Plan Entrepreneur' : 'Contáctanos para mejorar';
+    const buttonLink = isFreePlan ? 'https://buy.stripe.com/3cI6oI2dX1Rrfpy9XP5c400' : 'mailto:contacto@loyalfly.app';
+
     return (
         <div className="p-4 mb-6 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <p className="font-bold">Límite de Clientes Alcanzado</p>
                     <p>Has alcanzado el máximo de {PLAN_LIMITS[plan]} clientes para el plan {plan}.</p>
                 </div>
-                <a href="mailto:contacto@loyalfly.app" className="px-4 py-2 bg-yellow-500 text-white font-semibold rounded-md hover:bg-yellow-600 transition-colors">
-                    Contáctanos para mejorar
+                <a 
+                    href={buttonLink} 
+                    target={isFreePlan ? "_blank" : undefined}
+                    rel={isFreePlan ? "noopener noreferrer" : undefined}
+                    className="px-4 py-2 bg-yellow-500 text-white font-semibold rounded-md hover:bg-yellow-600 transition-colors whitespace-nowrap"
+                >
+                    {buttonText}
                 </a>
             </div>
         </div>
