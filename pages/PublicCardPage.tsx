@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import CardPreview from '../components/CardPreview';
@@ -17,6 +18,7 @@ interface CardSettings {
     textColorScheme: 'dark' | 'light';
     logoUrl?: string;
     plan?: string;
+    stampsGoal?: number;
 }
 
 interface SurveySettings {
@@ -29,7 +31,7 @@ interface SurveySettings {
 }
 
 const validateMexicanPhoneNumber = (phone: string): string => {
-    if (!phone) return ""; // Let basic required check handle empty
+    if (!phone) return ""; 
     let cleaned = phone.trim();
 
     if (cleaned.startsWith('+521')) {
@@ -48,21 +50,18 @@ const PublicCardPage: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
     const topRef = useRef<HTMLDivElement>(null);
 
-    // Business & UI State
     const [settings, setSettings] = useState<CardSettings | null>(null);
     const [businessId, setBusinessId] = useState<string | null>(null);
-    const [loading, setLoading] = useState(true); // Initial page load
-    const [isSubmitting, setIsSubmitting] = useState(false); // For form submissions
+    const [loading, setLoading] = useState(true); 
+    const [isSubmitting, setIsSubmitting] = useState(false); 
     const [errors, setErrors] = useState<{ phoneLookup?: string, userName?: string, userPhone?: string, userEmail?: string, form?: string }>({});
 
-    // View & Customer State
     const [view, setView] = useState<ViewState>('lookup');
     const [customer, setCustomer] = useState<Customer | null>(null);
     const [surveySettings, setSurveySettings] = useState<SurveySettings | null>(null);
     const [hasVoted, setHasVoted] = useState(true);
     
-    // Form Inputs State
-    const [phoneLookup, setPhoneLookup] = useState(''); // For the lookup form
+    const [phoneLookup, setPhoneLookup] = useState(''); 
     const [userName, setUserName] = useState('');
     const [userPhone, setUserPhone] = useState('');
     const [userEmail, setUserEmail] = useState('');
@@ -101,7 +100,6 @@ const PublicCardPage: React.FC = () => {
         fetchSettings();
     }, [slug]);
 
-    // Scroll to top when the card is displayed using a more robust method
     useEffect(() => {
         if (view === 'display') {
             topRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -135,11 +133,11 @@ const PublicCardPage: React.FC = () => {
                     const voted = await hasCustomerVoted(businessId, foundCustomer.id, surveyData.surveyId);
                     setHasVoted(voted);
                 } else {
-                    setHasVoted(true); // No active survey, so treat as "voted"
+                    setHasVoted(true); 
                 }
                 setView('display');
             } else {
-                setUserPhone(phoneLookup); // Pre-fill phone for registration
+                setUserPhone(phoneLookup); 
                 setView('register');
             }
         } catch (err) {
@@ -184,7 +182,7 @@ const PublicCardPage: React.FC = () => {
             const surveyData = await getSurveySettings(businessId);
             if (surveyData && surveyData.isEnabled) {
                 setSurveySettings(surveyData as SurveySettings);
-                setHasVoted(false); // New customer, hasn't voted
+                setHasVoted(false); 
             }
             setView('display');
         } catch (err) {
@@ -196,7 +194,7 @@ const PublicCardPage: React.FC = () => {
     };
     
     const renderContent = () => {
-        if (errors.form && !settings) { // Show fatal error if settings couldn't load
+        if (errors.form && !settings) {
             return (
                 <div className="text-center">
                     <h1 className="text-2xl font-bold text-red-600">{t('common.error')}</h1>
@@ -386,6 +384,7 @@ const PublicCardPage: React.FC = () => {
                           customerName={customer?.name}
                           customerPhone={customer?.phone}
                           customerId={customer?.id}
+                          stampsGoal={settings?.stampsGoal}
                         />
                         <button
                            onClick={() => {

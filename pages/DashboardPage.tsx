@@ -60,8 +60,6 @@ const AlertBar: React.FC<{ plan: 'Gratis' | 'Entrepreneur' }> = ({ plan }) => {
     );
 };
 
-
-// Custom hook for debouncing
 function useDebounce<T>(value: T, delay: number): T {
     const [debouncedValue, setDebouncedValue] = useState<T>(value);
     useEffect(() => {
@@ -81,21 +79,17 @@ const DashboardPage: React.FC = () => {
     const { showToast } = useToast();
     const navigate = useNavigate();
     
-    // The state for the currently displayed list. Can be from main list or search results.
     const [customers, setCustomers] = useState<Customer[]>([]);
-
     const [businessData, setBusinessData] = useState<Business | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(true);
     const [isSearching, setIsSearching] = useState(false);
     const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
-    // SERVER-SIDE PAGINATION STATE (main list)
     const [mainListPage, setMainListPage] = useState(1);
     const [pageStartCursors, setPageStartCursors] = useState<any[]>([null]);
     const [isLastPage, setIsLastPage] = useState(false);
     
-    // CLIENT-SIDE PAGINATION STATE (search results)
     const [allSearchResults, setAllSearchResults] = useState<Customer[]>([]);
     const [searchPage, setSearchPage] = useState(1);
 
@@ -134,7 +128,6 @@ const DashboardPage: React.FC = () => {
         }
     };
     
-    // Effect for initial load of recent customers
     useEffect(() => {
         document.title = 'Dashboard | Loyalfly App';
         if (user) {
@@ -142,7 +135,6 @@ const DashboardPage: React.FC = () => {
         }
     }, [user]);
 
-    // Effect for handling search queries
     useEffect(() => {
         const performSearch = async () => {
             if (!user) return;
@@ -165,14 +157,12 @@ const DashboardPage: React.FC = () => {
             performSearch();
         } else {
              if (searchQuery === '' && allSearchResults.length > 0) {
-                // Was searching, now cleared
                 setAllSearchResults([]);
                 fetchInitialData();
             }
         }
     }, [debouncedSearchQuery, user]);
 
-    // Effect for QR Code Scanner
     useEffect(() => {
         if (!isScannerOpen || !user?.uid) return;
 
@@ -207,7 +197,7 @@ const DashboardPage: React.FC = () => {
             { facingMode: "environment" },
             config,
             qrCodeSuccessCallback,
-            () => {} // Error callback, ignored for continuous scanning
+            () => {} 
         ).catch((err) => {
             showToast('No se pudo iniciar el escáner. Revisa los permisos de la cámara.', 'error');
             console.error("Unable to start scanning.", err);
@@ -471,8 +461,9 @@ const DashboardPage: React.FC = () => {
         setSearchPage(prevPage);
     };
 
-    const isLimitReached = businessData && businessData.plan && businessData.plan !== 'Pro' && PLAN_LIMITS[businessData.plan] && businessData.customerCount >= PLAN_LIMITS[businessData.plan];
+    const isLimitReached = businessData && businessData.plan && businessData.plan !== 'Pro' && PLAN_LIMITS[businessData.plan as keyof typeof PLAN_LIMITS] && businessData.customerCount >= PLAN_LIMITS[businessData.plan as keyof typeof PLAN_LIMITS];
     const totalSearchPages = Math.ceil(allSearchResults.length / PAGE_SIZE);
+    const stampsGoal = businessData?.cardSettings?.stampsGoal || 10;
 
     const renderTableBody = () => {
         if (loading) {
@@ -500,7 +491,7 @@ const DashboardPage: React.FC = () => {
                     <td className="px-4 py-4 sm:px-6 text-center">{customer.rewardsRedeemed}</td>
                     <td className="px-4 py-4 sm:px-6 text-right">
                         <div className="flex justify-end items-center gap-2">
-                            {customer.stamps >= 10 ? (
+                            {customer.stamps >= stampsGoal ? (
                                 <button
                                     onClick={() => handleOpenRedeemModal(customer)}
                                     className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-white bg-[#00AA00] rounded-md hover:bg-opacity-90 transition-colors"
@@ -734,7 +725,7 @@ const DashboardPage: React.FC = () => {
                     confirmText={isUpdating ? 'Redimiendo...' : 'Sí, Redimir'}
                 >
                     <p>Estás a punto de redimir la recompensa para <strong>{selectedCustomer.name}</strong>.</p>
-                    <p className="mt-2">Su contador de sellos se reducirá en 10. ¿Estás seguro?</p>
+                    <p className="mt-2">Su contador de sellos se reducirá en {stampsGoal}. ¿Estás seguro?</p>
                 </ConfirmationModal>
             )}
 

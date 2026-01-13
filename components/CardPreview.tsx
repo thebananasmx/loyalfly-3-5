@@ -1,3 +1,4 @@
+
 import React from 'react';
 import QRCode from './QRCode';
 import { useTranslation } from 'react-i18next';
@@ -12,18 +13,29 @@ interface CardPreviewProps {
   customerName?: string;
   customerPhone?: string;
   customerId?: string;
+  stampsGoal?: number;
 }
 
-// Increased size of the star icon itself
 const StarIcon: React.FC = () => (
     <svg className="w-8 h-8 text-[#FFC700]" viewBox="0 0 24 24" fill="currentColor">
         <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
     </svg>
 );
 
-const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, cardColor, stamps, textColorScheme, logoUrl, customerName, customerPhone, customerId }) => {
+const CardPreview: React.FC<CardPreviewProps> = ({ 
+    businessName, 
+    rewardText, 
+    cardColor, 
+    stamps, 
+    textColorScheme, 
+    logoUrl, 
+    customerName, 
+    customerPhone, 
+    customerId,
+    stampsGoal = 10 
+}) => {
   const { t } = useTranslation();
-  const totalStamps = 10;
+  const totalStamps = stampsGoal;
   const isRewardReady = stamps >= totalStamps;
 
   const isLight = textColorScheme === 'light';
@@ -36,7 +48,6 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
   const rewardReadyTextColor = isLight ? 'text-green-300' : 'text-green-600';
 
   return (
-    // Single container for the entire card, with rounded corners and shadow.
     <div 
         className="w-full max-w-sm mx-auto font-sans shadow-lg rounded-lg overflow-hidden flex flex-col transition-colors duration-300" 
         style={{ backgroundColor: cardColor }}
@@ -59,7 +70,7 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
             </div>
         </div>
 
-        {/* Stamps Grid - Space between elements reduced */}
+        {/* Stamps Grid - Manteniendo 5 columnas siempre */}
         <div className="grid grid-cols-5 gap-3 mt-6 mb-4">
             {Array.from({ length: totalStamps }).map((_, index) => (
                 <div
@@ -88,7 +99,7 @@ const CardPreview: React.FC<CardPreviewProps> = ({ businessName, rewardText, car
         )}
       </div>
       
-      {/* Reward Section - Integrated without border */}
+      {/* Reward Section */}
       <div className="p-4 sm:p-5">
         {isRewardReady ? (
             <div>

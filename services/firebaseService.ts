@@ -1,3 +1,4 @@
+
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -110,12 +111,11 @@ export const registerBusiness = async (email: string, password:string, businessN
     reward: 'Tu Recompensa',
     color: '#FEF3C7',
     textColorScheme: 'dark',
-    logoUrl: ''
+    logoUrl: '',
+    stampsGoal: 10 // Default initial goal
   });
 
   // --- ZAPIER TRIGGER ---
-  // Create a document in a separate collection to trigger the Zapier automation
-  // for the welcome email.
   try {
     const zapierTriggerCollectionRef = collection(db, "new_business_registrations");
     await addDoc(zapierTriggerCollectionRef, {
@@ -124,7 +124,6 @@ export const registerBusiness = async (email: string, password:string, businessN
       registeredAt: serverTimestamp(),
     });
   } catch (error) {
-    // Log the error but don't block the user registration process
     console.error("Zapier trigger failed:", error);
   }
   
@@ -154,14 +153,8 @@ export const reauthenticateAndChangePassword = async (currentPassword: string, n
     if (!user || !user.email) {
         throw new Error("No user is currently signed in.");
     }
-    
-    // Create a credential with the user's email and current password
     const credential = EmailAuthProvider.credential(user.email, currentPassword);
-    
-    // Re-authenticate the user
     await reauthenticateWithCredential(user, credential);
-    
-    // If re-authentication is successful, update the password
     await updatePassword(user, newPassword);
 };
 
@@ -189,12 +182,11 @@ export const getBusinessData = async (businessId: string): Promise<Business | nu
         return {
             id: businessId,
             ...businessData,
-            cardSettings: cardSettings,
+            cardSettings: cardSettings ? { ...cardSettings, stampsGoal: cardSettings.stampsGoal || 10 } : null,
             surveySettings: surveySettings,
             customerCount: customerSnapshot.size
         } as Business;
     } else {
-        console.log("No such business document!");
         return null;
     }
 }
@@ -224,11 +216,10 @@ export const getPublicCardSettings = async (businessId: string) => {
         return {
             ...cardData,
             plan: businessData.plan || 'Gratis',
-            // Ensure name uses card config name if available, else business name
-            name: cardData.name || businessData.name
+            name: cardData.name || businessData.name,
+            stampsGoal: cardData.stampsGoal || 10
         };
     } else {
-        console.log("No such card configuration or business!");
         return null;
     }
 }
@@ -268,10 +259,8 @@ export const getAllCustomers = async (businessId: string): Promise<Customer[]> =
 
 export const searchCustomers = async (businessId: string, searchQuery: string): Promise<Customer[]> => {
     const customersCol = collection(db, `businesses/${businessId}/customers`);
-    
     const normalizedNameQuery = normalizeForSearch(searchQuery);
     
-    // Query for name prefix using the normalized `searchableName` field
     const nameQuery = query(
         customersCol,
         where('searchableName', '>=', normalizedNameQuery),
@@ -279,7 +268,6 @@ export const searchCustomers = async (businessId: string, searchQuery: string): 
         limit(15)
     );
 
-    // Query for phone prefix (remains unchanged)
     const phoneQuery = query(
         customersCol,
         where('phone', '>=', searchQuery),
@@ -287,7 +275,6 @@ export const searchCustomers = async (businessId: string, searchQuery: string): 
         limit(15)
     );
 
-    // Query for email prefix
     const emailQuery = query(
         customersCol,
         where('email', '>=', searchQuery),
@@ -322,7 +309,7 @@ export const searchCustomers = async (businessId: string, searchQuery: string): 
     return Array.from(customersMap.values());
 };
 
-export const updateCardSettings = async (businessId: string, settings: { name: string; reward: string; color: string; textColorScheme: string; logoUrl?: string; }) => {
+export const updateCardSettings = async (businessId: string, settings: any) => {
     const cardConfigRef = doc(db, "businesses", businessId, "config", "card");
     await setDoc(cardConfigRef, settings, { merge: true });
     return { success: true, settings };
@@ -365,18 +352,22 @@ export const addStampToCustomer = async (businessId: string, customerId: string,
 };
 
 export const redeemRewardForCustomer = async (businessId: string, customerId: string): Promise<Customer> => {
+    const businessData = await getBusinessData(businessId);
+    if (!businessData) throw new Error("Business not found");
+    const stampsGoal = businessData.cardSettings?.stampsGoal || 10;
+
     const customerDocRef = doc(db, `businesses/${businessId}/customers`, customerId);
     const customerSnap = await getDoc(customerDocRef);
     if (customerSnap.exists()) {
         const currentStamps = customerSnap.data().stamps || 0;
         const currentRewards = customerSnap.data().rewardsRedeemed || 0;
 
-        if (currentStamps < 10) {
-            throw new Error("Customer does not have enough stamps for a reward.");
+        if (currentStamps < stampsGoal) {
+            throw new Error(`Customer does not have enough stamps (${stampsGoal} required).`);
         }
 
         await updateDoc(customerDocRef, {
-            stamps: currentStamps - 10,
+            stamps: currentStamps - stampsGoal,
             rewardsRedeemed: currentRewards + 1
         });
 
@@ -547,9 +538,6 @@ export const getGlobalStats = async (): Promise<{ totalBusinesses: number; total
     let totalStamps = 0;
     let totalRewards = 0;
 
-    // Use Promise.all to fetch customer collections in parallel
-    // Note: In a production environment with thousands of businesses, this should be a cached cloud function.
-    // For MVP, this client-side aggregation is acceptable.
     await Promise.all(
         businesses.map(async (businessId) => {
             const customersCol = collection(db, `businesses/${businessId}/customers`);
@@ -697,7 +685,6 @@ export const deleteBlogPost = async (postId: string, slug: string): Promise<void
 
 export const getPublishedBlogPosts = async (): Promise<BlogPost[]> => {
     const blogPostsCol = collection(db, 'blogPosts');
-    // Query only by createdAt to avoid needing a composite index.
     const q = query(blogPostsCol, orderBy('createdAt', 'desc'));
     const snapshot = await getDocs(q);
     
@@ -707,7 +694,6 @@ export const getPublishedBlogPosts = async (): Promise<BlogPost[]> => {
         createdAt: (doc.data().createdAt as Timestamp)?.toDate() || new Date()
     } as BlogPost));
     
-    // Filter for published posts on the client side.
     return allPosts.filter(post => post.status === 'published');
 };
 
@@ -765,6 +751,8 @@ export interface BusinessMetrics {
 }
 
 export const getBusinessMetrics = async (businessId: string): Promise<BusinessMetrics> => {
+    const businessData = await getBusinessData(businessId);
+    const stampsGoal = businessData?.cardSettings?.stampsGoal || 10;
     const customers = await getAllCustomers(businessId);
 
     let totalStamps = 0;
@@ -784,9 +772,8 @@ export const getBusinessMetrics = async (businessId: string): Promise<BusinessMe
         }
     });
 
-    const redemptionRate = totalStamps > 0 ? (totalRewards * 10) / totalStamps * 100 : 0;
+    const redemptionRate = totalStamps > 0 ? (totalRewards * stampsGoal) / totalStamps * 100 : 0;
 
-    // Format customer growth data for the chart
     const newCustomersByMonth = Array.from({ length: 6 }).map((_, i) => {
         const d = new Date();
         d.setMonth(d.getMonth() - i);

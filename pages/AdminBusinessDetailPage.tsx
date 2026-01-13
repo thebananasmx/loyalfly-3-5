@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getBusinessData, getAllCustomers } from '../services/firebaseService';
@@ -95,6 +96,7 @@ const AdminBusinessDetailPage: React.FC = () => {
                                 customerName={previewCustomer?.name || 'Juan Pérez'}
                                 customerPhone={previewCustomer?.phone || '5512345678'}
                                 customerId={previewCustomer?.id}
+                                stampsGoal={cardSettings.stampsGoal}
                             />
                         </div>
                     </div>
