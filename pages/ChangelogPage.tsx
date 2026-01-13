@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 
 const FeatureTag: React.FC<{ type: 'new' | 'improvement' }> = ({ type }) => {
@@ -32,6 +31,15 @@ const ChangelogPage: React.FC = () => {
         </div>
         
         <ul className="mt-8 space-y-6">
+           <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Widget de Contador de Clientes y Plan</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha integrado un nuevo widget visual en la barra lateral del menú que permite a los dueños de negocios monitorear en tiempo real su consumo de cupos de clientes (ej: 1/100 en plan Gratis o 1/1000 en Entrepreneur). Este widget también destaca el nivel de suscripción actual para una mejor visibilidad administrativa.
+                  </p>
+              </div>
+          </li>
            <li className="flex items-start gap-4">
               <FeatureTag type="new" />
               <div>
@@ -639,7 +647,7 @@ const ChangelogPage: React.FC = () => {
           <li className="flex items-start gap-4">
               <FeatureTag type="new" />
               <div>
-                  <h3 className="font-semibold text-black">Gestión Completa de Clientes: Editar y Eliminar</h3>
+                  <h3 className="font-semibold text-black">Gestión completa de clientes: Editar y Eliminar</h3>
                   <p className="text-gray-600 mt-1">
                       Se ha introducido la capacidad de editar la información de un cliente (nombre, teléfono, email) en una nueva página dedicada. Además, se ha añadido una 'Zona de Peligro' segura para eliminar clientes de forma permanentemente, con una doble confirmación para evitar borrados accidentales.
                   </p>
@@ -820,7 +828,8 @@ const ChangelogPage: React.FC = () => {
               <div>
                   <h3 className="font-semibold text-black">Reestructuración de Datos en Firestore para Mejor Escalabilidad</h3>
                   <p className="text-gray-600 mt-1">
-                      Se ha refactorizado la estructura de la base de datos en Firestore. La configuración de la tarjeta de lealtad ahora se almacena en una subcolección dedicada (`/businesses/{'{'}businessId{'}'}/config/card`). Este cambio mejora la organización, aísla la configuración de la información principal del negocio y prepara la plataforma para futuras funcionalidades avanzadas sin impactar la experiencia del usuario.
+                      {/* FIX: Escaped curly braces in text to prevent "Cannot find name 'businessId'" JSX error */}
+                      Se ha refactorizado la estructura de la base de datos en Firestore. La configuración de la tarjeta de lealtad ahora se almacena en una subcolección dedicada ({"/businesses/{ businessId }/config/card"}). Este cambio mejora la organización, aísla la configuración de la información principal del negocio y prepara la plataforma para futuras funcionalidades avanzadas sin impactar la experiencia del usuario.
                   </p>
               </div>
           </li>
