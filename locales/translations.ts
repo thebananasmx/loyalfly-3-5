@@ -53,7 +53,11 @@ export const es = {
     metrics: "Métricas",
     survey: "Encuesta",
     settings: "Ajustes",
-    logout: "Cerrar Sesión"
+    logout: "Cerrar Sesión",
+    usage: {
+      clients: "Clientes",
+      plan: "Plan actual"
+    }
   },
   landing: {
     hero: {
@@ -299,7 +303,11 @@ export const en = {
     metrics: "Metrics",
     survey: "Survey",
     settings: "Settings",
-    logout: "Log Out"
+    logout: "Log Out",
+    usage: {
+      clients: "Customers",
+      plan: "Current plan"
+    }
   },
   landing: {
     hero: {
@@ -545,7 +553,11 @@ export const pt = {
     metrics: "Métricas",
     survey: "Pesquisa",
     settings: "Configurações",
-    logout: "Sair"
+    logout: "Sair",
+    usage: {
+      clients: "Clientes",
+      plan: "Plano atual"
+    }
   },
   landing: {
     hero: {
@@ -556,7 +568,7 @@ export const pt = {
     },
     stats: {
       title: "Nossa comunidade continua crescendo graças a todos",
-      businesses: "Negócios Confiam em Nós",
+      businesses: "Negocios Confiam em Nós",
       stamps: "Momentos de Fidelidade (Selos)",
       rewards: "Recompensas Entregues"
     },
