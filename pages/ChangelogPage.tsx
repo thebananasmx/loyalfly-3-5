@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 
 const FeatureTag: React.FC<{ type: 'new' | 'improvement' }> = ({ type }) => {
@@ -22,6 +23,35 @@ const ChangelogPage: React.FC = () => {
       <p className="text-lg text-gray-600 mb-12">
         Un historial de todas las mejoras y nuevas funcionalidades que hemos agregado a Loyalfly para ayudarte a crecer.
       </p>
+
+      {/* --- VERSION v3.5.0.21 --- */}
+      <section className="mb-12">
+        <div className="pb-4 border-b border-gray-200">
+          <h2 className="text-3xl font-bold text-black">Versión 3.5.0.21</h2>
+          <p className="text-base text-gray-500 mt-1">Lanzada el 18 de Enero de 2026</p>
+        </div>
+        
+        <ul className="mt-8 space-y-6">
+           <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Objetivo de Sellos Personalizable (Premium)</h3>
+                  <p className="text-gray-600 mt-1">
+                      Los negocios en los planes <strong>Entrepreneur</strong> y <strong>Pro</strong> ahora pueden definir cuántos sellos se requieren para obtener la recompensa (desde 1 sello, sin límite máximo). La tarjeta digital mantiene visualmente la rejilla de 5 columnas, ajustando las filas automáticamente para una estética impecable.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Enlace Directo de Suscripción en Alertas</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha actualizado el banner de límite de clientes para que, al alcanzar el tope del plan Gratis (100 clientes), el botón dirija instantáneamente a la página de pago segura de Stripe para el <strong>Plan Entrepreneur</strong>, agilizando el proceso de mejora de cuenta.
+                  </p>
+              </div>
+          </li>
+        </ul>
+      </section>
 
       {/* --- VERSION v3.5.0.20 --- */}
       <section className="mb-12">
