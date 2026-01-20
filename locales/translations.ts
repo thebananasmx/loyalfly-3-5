@@ -53,11 +53,11 @@ export const es = {
     metrics: "Métricas",
     survey: "Encuesta",
     settings: "Ajustes",
-    logout: "Cerrar Sesión",
     usage: {
       clients: "Clientes",
       plan: "Plan actual"
-    }
+    },
+    logout: "Cerrar Sesión"
   },
   landing: {
     hero: {
@@ -151,7 +151,9 @@ export const es = {
     shareTitle: "Comparte con tus clientes",
     editorTitle: "Editor de Tarjeta",
     businessNameLabel: "Nombre del Negocio",
-    logoUrlLabel: "URL del Logo (Opcional)",
+    logoUrlLabel: "Pegar URL del Logo",
+    logoUploadLabel: "O sube una imagen",
+    logoRemove: "Quitar Logo",
     rewardTextLabel: "Texto de la Recompensa",
     cardColorLabel: "Color de Fondo",
     textColorLabel: "Patrón de color del texto",
@@ -160,7 +162,8 @@ export const es = {
     sampleStamps: "Sellos de Muestra",
     shareText: "Tus clientes pueden usar el siguiente enlace para unirse.",
     generateQr: "Genera QR",
-    copied: "¡URL copiada!"
+    copied: "¡URL copiada!",
+    fileSizeError: "La imagen es demasiado grande (máximo 500KB)."
   },
   cardEditor: {
     saveSuccess: "¡Cambios guardados con éxito!",
@@ -303,11 +306,11 @@ export const en = {
     metrics: "Metrics",
     survey: "Survey",
     settings: "Settings",
-    logout: "Log Out",
     usage: {
       clients: "Customers",
       plan: "Current plan"
-    }
+    },
+    logout: "Log Out"
   },
   landing: {
     hero: {
@@ -401,7 +404,9 @@ export const en = {
     shareTitle: "Share with your customers",
     editorTitle: "Card Editor",
     businessNameLabel: "Business Name",
-    logoUrlLabel: "Logo URL (Optional)",
+    logoUrlLabel: "Paste Logo URL",
+    logoUploadLabel: "Or upload an image",
+    logoRemove: "Remove Logo",
     rewardTextLabel: "Reward Text",
     cardColorLabel: "Background Color",
     textColorLabel: "Text Color Scheme",
@@ -410,7 +415,8 @@ export const en = {
     sampleStamps: "Sample Stamps",
     shareText: "Your customers can use the following link to join.",
     generateQr: "Generate QR",
-    copied: "URL copied!"
+    copied: "URL copied!",
+    fileSizeError: "Image is too large (max 500KB)."
   },
   cardEditor: {
     saveSuccess: "Changes saved successfully!",
@@ -542,7 +548,7 @@ export const pt = {
   },
   cookieConsent: {
     title: "Uso de Cookies",
-    text: "Usamos cookies para melhorar sua experiência em nosso site. Ao continuar, você concorda com nosso uso de cookies.",
+    text: "Usamos cookies para melhorar sua experiencia em nosso site. Ao continuar, você concorda com nosso uso de cookies.",
     readTerms: "Leia nossos Termos de Serviço",
     accept: "Aceitar",
     reject: "Rejeitar"
@@ -553,11 +559,11 @@ export const pt = {
     metrics: "Métricas",
     survey: "Pesquisa",
     settings: "Configurações",
-    logout: "Sair",
     usage: {
       clients: "Clientes",
       plan: "Plano atual"
-    }
+    },
+    logout: "Sair"
   },
   landing: {
     hero: {
@@ -578,7 +584,7 @@ export const pt = {
       tabs: {
         entrepreneur: { title: "Empreendedores", desc: "Um cartão versátil e moderno, perfeito para qualquer tipo de negocio que está começando a construir uma base de clientes fiéis." },
         cafe: { title: "Cafeterias", desc: "Um design acolhedor e convidativo que incentiva seus clientes a voltarem para sua próxima xícara de café ou prato favorito." },
-        barber: { title: "Barbearias", desc: "Estilo e sofisticação em um cartão que reflete a qualidade de seus cortes e serviços. Ideal para salões e barbearias." },
+        barber: { title: "Barbearias", desc: "Estilo y sofisticación em um cartão que reflete a qualidade de seus cortes e serviços. Ideal para salões e barbearias." },
         beauty: { title: "Beleza", desc: "Um toque de elegância e glamour para recompensar a fidelidade de suas clientes e fazê-las se sentirem especiais em cada visita." }
       }
     },
@@ -598,8 +604,8 @@ export const pt = {
       slides: {
         cafe: { industry: "Cafeterias", title: "Aroma de lealdade em cada xícara.", desc: "Recompense seus clientes frequentes com um café grátis e faça cada visita valer a pena. Loyalfly é o ingrediente secreto para fazê-los voltar para mais." },
         restaurant: { industry: "Restaurantes", title: "A fidelidade é o prato principal.", desc: "De sobremesas de cortesia a descontos especiais, crie um programa de recompensas que deixe seus clientes com um ótimo gosto na boca." },
-        entrepreneur: { industry: "Empreendedores", title: "Construa uma comunidade, não apenas clientes.", desc: "Se você tem uma loja local ou um pequeno negócio, o Loyalfly ajuda a criar conexões duradouras e transformar compradores ocasionais em seus fãs número um." },
-        makeup: { industry: "Nail & Makeup Artists", title: "Beleza que recompensa.", desc: "Ofereça um serviço gratuito ou desconto exclusivo após várias visitas. É a maneira perfeita de agradecer suas clientes por sua confiança e lealdade." },
+        entrepreneur: { industry: "Empreendedores", title: "Construa uma comunidade, não apenas clientes.", desc: "Se você tem uma loja local ou um pequeño negocio, o Loyalfly ajuda a criar conexões duradouras e transformar compradores ocasionais em seus fãs número um." },
+        makeup: { industry: "Nail & Makeup Artists", title: "Beleza que recompensa.", desc: "Ofereça um serviço gratuito ou desconto exclusivo após varias visitas. É a maneira perfeita de agradecer suas clientes por sua confiança e lealdade." },
         barber: { industry: "Estilistas e Barbeiros", title: "Um corte acima da concorrência.", desc: "Fidelize sua clientela com um programa de fidelidade tão impecável quanto seus cortes. Um serviço gratuito a cada poucos cortes é um incentivo que funciona." }
       }
     }
@@ -651,7 +657,9 @@ export const pt = {
     shareTitle: "Compartilhe com seus clientes",
     editorTitle: "Editor de Cartão",
     businessNameLabel: "Nome do Negócio",
-    logoUrlLabel: "URL do Logo (Opcional)",
+    logoUrlLabel: "Colar URL do Logo",
+    logoUploadLabel: "Ou suba uma imagem",
+    logoRemove: "Remover Logo",
     rewardTextLabel: "Texto da Recompensa",
     cardColorLabel: "Cor de Fundo",
     textColorLabel: "Esquema de cor do texto",
@@ -660,7 +668,8 @@ export const pt = {
     sampleStamps: "Selos de Exemplo",
     shareText: "Seus clientes podem usar o seguinte link para participar.",
     generateQr: "Gerar QR",
-    copied: "URL copiada!"
+    copied: "URL copiada!",
+    fileSizeError: "Imagem muito grande (máximo 500KB)."
   },
   cardEditor: {
     saveSuccess: "Alterações salvas com sucesso!",
@@ -700,7 +709,7 @@ export const pt = {
     totalResponses: "Total de respostas",
     emptyResponses: "Ainda não há respostas para esta pesquisa. Se você acabou de criá-la, as respostas aparecerão aqui conforme os clientes votarem.",
     saveSuccess: "Configuração da pesquisa salva.",
-    saveError: "Não foi possível salvar a configuração.",
+    saveError: "Não foi posible salvar a configuração.",
     requiredError: "A pergunta e ambas as opções são obrigatórias."
   },
   publicView: {
@@ -716,14 +725,14 @@ export const pt = {
   },
   pricing: {
     title: "Planos simples e transparentes",
-    subtitle: "Escolha o plano que se adapta ao tamanho do seu negócio.",
+    subtitle: "Escolha o plano que se adapta ao tamanho do seu negocio.",
     free: {
       name: "Grátis",
       desc: "Para começar e testar."
     },
     entrepreneur: {
       name: "Empreendedor",
-      desc: "Ideal para negócios em crescimento."
+      desc: "Ideal para negocios em crescimento."
     },
     pro: {
       name: "Pro",

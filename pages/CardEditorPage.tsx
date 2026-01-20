@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import CardPreview from '../components/CardPreview';
 import { useAuth } from '../context/AuthContext';
@@ -14,11 +13,14 @@ const ExternalLinkIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className
 const ArrowLeftIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>;
 const QRIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v1m6 11h-1m-1-6v1m-1-1h-1m-1 6h1m-1-1v1m0-1h1m4-4h1m-5 5v1m-1-1h1M4 4h4v4H4zm0 12h4v4H4zm12 0h4v4h-4zm0-12h4v4h-4z" /></svg>;
 const LockIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" /></svg>;
+const UploadIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>;
+const TrashIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>;
 
 const CardEditorPage: React.FC = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
   const { showToast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [businessData, setBusinessData] = useState<Business | null>(null);
   const [businessName, setBusinessName] = useState('');
@@ -97,6 +99,32 @@ const CardEditorPage: React.FC = () => {
     });
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Limit to 500KB to stay within Firestore document limits comfortably
+    if (file.size > 500 * 1024) {
+      showToast(t('card.fileSizeError'), 'error');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setLogoUrl(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const triggerFileUpload = () => {
+    fileInputRef.current?.click();
+  };
+
+  const removeLogo = () => {
+    setLogoUrl('');
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
   if (isLoadingData) {
       return (
           <div className="flex items-center justify-center py-20">
@@ -134,19 +162,63 @@ const CardEditorPage: React.FC = () => {
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black"
             />
           </div>
-          <div>
-            <label htmlFor="logoUrl" className="block text-base font-medium text-gray-700 mb-1">
-              {t('card.logoUrlLabel')}
+
+          {/* Logo Section */}
+          <div className="space-y-3">
+            <label className="block text-base font-medium text-gray-700">
+              Logo
             </label>
-            <input
-              id="logoUrl"
-              type="url"
-              value={logoUrl}
-              onChange={(e) => setLogoUrl(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black"
-              placeholder="https://ejemplo.com/logo.png"
-            />
+            
+            <div className="flex items-center gap-4">
+               <div className="w-16 h-16 rounded-full border border-gray-200 bg-gray-50 flex items-center justify-center overflow-hidden flex-shrink-0">
+                  {logoUrl ? (
+                    <img src={logoUrl} alt="Logo preview" className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-2xl font-bold text-gray-300">L</span>
+                  )}
+               </div>
+               <div className="flex flex-wrap gap-2">
+                  <button
+                    onClick={triggerFileUpload}
+                    className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+                  >
+                    <UploadIcon />
+                    {t('card.logoUploadLabel')}
+                  </button>
+                  {logoUrl && (
+                    <button
+                      onClick={removeLogo}
+                      className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 border border-red-100 rounded-md hover:bg-red-100 transition-colors"
+                    >
+                      <TrashIcon />
+                      {t('card.logoRemove')}
+                    </button>
+                  )}
+               </div>
+               <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  onChange={handleFileChange} 
+                  accept="image/png, image/jpeg" 
+                  className="hidden" 
+                />
+            </div>
+
+            <div>
+              <label htmlFor="logoUrl" className="block text-xs font-medium text-gray-500 mb-1">
+                {t('card.logoUrlLabel')}
+              </label>
+              <input
+                id="logoUrl"
+                type="url"
+                value={logoUrl.startsWith('data:') ? '' : logoUrl}
+                onChange={(e) => setLogoUrl(e.target.value)}
+                className="block w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black"
+                placeholder="https://ejemplo.com/logo.png"
+              />
+            </div>
           </div>
+
           <div>
             <label htmlFor="rewardText" className="block text-base font-medium text-gray-700 mb-1">
               {t('card.rewardTextLabel')}
