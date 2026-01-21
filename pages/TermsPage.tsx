@@ -6,8 +6,7 @@ const TermsPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <div className="max-w-3xl mx-auto">
+    <div className="max-w-3xl">
         <h1 className="text-3xl font-bold text-black mb-6 tracking-tight">Términos y Condiciones del Servicio</h1>
         <div className="prose prose-lg text-gray-700 space-y-4">
           <p className='text-sm text-gray-500'>Última actualización: 9 de Octubre de 2025</p>
@@ -71,7 +70,6 @@ const TermsPage: React.FC = () => {
             Estos términos se regirán e interpretarán de acuerdo con las leyes de los Estados Unidos Mexicanos. Para cualquier controversia, las partes se someten a la jurisdicción de los tribunales competentes de la Ciudad de México, renunciando a cualquier otro fuero que pudiera corresponderles.
           </p>
         </div>
-      </div>
     </div>
   );
 };

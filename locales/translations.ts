@@ -59,6 +59,36 @@ export const es = {
     },
     logout: "Cerrar Sesión"
   },
+  legal: {
+    sidebarTitle: "Centro Legal",
+    terms: "Términos de Servicio",
+    cancellations: "Cancelaciones",
+    refunds: "Reembolsos",
+    lastUpdated: "Última actualización",
+    cancellationsTitle: "Política de Cancelaciones",
+    cancellationsIntro: "En Loyalfly queremos que el proceso sea lo más sencillo posible. Para solicitar la cancelación de cualquier plan de pago (Entrepreneur o Pro), el proceso es el siguiente:",
+    cancellationsEmailProcess: "Debe contactar a nuestro equipo de servicio al cliente mediante correo electrónico.",
+    cancellationsEmailAddress: "Envíe su solicitud a",
+    cancellationsDetail: "Incluya en el correo el nombre de su negocio y el correo electrónico asociado a la cuenta.",
+    cancellationsTimeframeTitle: "Tiempos de procesamiento",
+    cancellationsTimeframeDesc: "Una vez recibida su solicitud por correo electrónico, nuestro equipo procesará la cancelación en un plazo máximo de 24 horas hábiles. Recibirá una confirmación por la misma vía una vez que la suscripción haya sido dada de baja.",
+    cancellationsAccessTitle: "Acceso al servicio tras la cancelación",
+    cancellationsAccessDesc: "Tras procesar la cancelación, su cuenta volverá automáticamente al Plan Gratis al finalizar su periodo de facturación actual, o podrá ser desactivada según su preferencia. Los datos de sus clientes se mantendrán seguros de acuerdo a nuestras políticas de retención de datos.",
+    refundsTitle: "Política de Reembolsos",
+    refundsIntro: "Queremos que estés feliz con Loyalfly y ames tu plan. Ofrecemos a los nuevos clientes la posibilidad de iniciar con nuestro plan gratuito y una garantía de devolución de dinero de 30 días al suscribirse por primera vez a un plan de pago.",
+    refundsGuaranteeTitle: "Garantía de devolución de dinero de 30 días",
+    refundsGuaranteeDesc1: "Si eres un nuevo cliente de Loyalfly y estás dentro de los primeros 30 días de haber comenzado una nueva suscripción mensual o anual, tienes derecho a solicitar un reembolso completo si el servicio no cumple con tus expectativas.",
+    refundsGuaranteeDesc2: "Para recibir un reembolso completo, el Propietario de la Cuenta debe enviar una solicitud de cancelación y reembolso vía email antes de la primera fecha de renovación. Si el propietario de la cuenta no solicita la cancelación antes de dicha fecha, no se podrá proporcionar un reembolso.",
+    refundsNoteTitle: "Nota importante sobre reembolsos",
+    refundsNoteItem1: "No se proporcionarán reembolsos por días o meses parcialmente utilizados de ninguna suscripción de Loyalfly.",
+    refundsNoteItem2: "No se proporcionarán reembolsos por suscripciones recurrentes que se cancelen después de la fecha de renovación automática. Esto incluye tanto suscripciones mensuales como anuales.",
+    refundsExceptionsTitle: "Excepciones y Errores de Facturación",
+    refundsExceptionsDesc: "Si se te realizó un cargo de impuestos (IVA) erróneamente, es posible que tengas derecho a un reembolso parcial. Ten en cuenta lo siguiente:",
+    refundsExceptionsItem1: "Debes comunicarte con nosotros dentro del mismo trimestre en que se realizó el cargo.",
+    refundsExceptionsItem2: "No podemos regenerar facturas de periodos cerrados, pero podemos proporcionar una nota de crédito aplicable.",
+    refundsContactTitle: "Contacto",
+    refundsContactDesc: "Si tienes alguna pregunta que no se responda aquí o en nuestros Términos de Servicio, por favor ponte en contacto con nuestro equipo de Soporte escribiendo a"
+  },
   landing: {
     hero: {
       title: "Transforma visitantes en clientes fieles.",
@@ -312,6 +342,36 @@ export const en = {
     },
     logout: "Log Out"
   },
+  legal: {
+    sidebarTitle: "Legal Center",
+    terms: "Terms of Service",
+    cancellations: "Cancellations",
+    refunds: "Refunds",
+    lastUpdated: "Last updated",
+    cancellationsTitle: "Cancellation Policy",
+    cancellationsIntro: "At Loyalfly, we want the process to be as simple as possible. To request a cancellation for any paid plan (Entrepreneur or Pro), the process is as follows:",
+    cancellationsEmailProcess: "You must contact our customer service team via email.",
+    cancellationsEmailAddress: "Send your request to",
+    cancellationsDetail: "Include your business name and the email address associated with the account in the email.",
+    cancellationsTimeframeTitle: "Processing Times",
+    cancellationsTimeframeDesc: "Once your request is received by email, our team will process the cancellation within a maximum period of 24 business hours. You will receive a confirmation via the same method once the subscription has been cancelled.",
+    cancellationsAccessTitle: "Service Access After Cancellation",
+    cancellationsAccessDesc: "After processing the cancellation, your account will automatically return to the Free Plan at the end of your current billing period, or it can be deactivated according to your preference. Your customer data will remain secure in accordance with our data retention policies.",
+    refundsTitle: "Refund Policy",
+    refundsIntro: "We want you to be happy with Loyalfly and love your plan. We offer new customers the ability to start with our free plan and a 30-day money-back guarantee when subscribing to a paid plan for the first time.",
+    refundsGuaranteeTitle: "30-Day Money-Back Guarantee",
+    refundsGuaranteeDesc1: "If you are a new Loyalfly customer and are within the first 30 days of starting a new monthly or annual subscription, you are entitled to request a full refund if the service does not meet your expectations.",
+    refundsGuaranteeDesc2: "To receive a full refund, the Account Owner must send a cancellation and refund request via email before the first renewal date. If the account owner does not request cancellation before that date, a refund cannot be provided.",
+    refundsNoteTitle: "Important Note on Refunds",
+    refundsNoteItem1: "No refunds will be provided for partially used days or months of any Loyalfly subscription.",
+    refundsNoteItem2: "No refunds will be provided for recurring subscriptions that are cancelled after the automatic renewal date. This includes both monthly and annual subscriptions.",
+    refundsExceptionsTitle: "Exceptions and Billing Errors",
+    refundsExceptionsDesc: "If you were charged tax (VAT) erroneously, you may be entitled to a partial refund. Please note the following:",
+    refundsExceptionsItem1: "You must contact us within the same quarter the charge was made.",
+    refundsExceptionsItem2: "We cannot regenerate invoices for closed periods, but we can provide an applicable credit note.",
+    refundsContactTitle: "Contact",
+    refundsContactDesc: "If you have any questions that are not answered here or in our Terms of Service, please contact our Support team by writing to"
+  },
   landing: {
     hero: {
       title: "Turn visitors into loyal customers.",
@@ -548,7 +608,7 @@ export const pt = {
   },
   cookieConsent: {
     title: "Uso de Cookies",
-    text: "Usamos cookies para melhorar sua experiencia em nosso site. Ao continuar, você concorda com nosso uso de cookies.",
+    text: "Usamos cookies para melhorar sua experiencia em nosso site. Ao continuar, você concorda con nosso uso de cookies.",
     readTerms: "Leia nossos Termos de Serviço",
     accept: "Aceitar",
     reject: "Rejeitar"
@@ -564,6 +624,36 @@ export const pt = {
       plan: "Plano atual"
     },
     logout: "Sair"
+  },
+  legal: {
+    sidebarTitle: "Centro Jurídico",
+    terms: "Termos de Serviço",
+    cancellations: "Cancelamentos",
+    refunds: "Reembolsos",
+    lastUpdated: "Última atualização",
+    cancellationsTitle: "Política de Cancelamento",
+    cancellationsIntro: "No Loyalfly, queremos que o processo seja o mais simples possível. Para solicitar o cancelamento de qualquer plano pago (Entrepreneur ou Pro), o processo é o seguinte:",
+    cancellationsEmailProcess: "Você deve entrar em contato com nossa equipe de atendimento ao cliente por e-mail.",
+    cancellationsEmailAddress: "Envie sua solicitação para",
+    cancellationsDetail: "Inclua o nome da sua empresa e o endereço de e-mail associado à conta no e-mail.",
+    cancellationsTimeframeTitle: "Prazos de processamento",
+    cancellationsTimeframeDesc: "Assim que sua solicitação for recebida por e-mail, nossa equipe processará o cancelamento em um prazo máximo de 24 horas úteis. Você receberá uma confirmação pelo mesmo meio assim que a assinatura for cancelada.",
+    cancellationsAccessTitle: "Acesso ao serviço após o cancelamento",
+    cancellationsAccessDesc: "Após processar o cancelamento, sua conta retornará automaticamente ao Plano Gratuito no final do seu período de faturamento atual, ou poderá ser desativada de acordo com sua preferência. Os dados de seus clientes permanecerão seguros de acordo com nossas políticas de retenção de dados.",
+    refundsTitle: "Política de Reembolso",
+    refundsIntro: "Queremos que você esteja feliz com o Loyalfly e ame seu plano. Oferecemos aos novos clientes a possibilidade de começar com nosso plano gratuito e uma garantia de reembolso de 30 dias ao assinar um plano pago pela primeira vez.",
+    refundsGuaranteeTitle: "Garantia de reembolso de 30 dias",
+    refundsGuaranteeDesc1: "Se você é um novo cliente do Loyalfly e está nos primeiros 30 dias após o início de uma nova assinatura mensal ou anual, você tem o direito de solicitar um reembolso total se o serviço não atender às suas expectativas.",
+    refundsGuaranteeDesc2: "Para receber um reembolso total, o Proprietário da Conta deve enviar uma solicitação de cancelamento e reembolso por e-mail antes da primeira data de renovação. Se o proprietário da conta não solicitar o cancelamento antes dessa data, o reembolso não poderá ser fornecido.",
+    refundsNoteTitle: "Nota importante sobre reembolsos",
+    refundsNoteItem1: "Nenhum reembolso será fornecido por dias ou meses parcialmente utilizados de qualquer assinatura do Loyalfly.",
+    refundsNoteItem2: "Nenhum reembolso será fornecido para assinaturas recorrentes que sejam canceladas após a data de renovação automática. Isso inclui assinaturas mensais e anuais.",
+    refundsExceptionsTitle: "Exceções e Erros de Faturamento",
+    refundsExceptionsDesc: "Se você foi cobrado imposto (IVA) erroneamente, você pode ter direito a um reembolso parcial. Observe o seguinte:",
+    refundsExceptionsItem1: "Você deve entrar em contato conosco dentro do mesmo trimestre em que a cobrança foi feita.",
+    refundsExceptionsItem2: "Não podemos regenerar faturas de períodos encerrados, mas podemos fornecer uma nota de crédito aplicável.",
+    refundsContactTitle: "Contato",
+    refundsContactDesc: "Se você tiver alguma dúvida que não seja respondida aqui ou em nossos Termos de Serviço, entre em contato com nossa equipe de Suporte escrevendo para"
   },
   landing: {
     hero: {
@@ -585,7 +675,7 @@ export const pt = {
         entrepreneur: { title: "Empreendedores", desc: "Um cartão versátil e moderno, perfeito para qualquer tipo de negocio que está começando a construir uma base de clientes fiéis." },
         cafe: { title: "Cafeterias", desc: "Um design acolhedor e convidativo que incentiva seus clientes a voltarem para sua próxima xícara de café ou prato favorito." },
         barber: { title: "Barbearias", desc: "Estilo y sofisticación em um cartão que reflete a qualidade de seus cortes e serviços. Ideal para salões e barbearias." },
-        beauty: { title: "Beleza", desc: "Um toque de elegância e glamour para recompensar a fidelidade de suas clientes e fazê-las se sentirem especiais em cada visita." }
+        beauty: { title: "Beleza", desc: "Um toque de elegância y glamour para recompensar a fidelidade de suas clientes e fazê-las se sentirem especiais em cada visita." }
       }
     },
     features: {
@@ -622,7 +712,7 @@ export const pt = {
     noAccount: "Não tem uma conta?",
     haveAccount: "Já tem uma conta?",
     resetTitle: "Redefinir Senha",
-    resetSubtitle: "Digite seu email para receber um link.",
+    resetSubtitle: "Digite seu email para receber un link.",
     sendLink: "Enviar link",
     backToLogin: "Voltar para Entrar",
     createAccount: "Criar Conta",
@@ -673,7 +763,7 @@ export const pt = {
   },
   cardEditor: {
     saveSuccess: "Alterações salvas com sucesso!",
-    saveError: "Não foi possível salvar as alterações.",
+    saveError: "Não foi posible salvar as alterações.",
     loadError: "Erro ao carregar dados do cartão."
   },
   metrics: {
@@ -697,13 +787,13 @@ export const pt = {
     subtitle: "Configure a pesquisa que seus clientes verão e revise os resultados.",
     configTitle: "Configuração",
     active: "Ativada",
-    inactive: "Desativada",
+    inactive: "Desactivada",
     bannerLabel: "Mensagem do Banner",
     questionLabel: "Pergunta",
     questionPlaceholder: "Ex: O que achou do serviço?",
     option1Label: "Opção 1",
     option1Placeholder: "Ex: Excelente",
-    option2Label: "Opção 2",
+    option2Label: "Opción 2",
     option2Placeholder: "Ex: Pode melhorar",
     resultsTitle: "Resultados da Pesquisa Atual",
     totalResponses: "Total de respostas",
@@ -724,7 +814,7 @@ export const pt = {
     consultOther: "Consultar outro número"
   },
   pricing: {
-    title: "Planos simples e transparentes",
+    title: "Planos simples y transparentes",
     subtitle: "Escolha o plano que se adapta ao tamanho do seu negocio.",
     free: {
       name: "Grátis",

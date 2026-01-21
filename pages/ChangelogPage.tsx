@@ -27,10 +27,19 @@ const ChangelogPage: React.FC = () => {
       <section className="mb-12">
         <div className="pb-4 border-b border-gray-200">
           <h2 className="text-3xl font-bold text-black">Versión 3.5.0.21</h2>
-          <p className="text-base text-gray-500 mt-1">Lanzada el 18 de Enero de 2026</p>
+          <p className="text-base text-gray-500 mt-1">Lanzada el 20 de Enero de 2026</p>
         </div>
         
         <ul className="mt-8 space-y-6">
+           <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Subida de Logo Dual (URL y Archivo Local)</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha implementado una forma más flexible de personalizar la tarjeta. Los negocios ahora pueden elegir entre pegar una URL externa o subir un archivo directamente desde su dispositivo (PNG/JPG). Esta mejora utiliza codificación Base64 para garantizar que no haya impacto en la base de datos ni en los logos previamente configurados.
+                  </p>
+              </div>
+          </li>
            <li className="flex items-start gap-4">
               <FeatureTag type="new" />
               <div>

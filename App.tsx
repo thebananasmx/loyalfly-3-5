@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 import React from 'react';
 import { BrowserRouter, HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
@@ -14,12 +6,15 @@ import MainLayout from './components/MainLayout';
 import AppLayout from './components/AppLayout';
 import ProtectedRoute from './components/ProtectedRoute';
 import DocsLayout from './components/DocsLayout';
+import LegalLayout from './components/LegalLayout';
 import AnalyticsTracker from './components/AnalyticsTracker';
 import ScrollToTop from './components/ScrollToTop';
 
 import LandingPage from './pages/LandingPage';
 import PricingPage from './pages/PricingPage';
 import TermsPage from './pages/TermsPage';
+import CancellationsPage from './pages/CancellationsPage';
+import RefundsPage from './pages/RefundsPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
@@ -46,8 +41,6 @@ import AccountSettingsPage from './pages/AccountSettingsPage';
 import AdminBusinessDetailPage from './pages/AdminBusinessDetailPage';
 
 function App() {
-  // Use BrowserRouter for production/Vercel domains and HashRouter for all other environments
-  // (like local development and AI Studio previews) to ensure maximum compatibility.
   const isProductionLike = window.location.hostname.endsWith('loyalfly.com.mx') || window.location.hostname.includes('vercel.app');
   const Router = isProductionLike ? BrowserRouter : HashRouter;
 
@@ -61,12 +54,16 @@ function App() {
           <Route element={<MainLayout />}>
             <Route path="/" element={<LandingPage />} />
             <Route path="/pricing" element={<PricingPage />} />
-            <Route path="/terminos" element={<TermsPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/:slug" element={<BlogPostPage />} />
             
+            {/* Nested Legal Routes */}
+            <Route path="/terminos" element={<LegalLayout />}>
+              <Route index element={<TermsPage />} />
+              <Route path="cancelaciones" element={<CancellationsPage />} />
+              <Route path="reembolsos" element={<RefundsPage />} />
+            </Route>
+
             <Route path="/docs" element={<DocsLayout />}>
               <Route index element={<Navigate to="/docs/style-guide" replace />} />
               <Route path="style-guide" element={<StyleGuidePage />} />
@@ -74,6 +71,9 @@ function App() {
               <Route path="flujos" element={<UserFlowsPage />} />
             </Route>
           </Route>
+          
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
           
           {/* Public Card & Vote Routes (no layout) */}
           <Route path="/view/:slug" element={<PublicCardPage />} />
