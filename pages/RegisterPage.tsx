@@ -207,7 +207,7 @@ const RegisterPage: React.FC = () => {
 
                     <ErrorMessage message={errors.form} />
 
-                    <div>
+                    <div className="space-y-4">
                         <button 
                             type="submit"
                             disabled={loading}
@@ -215,6 +215,14 @@ const RegisterPage: React.FC = () => {
                         >
                             {loading ? t('auth.creating') : t('auth.createAccount')}
                         </button>
+                        
+                        <p className="text-[11px] leading-relaxed text-gray-500 text-center px-2">
+                            {t('auth.registrationDisclaimer.prefix')}
+                            <a href="https://www.loyalfly.com.mx/terminos" className="underline hover:text-black transition-colors" target="_blank" rel="noopener noreferrer">
+                                {t('auth.registrationDisclaimer.link')}
+                            </a>
+                            {t('auth.registrationDisclaimer.suffix')}
+                        </p>
                     </div>
                 </form>
                 <div className="text-center mt-6">

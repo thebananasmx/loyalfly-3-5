@@ -150,7 +150,12 @@ export const es = {
     sendLink: "Enviar enlace",
     backToLogin: "Volver a Iniciar Sesión",
     createAccount: "Crear Cuenta",
-    creating: "Creando cuenta..."
+    creating: "Creando cuenta...",
+    registrationDisclaimer: {
+      prefix: "Al dar clic en Crear cuenta aceptas los ",
+      link: "términos de uso",
+      suffix: ", términos y condiciones, política de privacidad, y recibir ofertas, novedades y actualizaciones del servicio de Loyalfly."
+    }
   },
   dashboard: {
     title: "Dashboard de Clientes",
@@ -433,7 +438,12 @@ export const en = {
     sendLink: "Send link",
     backToLogin: "Back to Log In",
     createAccount: "Create Account",
-    creating: "Creating account..."
+    creating: "Creating account...",
+    registrationDisclaimer: {
+      prefix: "By clicking Create Account, you accept the ",
+      link: "terms of use",
+      suffix: ", terms and conditions, privacy policy, and to receive offers, news and service updates from Loyalfly."
+    }
   },
   dashboard: {
     title: "Customer Dashboard",
@@ -594,7 +604,7 @@ export const pt = {
     closeMenu: "Fechar menu"
   },
   footer: {
-    rights: "Todos os direitos reservados.",
+    rights: "Todos os derechos reservados.",
     terms: "Termos de Serviço",
     pricing: "Preços",
     blog: "Blog",
@@ -621,7 +631,7 @@ export const pt = {
     settings: "Configurações",
     usage: {
       clients: "Clientes",
-      plan: "Plano atual"
+      plan: "Plano actual"
     },
     logout: "Sair"
   },
@@ -632,7 +642,7 @@ export const pt = {
     refunds: "Reembolsos",
     lastUpdated: "Última atualização",
     cancellationsTitle: "Política de Cancelamento",
-    cancellationsIntro: "No Loyalfly, queremos que o processo seja o mais simples possível. Para solicitar o cancelamento de qualquer plano pago (Entrepreneur ou Pro), o processo é o seguinte:",
+    cancellationsIntro: "No Loyalfly, queremos que o processo seja o mais simples posible. Para solicitar o cancelamento de qualquer plano pago (Entrepreneur ou Pro), o processo é o seguinte:",
     cancellationsEmailProcess: "Você deve entrar em contato com nossa equipe de atendimento ao cliente por e-mail.",
     cancellationsEmailAddress: "Envie sua solicitação para",
     cancellationsDetail: "Inclua o nome da sua empresa e o endereço de e-mail associado à conta no e-mail.",
@@ -643,15 +653,15 @@ export const pt = {
     refundsTitle: "Política de Reembolso",
     refundsIntro: "Queremos que você esteja feliz com o Loyalfly e ame seu plano. Oferecemos aos novos clientes a possibilidade de começar com nosso plano gratuito e uma garantia de reembolso de 30 dias ao assinar um plano pago pela primeira vez.",
     refundsGuaranteeTitle: "Garantia de reembolso de 30 dias",
-    refundsGuaranteeDesc1: "Se você é um novo cliente do Loyalfly e está nos primeiros 30 dias após o início de uma nova assinatura mensal ou anual, você tem o direito de solicitar um reembolso total se o serviço não atender às suas expectativas.",
+    refundsGuaranteeDesc1: "Se você é un novo cliente do Loyalfly e está nos primeiros 30 dias após o início de uma nova assinatura mensal ou anual, você tem o direito de solicitar um reembolso total se o serviço não atender às suas expectativas.",
     refundsGuaranteeDesc2: "Para receber um reembolso total, o Proprietário da Conta deve enviar uma solicitação de cancelamento e reembolso por e-mail antes da primeira data de renovação. Se o proprietário da conta não solicitar o cancelamento antes dessa data, o reembolso não poderá ser fornecido.",
     refundsNoteTitle: "Nota importante sobre reembolsos",
     refundsNoteItem1: "Nenhum reembolso será fornecido por dias ou meses parcialmente utilizados de qualquer assinatura do Loyalfly.",
-    refundsNoteItem2: "Nenhum reembolso será fornecido para assinaturas recorrentes que sejam canceladas após a data de renovação automática. Isso inclui assinaturas mensais e anuais.",
+    refundsNoteItem2: "Nenhum reembolso será fornecido para assinaturas recorrentes que sejam canceladas após a data de renovação automática. Isso incluye assinaturas mensais e anuais.",
     refundsExceptionsTitle: "Exceções e Erros de Faturamento",
-    refundsExceptionsDesc: "Se você foi cobrado imposto (IVA) erroneamente, você pode ter direito a um reembolso parcial. Observe o seguinte:",
+    refundsExceptionsDesc: "Se você foi cobrado imposto (IVA) erroneamente, você pode ter direito a um reembolso parcial. Observe o siguiente:",
     refundsExceptionsItem1: "Você deve entrar em contato conosco dentro do mesmo trimestre em que a cobrança foi feita.",
-    refundsExceptionsItem2: "Não podemos regenerar faturas de períodos encerrados, mas podemos fornecer uma nota de crédito aplicável.",
+    refundsExceptionsItem2: "Não podemos regenerar faturas de períodos encerrados, mas podemos fornecer uma nota de crédito aplicable.",
     refundsContactTitle: "Contato",
     refundsContactDesc: "Se você tiver alguma dúvida que não seja respondida aqui ou em nossos Termos de Serviço, entre em contato com nossa equipe de Suporte escrevendo para"
   },
@@ -674,7 +684,7 @@ export const pt = {
       tabs: {
         entrepreneur: { title: "Empreendedores", desc: "Um cartão versátil e moderno, perfeito para qualquer tipo de negocio que está começando a construir uma base de clientes fiéis." },
         cafe: { title: "Cafeterias", desc: "Um design acolhedor e convidativo que incentiva seus clientes a voltarem para sua próxima xícara de café ou prato favorito." },
-        barber: { title: "Barbearias", desc: "Estilo y sofisticación em um cartão que reflete a qualidade de seus cortes e serviços. Ideal para salões e barbearias." },
+        barber: { title: "Barbearias", desc: "Estilo y sofisticación em um cartão que reflete a qualidade de seus cortes y serviços. Ideal para salões e barbearias." },
         beauty: { title: "Beleza", desc: "Um toque de elegância y glamour para recompensar a fidelidade de suas clientes e fazê-las se sentirem especiais em cada visita." }
       }
     },
@@ -685,15 +695,15 @@ export const pt = {
         digital: { title: "100% Digital", desc: "Seus clientes só precisam do número de telefone. Esqueça os cartões físicos para sempre." },
         custom: { title: "Fácil de Personalizar", desc: "Adapte o design do seu cartão de fidelidade com sua marca, cores e recompensas em segundos." },
         analytics: { title: "Análises Simples", desc: "Visualize quem são seus clientes mais fiéis e entenda seu comportamento de compra." },
-        results: { title: "Resultados Reais", desc: "Aumente a frequência de visitas e o gasto médio de seus clientes mais valiosos." }
+        results: { title: "Resultados Reais", desc: "Aumente a frequência de visitas e o gasto médio de seus clientes más valiosos." }
       }
     },
     industries: {
       title: "Perfeito para o seu Negócio",
-      subtitle: "De cafeterias a salões de beleza, o Loyalfly se adapta a você.",
+      subtitle: "De cafeterias a salones de beleza, o Loyalfly se adapta a você.",
       slides: {
         cafe: { industry: "Cafeterias", title: "Aroma de lealdade em cada xícara.", desc: "Recompense seus clientes frequentes com um café grátis e faça cada visita valer a pena. Loyalfly é o ingrediente secreto para fazê-los voltar para mais." },
-        restaurant: { industry: "Restaurantes", title: "A fidelidade é o prato principal.", desc: "De sobremesas de cortesia a descontos especiais, crie um programa de recompensas que deixe seus clientes com um ótimo gosto na boca." },
+        restaurant: { industry: "Restaurantes", title: "A fidelidade é o prato principal.", desc: "De sobremesas de cortesia a descontos especiales, crie um programa de recompensas que deixe seus clientes com um ótimo gosto na boca." },
         entrepreneur: { industry: "Empreendedores", title: "Construa uma comunidade, não apenas clientes.", desc: "Se você tem uma loja local ou um pequeño negocio, o Loyalfly ajuda a criar conexões duradouras e transformar compradores ocasionais em seus fãs número um." },
         makeup: { industry: "Nail & Makeup Artists", title: "Beleza que recompensa.", desc: "Ofereça um serviço gratuito ou desconto exclusivo após varias visitas. É a maneira perfeita de agradecer suas clientes por sua confiança e lealdade." },
         barber: { industry: "Estilistas e Barbeiros", title: "Um corte acima da concorrência.", desc: "Fidelize sua clientela com um programa de fidelidade tão impecável quanto seus cortes. Um serviço gratuito a cada poucos cortes é um incentivo que funciona." }
@@ -716,7 +726,12 @@ export const pt = {
     sendLink: "Enviar link",
     backToLogin: "Voltar para Entrar",
     createAccount: "Criar Conta",
-    creating: "Criando conta..."
+    creating: "Criando conta...",
+    registrationDisclaimer: {
+      prefix: "Ao clicar em Criar Conta, você aceita os ",
+      link: "termos de uso",
+      suffix: ", termos e condições, política de privacidade e em receber ofertas, novidades e atualizaciones do serviço da Loyalfly."
+    }
   },
   dashboard: {
     title: "Painel de Clientes",
@@ -794,10 +809,10 @@ export const pt = {
     option1Label: "Opção 1",
     option1Placeholder: "Ex: Excelente",
     option2Label: "Opción 2",
-    option2Placeholder: "Ex: Pode melhorar",
+    option2Placeholder: "Ex: Pode mejorar",
     resultsTitle: "Resultados da Pesquisa Atual",
     totalResponses: "Total de respostas",
-    emptyResponses: "Ainda não há respostas para esta pesquisa. Se você acabou de criá-la, as respostas aparecerão aqui conforme os clientes votarem.",
+    emptyResponses: "Ainda não há respostas para esta pesquisa. Se você acabou de criá-la, as respostas aparecerão aquí conforme os clientes votarem.",
     saveSuccess: "Configuração da pesquisa salva.",
     saveError: "Não foi posible salvar a configuração.",
     requiredError: "A pergunta e ambas as opções são obrigatórias."
@@ -809,7 +824,7 @@ export const pt = {
     registerTitle: "Cadastre-se",
     registerBtn: "Registrar",
     newHere: "Novo aqui?",
-    registerLink: "Cadastre-se aqui",
+    registerLink: "Cadastre-se aquí",
     checkPoints: "Consulte seus selos",
     consultOther: "Consultar outro número"
   },
