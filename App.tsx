@@ -56,6 +56,8 @@ function App() {
             <Route path="/pricing" element={<PricingPage />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/:slug" element={<BlogPostPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
             
             {/* Nested Legal Routes */}
             <Route path="/terminos" element={<LegalLayout />}>
@@ -71,9 +73,6 @@ function App() {
               <Route path="flujos" element={<UserFlowsPage />} />
             </Route>
           </Route>
-          
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
           
           {/* Public Card & Vote Routes (no layout) */}
           <Route path="/view/:slug" element={<PublicCardPage />} />
