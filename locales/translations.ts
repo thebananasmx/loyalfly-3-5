@@ -271,7 +271,7 @@ export const es = {
       customers100: "Hasta 100 clientes",
       customers1000: "Hasta 1000 clientes",
       customersUnlimited: "Clientes ilimitados",
-      digitalCard: "Tarjeta de lealtad digital",
+      digitalCard: "Tarjeta de lealtad digital web",
       basicCustom: "Personalización básica",
       fullCustom: "Personalización completa",
       stampsCustomization: "Personalización de número de sellos",
@@ -560,7 +560,7 @@ export const en = {
       customers100: "Up to 100 customers",
       customers1000: "Up to 1000 customers",
       customersUnlimited: "Unlimited customers",
-      digitalCard: "Digital loyalty card",
+      digitalCard: "Digital web loyalty card",
       basicCustom: "Basic customization",
       fullCustom: "Full customization",
       stampsCustomization: "Custom number of stamps",
@@ -665,7 +665,7 @@ export const pt = {
     refundsExceptionsItem1: "Você deve entrar em contato conosco dentro del mesmo trimestre em que a cobrança foi feita.",
     refundsExceptionsItem2: "Não podemos regenerar faturas de períodos encerrados, mas podemos fornecer uma nota de crédito aplicable.",
     refundsContactTitle: "Contato",
-    refundsContactDesc: "Se você tiver alguma dúvida que não seja respondida aqui ou em nuestros Termos de Serviço, entre em contato com nossa equipe de Suporte escrevendo para"
+    refundsContactDesc: "Se você tiver alguma dúvida que não seja respondida aqui o em nuestros Termos de Serviço, entre em contato com nossa equipe de Suporte escrevendo para"
   },
   landing: {
     hero: {
@@ -765,7 +765,7 @@ export const pt = {
     editorTitle: "Editor de Cartão",
     businessNameLabel: "Nome do Negócio",
     logoUrlLabel: "Colar URL do Logo",
-    logoUploadLabel: "Ou suba uma imagem",
+    logoUploadLabel: "Ou suba uma imagen",
     logoRemove: "Remover Logo",
     rewardTextLabel: "Texto da Recompensa",
     cardColorLabel: "Cor de Fundo",
@@ -815,7 +815,7 @@ export const pt = {
     resultsTitle: "Resultados da Pesquisa Atual",
     totalResponses: "Total de respostas",
     emptyResponses: "Ainda não há respostas para esta pesquisa. Se você acabou de criá-la, as respostas aparecerão aquí conforme os clientes votarem.",
-    saveSuccess: "Configuración da pesquisa salva.",
+    saveSuccess: "Configuração da pesquisa salva.",
     saveError: "Não foi posible salvar a configuração.",
     requiredError: "A pergunta e ambas as opções são obrigatórias."
   },
@@ -849,7 +849,7 @@ export const pt = {
       customers100: "Até 100 clientes",
       customers1000: "Até 1000 clientes",
       customersUnlimited: "Clientes ilimitados",
-      digitalCard: "Cartão de fidelidade digital",
+      digitalCard: "Cartão de fidelidade digital web",
       basicCustom: "Personalização básica",
       fullCustom: "Personalização completa",
       stampsCustomization: "Personalização do número de selos",
