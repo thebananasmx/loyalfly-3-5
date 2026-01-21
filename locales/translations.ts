@@ -37,7 +37,7 @@ export const es = {
   infoBar: {
     prefix: "✨ ¡Regístrate",
     highlight: "GRATIS",
-    suffix: "y comienza a fidelizar a tus clientes hoy mismo! 🚀",
+    suffix: "y comienza a fidelizar tus clientes hoy mismo! 🚀",
     cta: "Comienza Hoy"
   },
   cookieConsent: {
@@ -274,6 +274,7 @@ export const es = {
       digitalCard: "Tarjeta de lealtad digital",
       basicCustom: "Personalización básica",
       fullCustom: "Personalización completa",
+      stampsCustomization: "Personalización de número de sellos",
       removeBranding: "Elimina botón 'Únete a Loyalfly'",
       emailSupport: "Soporte por email",
       prioritySupport: "Soporte prioritario"
@@ -562,6 +563,7 @@ export const en = {
       digitalCard: "Digital loyalty card",
       basicCustom: "Basic customization",
       fullCustom: "Full customization",
+      stampsCustomization: "Custom number of stamps",
       removeBranding: "Remove 'Join Loyalfly' button",
       emailSupport: "Email support",
       prioritySupport: "Priority support"
@@ -642,7 +644,7 @@ export const pt = {
     refunds: "Reembolsos",
     lastUpdated: "Última atualização",
     cancellationsTitle: "Política de Cancelamento",
-    cancellationsIntro: "No Loyalfly, queremos que o processo seja o mais simples posible. Para solicitar o cancelamento de qualquer plano pago (Entrepreneur ou Pro), o processo é o seguinte:",
+    cancellationsIntro: "No Loyalfly, queremos que o processo seja o mais simples posible. Para solicitar o cancelamento de qualquer plano pago (Entrepreneur ou Pro), o processo é o siguiente:",
     cancellationsEmailProcess: "Você deve entrar em contato com nossa equipe de atendimento ao cliente por e-mail.",
     cancellationsEmailAddress: "Envie sua solicitação para",
     cancellationsDetail: "Inclua o nome da sua empresa e o endereço de e-mail associado à conta no e-mail.",
@@ -651,19 +653,19 @@ export const pt = {
     cancellationsAccessTitle: "Acesso ao serviço após o cancelamento",
     cancellationsAccessDesc: "Após processar o cancelamento, sua conta retornará automaticamente ao Plano Gratuito no final do seu período de faturamento atual, ou poderá ser desativada de acordo com sua preferência. Os dados de seus clientes permanecerão seguros de acordo com nossas políticas de retenção de dados.",
     refundsTitle: "Política de Reembolso",
-    refundsIntro: "Queremos que você esteja feliz com o Loyalfly e ame seu plano. Oferecemos aos novos clientes a possibilidade de começar com nosso plano gratuito e uma garantia de reembolso de 30 dias ao assinar um plano pago pela primeira vez.",
+    refundsIntro: "Queremos que você esteja feliz com o Loyalfly e ame seu plano. Oferecemos aos nuevos clientes a possibilidade de começar com nosso plano gratuito e uma garantia de reembolso de 30 dias ao assinar um plano pago pela primera vez.",
     refundsGuaranteeTitle: "Garantia de reembolso de 30 dias",
     refundsGuaranteeDesc1: "Se você é un novo cliente do Loyalfly e está nos primeiros 30 dias após o início de uma nova assinatura mensal ou anual, você tem o direito de solicitar um reembolso total se o serviço não atender às suas expectativas.",
-    refundsGuaranteeDesc2: "Para receber um reembolso total, o Proprietário da Conta deve enviar uma solicitação de cancelamento e reembolso por e-mail antes da primeira data de renovação. Se o proprietário da conta não solicitar o cancelamento antes dessa data, o reembolso não poderá ser fornecido.",
+    refundsGuaranteeDesc2: "Para receber um reembolso total, o Proprietário da Conta deve enviar uma solicitação de cancelamento e reembolso por e-mail antes da primera data de renovação. Se o proprietário da conta não solicitar o cancelamento antes dessa data, o reembolso não poderá ser fornecido.",
     refundsNoteTitle: "Nota importante sobre reembolsos",
     refundsNoteItem1: "Nenhum reembolso será fornecido por dias ou meses parcialmente utilizados de qualquer assinatura do Loyalfly.",
     refundsNoteItem2: "Nenhum reembolso será fornecido para assinaturas recorrentes que sejam canceladas após a data de renovação automática. Isso incluye assinaturas mensais e anuais.",
     refundsExceptionsTitle: "Exceções e Erros de Faturamento",
     refundsExceptionsDesc: "Se você foi cobrado imposto (IVA) erroneamente, você pode ter direito a um reembolso parcial. Observe o siguiente:",
-    refundsExceptionsItem1: "Você deve entrar em contato conosco dentro do mesmo trimestre em que a cobrança foi feita.",
+    refundsExceptionsItem1: "Você deve entrar em contato conosco dentro del mesmo trimestre em que a cobrança foi feita.",
     refundsExceptionsItem2: "Não podemos regenerar faturas de períodos encerrados, mas podemos fornecer uma nota de crédito aplicable.",
     refundsContactTitle: "Contato",
-    refundsContactDesc: "Se você tiver alguma dúvida que não seja respondida aqui ou em nossos Termos de Serviço, entre em contato com nossa equipe de Suporte escrevendo para"
+    refundsContactDesc: "Se você tiver alguma dúvida que não seja respondida aqui ou em nuestros Termos de Serviço, entre em contato com nossa equipe de Suporte escrevendo para"
   },
   landing: {
     hero: {
@@ -777,8 +779,8 @@ export const pt = {
     fileSizeError: "Imagem muito grande (máximo 500KB)."
   },
   cardEditor: {
-    saveSuccess: "Alterações salvas com sucesso!",
-    saveError: "Não foi posible salvar as alterações.",
+    saveSuccess: "Alteraciones salvas com sucesso!",
+    saveError: "Não foi posible salvar as alteraciones.",
     loadError: "Erro ao carregar dados do cartão."
   },
   metrics: {
@@ -813,7 +815,7 @@ export const pt = {
     resultsTitle: "Resultados da Pesquisa Atual",
     totalResponses: "Total de respostas",
     emptyResponses: "Ainda não há respostas para esta pesquisa. Se você acabou de criá-la, as respostas aparecerão aquí conforme os clientes votarem.",
-    saveSuccess: "Configuração da pesquisa salva.",
+    saveSuccess: "Configuración da pesquisa salva.",
     saveError: "Não foi posible salvar a configuração.",
     requiredError: "A pergunta e ambas as opções são obrigatórias."
   },
@@ -850,6 +852,7 @@ export const pt = {
       digitalCard: "Cartão de fidelidade digital",
       basicCustom: "Personalização básica",
       fullCustom: "Personalização completa",
+      stampsCustomization: "Personalização do número de selos",
       removeBranding: "Remover botão 'Junte-se ao Loyalfly'",
       emailSupport: "Suporte por email",
       prioritySupport: "Suporte prioritário"

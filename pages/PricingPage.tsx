@@ -96,7 +96,7 @@ const PricingPage: React.FC = () => {
                         features={[
                             t('pricing.features.customers1000'),
                             t('pricing.features.digitalCard'),
-                            t('pricing.features.fullCustom'),
+                            t('pricing.features.stampsCustomization'),
                             t('pricing.features.removeBranding'),
                             t('pricing.features.emailSupport')
                         ]}
