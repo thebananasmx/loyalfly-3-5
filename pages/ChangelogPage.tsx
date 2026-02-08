@@ -23,6 +23,26 @@ const ChangelogPage: React.FC = () => {
         Un historial de todas las mejoras y nuevas funcionalidades que hemos agregado a Loyalfly para ayudarte a crecer.
       </p>
 
+      {/* --- VERSION v3.5.0.22 --- */}
+      <section className="mb-12">
+        <div className="pb-4 border-b border-gray-200">
+          <h2 className="text-3xl font-bold text-black">Versión 3.5.0.22</h2>
+          <p className="text-base text-gray-500 mt-1">Lanzada el 8 de Febrero de 2026</p>
+        </div>
+        
+        <ul className="mt-8 space-y-6">
+           <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Migración a Firebase Storage para Logos</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha implementado una arquitectura de almacenamiento profesional para los logos de los negocios. Ahora, las imágenes subidas se alojan en <strong>Firebase Storage</strong> en lugar de guardarse como texto Base64 en Firestore. Esta mejora optimiza drásticamente el rendimiento de la base de datos, reduce el peso de las consultas y habilita la compatibilidad técnica para exportar tarjetas a carteras digitales como Google Wallet.
+                  </p>
+              </div>
+          </li>
+        </ul>
+      </section>
+
       {/* --- VERSION v3.5.0.21 --- */}
       <section className="mb-12">
         <div className="pb-4 border-b border-gray-200">

@@ -1,5 +1,4 @@
-
-import { initializeApp } from "firebase/app";
+import { initializeApp } from "@firebase/app";
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -10,7 +9,7 @@ import {
   EmailAuthProvider,
   reauthenticateWithCredential,
   updatePassword
-} from "firebase/auth";
+} from "@firebase/auth";
 import {
   getFirestore,
   doc,
@@ -28,14 +27,20 @@ import {
   orderBy,
   limit,
   startAfter,
-} from "firebase/firestore";
+} from "@firebase/firestore";
+import {
+  getStorage,
+  ref,
+  uploadString,
+  getDownloadURL
+} from "@firebase/storage";
 import type { Customer, Business, BlogPost } from '../types';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAnW9n-Ou53G1RmD0amMXJfQ_OadfefVug",
   authDomain: "loyalflyapp-3-5.firebaseapp.com",
   projectId: "loyalflyapp-3-5",
-  storageBucket: "loyalflyapp-3-5.appspot.com",
+  storageBucket: "loyalflyapp-3-5.firebasestorage.app",
   messagingSenderId: "110326324187",
   appId: "1:110326324187:web:6516c54fab30370bf825fe",
   measurementId: "G-Z4DE1F8NTK"
@@ -44,6 +49,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 // --- HELPERS ---
 
@@ -310,9 +316,26 @@ export const searchCustomers = async (businessId: string, searchQuery: string): 
 };
 
 export const updateCardSettings = async (businessId: string, settings: any) => {
+    const finalSettings = { ...settings };
+    
+    // Transparent Base64 to Storage migration
+    if (finalSettings.logoUrl && finalSettings.logoUrl.startsWith('data:image')) {
+        try {
+            const timestamp = Date.now();
+            const storageRef = ref(storage, `logos/${businessId}/logo_${timestamp}`);
+            const uploadResult = await uploadString(storageRef, finalSettings.logoUrl, 'data_url');
+            const publicUrl = await getDownloadURL(uploadResult.ref);
+            finalSettings.logoUrl = publicUrl;
+        } catch (error) {
+            console.error("Error uploading logo to Storage:", error);
+            // If storage fails, we continue with Base64 to avoid data loss, 
+            // though it might hit Firestore limits later.
+        }
+    }
+
     const cardConfigRef = doc(db, "businesses", businessId, "config", "card");
-    await setDoc(cardConfigRef, settings, { merge: true });
-    return { success: true, settings };
+    await setDoc(cardConfigRef, finalSettings, { merge: true });
+    return { success: true, settings: finalSettings };
 };
 
 export const getCustomerByPhone = async (businessId: string, phone: string): Promise<Customer | null> => {
@@ -706,10 +729,11 @@ export const getBlogPostBySlug = async (slug: string): Promise<BlogPost | null> 
         const postDocRef = doc(db, 'blogPosts', postId);
         const postDocSnap = await getDoc(postDocRef);
         if (postDocSnap.exists()) {
+            const postData = postDocSnap.data();
             return { 
                 id: postDocSnap.id, 
-                ...postDocSnap.data(),
-                createdAt: (postDocSnap.data().createdAt as Timestamp)?.toDate() || new Date()
+                ...postData,
+                createdAt: (postData?.createdAt as Timestamp)?.toDate() || new Date()
             } as BlogPost;
         }
     }
@@ -720,21 +744,26 @@ export const getAllBlogPostsForAdmin = async (): Promise<BlogPost[]> => {
     const blogPostsCol = collection(db, 'blogPosts');
     const q = query(blogPostsCol, orderBy('createdAt', 'desc'));
     const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({ 
-        id: doc.id, 
-        ...doc.data(),
-        createdAt: (doc.data().createdAt as Timestamp)?.toDate().toISOString().split('T')[0] || new Date().toISOString().split('T')[0]
-    } as BlogPost));
+    return snapshot.docs.map(doc => {
+        const data = doc.data();
+        return { 
+            id: doc.id, 
+            ...data,
+            createdAt: (data?.createdAt as Timestamp)?.toDate().toISOString().split('T')[0] || new Date().toISOString().split('T')[0]
+        } as BlogPost;
+    });
 };
 
 export const getBlogPostById = async (postId: string): Promise<BlogPost | null> => {
     const postDocRef = doc(db, 'blogPosts', postId);
-    const docSnap = await getDoc(postDocRef);
-    if (docSnap.exists()) {
+    // FIX: Renamed docSnap to postDocSnap to match the usage in the return object and resolve "Cannot find name 'postDocSnap'" error.
+    const postDocSnap = await getDoc(postDocRef);
+    if (postDocSnap.exists()) {
+        const postData = postDocSnap.data();
         return { 
-            id: docSnap.id, 
-            ...docSnap.data(),
-            createdAt: (docSnap.data().createdAt as Timestamp)?.toDate() || new Date()
+            id: postDocSnap.id, 
+            ...postData,
+            createdAt: (postData?.createdAt as Timestamp)?.toDate() || new Date()
         } as BlogPost;
     }
     return null;
