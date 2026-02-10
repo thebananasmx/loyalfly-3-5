@@ -21,6 +21,19 @@ const BlogPostPage: React.FC = () => {
                 if (blogPost && blogPost.status === 'published') {
                     setPost(blogPost);
                     document.title = `${blogPost.title} | Loyalfly Blog`;
+                    
+                    // Canonical tag logic
+                    let canonical = document.querySelector('link[rel="canonical"]');
+                    const canonicalUrl = `https://loyalfly.com.mx/blog/${slug}`;
+                    if (canonical) {
+                      canonical.setAttribute('href', canonicalUrl);
+                    } else {
+                      canonical = document.createElement('link');
+                      canonical.setAttribute('rel', 'canonical');
+                      canonical.setAttribute('href', canonicalUrl);
+                      document.head.appendChild(canonical);
+                    }
+
                     const metaDesc = document.querySelector('meta[name="description"]');
                     if (metaDesc) {
                         metaDesc.setAttribute('content', blogPost.excerpt);

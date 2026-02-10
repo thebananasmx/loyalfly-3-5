@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import CardPreview from '../components/CardPreview';
@@ -68,6 +67,19 @@ const PublicCardPage: React.FC = () => {
 
     useEffect(() => {
         document.title = 'Loyalfly';
+        
+        // Canonical tag logic
+        let canonical = document.querySelector('link[rel="canonical"]');
+        const canonicalUrl = `https://loyalfly.com.mx/view/${slug}`;
+        if (canonical) {
+          canonical.setAttribute('href', canonicalUrl);
+        } else {
+          canonical = document.createElement('link');
+          canonical.setAttribute('rel', 'canonical');
+          canonical.setAttribute('href', canonicalUrl);
+          document.head.appendChild(canonical);
+        }
+
         const fetchSettings = async () => {
             if (!slug) {
                 setErrors({ form: 'No se ha especificado un negocio.' });

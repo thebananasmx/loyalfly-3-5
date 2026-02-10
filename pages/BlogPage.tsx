@@ -9,6 +9,18 @@ const BlogPage: React.FC = () => {
 
     useEffect(() => {
         document.title = 'Blog | Loyalfly';
+        
+        // Canonical tag logic
+        let canonical = document.querySelector('link[rel="canonical"]');
+        if (canonical) {
+          canonical.setAttribute('href', 'https://loyalfly.com.mx/blog');
+        } else {
+          canonical = document.createElement('link');
+          canonical.setAttribute('rel', 'canonical');
+          canonical.setAttribute('href', 'https://loyalfly.com.mx/blog');
+          document.head.appendChild(canonical);
+        }
+
         const fetchPosts = async () => {
             try {
                 const blogPosts = await getPublishedBlogPosts();

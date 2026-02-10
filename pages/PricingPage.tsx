@@ -64,6 +64,17 @@ const PricingPage: React.FC = () => {
     const { t } = useTranslation();
     useEffect(() => {
         document.title = 'Loyalfly';
+        
+        // Canonical tag logic
+        let canonical = document.querySelector('link[rel="canonical"]');
+        if (canonical) {
+          canonical.setAttribute('href', 'https://loyalfly.com.mx/pricing');
+        } else {
+          canonical = document.createElement('link');
+          canonical.setAttribute('rel', 'canonical');
+          canonical.setAttribute('href', 'https://loyalfly.com.mx/pricing');
+          document.head.appendChild(canonical);
+        }
     }, []);
 
     return (

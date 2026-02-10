@@ -100,6 +100,17 @@ const LandingPage: React.FC = () => {
     useEffect(() => {
         document.title = 'Loyalfly | Programa de Lealtad Digital para Negocios';
         
+        // Canonical tag logic
+        let canonical = document.querySelector('link[rel="canonical"]');
+        if (canonical) {
+          canonical.setAttribute('href', 'https://loyalfly.com.mx/');
+        } else {
+          canonical = document.createElement('link');
+          canonical.setAttribute('rel', 'canonical');
+          canonical.setAttribute('href', 'https://loyalfly.com.mx/');
+          document.head.appendChild(canonical);
+        }
+
         const interval = setInterval(() => {
             setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
         }, 7000);

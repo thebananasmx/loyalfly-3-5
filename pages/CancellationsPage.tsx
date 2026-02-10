@@ -6,6 +6,17 @@ const CancellationsPage: React.FC = () => {
   
   useEffect(() => {
     document.title = `${t('legal.cancellations')} | Loyalfly`;
+    
+    // Canonical tag logic
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) {
+      canonical.setAttribute('href', 'https://loyalfly.com.mx/terminos/cancelaciones');
+    } else {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      canonical.setAttribute('href', 'https://loyalfly.com.mx/terminos/cancelaciones');
+      document.head.appendChild(canonical);
+    }
   }, [t]);
 
   return (
