@@ -156,6 +156,25 @@ const LandingPage: React.FC = () => {
                                     {t('landing.hero.login')}
                                 </Link>
                             </div>
+                            
+                            {/* Wallet Badges (Informative) */}
+                            <div className="mt-14 flex flex-col items-center md:items-start gap-3 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                                <div className="flex flex-wrap justify-center md:justify-start gap-4">
+                                    <img 
+                                        src="https://res.cloudinary.com/dg4wbuppq/image/upload/v1770770709/ESMX_Add_to_Apple_Wallet_RGB_101821_in2cem.svg" 
+                                        alt="Add to Apple Wallet" 
+                                        className="h-[40px] w-auto opacity-90" 
+                                    />
+                                    <img 
+                                        src="https://res.cloudinary.com/dg4wbuppq/image/upload/v1770771245/esUS_add_to_google_wallet_add-wallet-badge_qmkpl1.svg" 
+                                        alt="Add to Google Wallet" 
+                                        className="h-[40px] w-auto opacity-90" 
+                                    />
+                                </div>
+                                <p className="text-xs text-gray-400 font-medium">
+                                    *Descarga a wallet solo disponible en plan Entrepreneur y PRO, consulta nuestros planes
+                                </p>
+                            </div>
                         </div>
 
                         {/* Right side: Image */}
