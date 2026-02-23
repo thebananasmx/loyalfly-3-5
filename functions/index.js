@@ -105,7 +105,7 @@ async function createApplePassBuffer(bid, cid, secrets) {
     const fgColor = cardSettings.textColorScheme === 'light' ? "rgb(255, 255, 255)" : "rgb(0, 0, 0)";
     const labelColor = cardSettings.textColorScheme === 'light' ? "rgb(255, 255, 255)" : "rgb(100, 100, 100)";
 
-    const webServiceURL = `https://applepassapi-2idcsaj5va-uc.a.run.app/v1/api/${bid}`;
+    const webServiceURL = `https://applepassapi-qt7vvfswnq-uc.a.run.app/v1/api/${bid}`;
 
     const pass = await PKPass.from({
         model: path.resolve("model.pass"),
