@@ -8,6 +8,10 @@ import ExclamationCircleIcon from '../components/icons/ExclamationCircleIcon';
 import LanguageSelector from '../components/LanguageSelector';
 import { useTranslation } from 'react-i18next';
 
+// --- CONFIGURACIÓN DE BACKEND (Cloud Functions 2nd Gen) ---
+const GOOGLE_WALLET_URL = "https://generatewalletpass-qt7vvfswnq-uc.a.run.app";
+const APPLE_WALLET_URL = "https://generateapplepass-qt7vvfswnq-uc.a.run.app";
+
 type ViewState = 'lookup' | 'register' | 'display';
 
 interface CardSettings {
@@ -64,6 +68,31 @@ const PublicCardPage: React.FC = () => {
     const [userName, setUserName] = useState('');
     const [userPhone, setUserPhone] = useState('');
     const [userEmail, setUserEmail] = useState('');
+    const { i18n } = useTranslation();
+
+    const handleAddToGoogleWallet = () => {
+        if (!businessId || !customer) return;
+        window.location.href = `${GOOGLE_WALLET_URL}?bid=${businessId}&cid=${customer.id}`;
+    };
+
+    const handleAddToAppleWallet = () => {
+        if (!businessId || !customer) return;
+        window.location.href = `${APPLE_WALLET_URL}?bid=${businessId}&cid=${customer.id}`;
+    };
+
+    const getGoogleWalletBadgeUrl = () => {
+        const lang = i18n.language.split('-')[0];
+        if (lang === 'es') return 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1770771245/esUS_add_to_google_wallet_add-wallet-badge_qmkpl1.svg';
+        if (lang === 'pt') return 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1770771211/br_add_to_google_wallet_add-wallet-badge_zpnazi.svg';
+        return 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1770771222/enUS_add_to_google_wallet_add-wallet-badge_lfceip.svg';
+    };
+
+    const getAppleWalletBadgeUrl = () => {
+        const lang = i18n.language.split('-')[0];
+        if (lang === 'es') return 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1770770709/ESMX_Add_to_Apple_Wallet_RGB_101821_in2cem.svg';
+        if (lang === 'pt') return 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1770770808/PT_Add_to_Apple_Wallet_RGB_102021_m9ggwe.svg';
+        return 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1770770828/US-UK_Add_to_Apple_Wallet_RGB_101421_hkprrj.svg';
+    };
 
     useEffect(() => {
         document.title = 'Loyalfly';
@@ -398,6 +427,26 @@ const PublicCardPage: React.FC = () => {
                           customerId={customer?.id}
                           stampsGoal={settings?.stampsGoal}
                         />
+
+                        {customer && (settings?.plan?.toLowerCase() === 'entrepreneur' || settings?.plan?.toLowerCase() === 'pro') && (
+                            <div className="mt-6 flex flex-col items-center gap-4 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                                <button 
+                                    onClick={handleAddToAppleWallet} 
+                                    className="transition-transform hover:scale-105 active:scale-95 focus:outline-none"
+                                    aria-label="Add to Apple Wallet"
+                                >
+                                    <img src={getAppleWalletBadgeUrl()} alt="Add to Apple Wallet" className="h-[44px] w-auto" />
+                                </button>
+                                <button 
+                                    onClick={handleAddToGoogleWallet} 
+                                    className="transition-transform hover:scale-105 active:scale-95 focus:outline-none"
+                                    aria-label="Add to Google Wallet"
+                                >
+                                    <img src={getGoogleWalletBadgeUrl()} alt="Add to Google Wallet" className="h-[44px] w-auto" />
+                                </button>
+                            </div>
+                        )}
+
                         <button
                            onClick={() => {
                                setView('lookup');
