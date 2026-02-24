@@ -23,6 +23,35 @@ const ChangelogPage: React.FC = () => {
         Un historial de todas las mejoras y nuevas funcionalidades que hemos agregado a Loyalfly para ayudarte a crecer.
       </p>
 
+      {/* --- VERSION v3.5.0.23 --- */}
+      <section className="mb-12">
+        <div className="pb-4 border-b border-gray-200">
+          <h2 className="text-3xl font-bold text-black">Versión 3.5.0.23</h2>
+          <p className="text-base text-gray-500 mt-1">Lanzada el 23 de Febrero de 2026</p>
+        </div>
+        
+        <ul className="mt-8 space-y-6">
+           <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Integración con Apple Wallet y Google Wallet</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha implementado la funcionalidad para que los clientes descarguen su tarjeta de lealtad directamente a sus carteras digitales. Esta característica, disponible para los planes <strong>Entrepreneur</strong> y <strong>PRO</strong>, permite a los usuarios llevar su tarjeta en su iPhone o dispositivo Android, facilitando el acceso y mejorando la retención. La integración incluye la generación dinámica de pases (.pkpass para Apple y Save to Wallet para Google) con sincronización en tiempo real de sellos y recompensas.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Badges de Wallet en Página de Inicio y Tarjeta Pública</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se han añadido los distintivos oficiales de "Add to Apple Wallet" y "Add to Google Wallet" en la página de inicio (como elemento informativo) y en la vista pública de la tarjeta para los negocios elegibles. Los badges se adaptan automáticamente al idioma del usuario (Español, Inglés o Portugués) para una experiencia localizada.
+                  </p>
+              </div>
+          </li>
+        </ul>
+      </section>
+
       {/* --- VERSION v3.5.0.22 --- */}
       <section className="mb-12">
         <div className="pb-4 border-b border-gray-200">
