@@ -109,6 +109,7 @@ const PricingPage: React.FC = () => {
                             t('pricing.features.digitalCard'),
                             t('pricing.features.stampsCustomization'),
                             t('pricing.features.removeBranding'),
+                            "Descarga a Wallet Apple y Google",
                             t('pricing.features.emailSupport')
                         ]}
                         isFeatured={true}
@@ -124,6 +125,7 @@ const PricingPage: React.FC = () => {
                             t('pricing.features.digitalCard'),
                             t('pricing.features.fullCustom'),
                             t('pricing.features.removeBranding'),
+                            "Descarga a Wallet Apple y Google",
                             t('pricing.features.prioritySupport')
                         ]}
                         isContact={true}
