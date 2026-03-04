@@ -144,16 +144,16 @@ const LandingPage: React.FC = () => {
                             </p>
                             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center md:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
                                 <Link
-                                    to="/pricing"
+                                    to="/register"
                                     className="px-8 py-3 w-full sm:w-auto text-base md:text-lg font-medium text-white bg-[#4D17FF] rounded-md hover:bg-opacity-90 transition-transform hover:scale-105"
                                 >
-                                    {t('landing.hero.viewPlans')}
+                                    Regístrate Gratis
                                 </Link>
                                 <Link
-                                    to="/login"
+                                    to="/pricing"
                                     className="px-8 py-3 w-full sm:w-auto text-base md:text-lg font-medium text-black bg-gray-100 rounded-md hover:bg-gray-200 transition-transform hover:scale-105"
                                 >
-                                    {t('landing.hero.login')}
+                                    Ver planes
                                 </Link>
                             </div>
                             
