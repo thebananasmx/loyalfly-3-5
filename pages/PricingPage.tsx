@@ -13,9 +13,10 @@ interface PricingCardProps {
   isContact?: boolean;
   stripeLink?: string;
   buttonText: string;
+  discountInfo?: React.ReactNode;
 }
 
-const PricingCard: React.FC<PricingCardProps> = ({ plan, price, description, features, isFeatured = false, isContact = false, stripeLink, buttonText }) => {
+const PricingCard: React.FC<PricingCardProps> = ({ plan, price, description, features, isFeatured = false, isContact = false, stripeLink, buttonText, discountInfo }) => {
   const cardClasses = `border rounded-lg p-6 sm:p-8 flex flex-col h-full ${isFeatured ? 'border-[#4D17FF] border-2' : 'border-gray-200'}`;
   const buttonClasses = `w-full mt-8 py-3 font-semibold rounded-md transition-colors text-center ${isFeatured ? 'bg-[#4D17FF] text-white hover:bg-opacity-90' : 'bg-black text-white hover:bg-gray-800'}`;
 
@@ -44,7 +45,14 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan, price, description, fea
   return (
     <div className={cardClasses}>
       <h3 className="text-lg font-semibold text-black">{plan}</h3>
-      <p className="mt-4 text-4xl font-bold text-black">{price}</p>
+      <div className="mt-4">
+        <p className="text-4xl font-bold text-black">{price}</p>
+        {discountInfo && (
+          <div className="mt-2">
+            {discountInfo}
+          </div>
+        )}
+      </div>
       <p className="mt-2 text-gray-600">{description}</p>
       <ul className="mt-6 space-y-4 text-gray-600 flex-grow">
         {features.map((feature, index) => (
@@ -62,6 +70,8 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan, price, description, fea
 
 const PricingPage: React.FC = () => {
     const { t } = useTranslation();
+    const [billingCycle, setBillingCycle] = React.useState<'monthly' | 'annual'>('monthly');
+
     useEffect(() => {
         document.title = 'Loyalfly';
         
@@ -85,6 +95,24 @@ const PricingPage: React.FC = () => {
                     <p className="mt-4 max-w-2xl mx-auto text-lg text-gray-600">
                         {t('pricing.subtitle')}
                     </p>
+
+                    {/* Billing Cycle Switch */}
+                    <div className="mt-10 flex justify-center">
+                        <div className="bg-gray-100 p-1 rounded-xl flex items-center shadow-inner">
+                            <button 
+                                onClick={() => setBillingCycle('monthly')}
+                                className={`px-8 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${billingCycle === 'monthly' ? 'bg-white shadow-sm text-black' : 'text-gray-500 hover:text-gray-700'}`}
+                            >
+                                Mensual
+                            </button>
+                            <button 
+                                onClick={() => setBillingCycle('annual')}
+                                className={`px-8 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${billingCycle === 'annual' ? 'bg-white shadow-sm text-black' : 'text-gray-500 hover:text-gray-700'}`}
+                            >
+                                Anual
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="mt-16 max-w-5xl mx-auto grid lg:grid-cols-3 gap-8">
@@ -101,7 +129,7 @@ const PricingPage: React.FC = () => {
                     />
                     <PricingCard 
                         plan={t('pricing.entrepreneur.name')}
-                        price="$299 / mes"
+                        price={billingCycle === 'monthly' ? "$299 / mes" : "$2,870 / año"}
                         description={t('pricing.entrepreneur.desc')}
                         buttonText={t('pricing.cta.subscribe')}
                         features={[
@@ -113,7 +141,14 @@ const PricingPage: React.FC = () => {
                             t('pricing.features.emailSupport')
                         ]}
                         isFeatured={true}
-                        stripeLink="https://buy.stripe.com/3cI6oI2dX1Rrfpy9XP5c400"
+                        stripeLink={billingCycle === 'monthly' ? "https://buy.stripe.com/3cI6oI2dX1Rrfpy9XP5c400" : "https://buy.stripe.com/eVq9AU5q9dA9fpy0nf5c402"}
+                        discountInfo={billingCycle === 'annual' ? (
+                            <p className="text-sm text-gray-500">
+                                <span className="text-red-600 font-bold">20% DE DESCUENTO</span>
+                                <br />
+                                DE: <span className="line-through">3,588 MXN</span> A $2,870
+                            </p>
+                        ) : undefined}
                     />
                     <PricingCard 
                         plan={t('pricing.pro.name')}
