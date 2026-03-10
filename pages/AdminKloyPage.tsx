@@ -25,6 +25,14 @@ const AdminKloyPage: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
+  const quickQuestions = [
+    "¿Quién es mi mejor cliente?",
+    "¿Qué promoción me sugieres?",
+    "¿Cuántos clientes tengo en total?",
+    "¿Cómo puedo mejorar la lealtad?",
+    "Resumen de actividad reciente"
+  ];
+
   useEffect(() => {
     document.title = 'Kloy AI Agent | Super Admin';
     fetchBusinesses();
@@ -32,7 +40,7 @@ const AdminKloyPage: React.FC = () => {
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages, isTyping]);
 
   const fetchBusinesses = async () => {
     setLoading(true);
@@ -75,16 +83,20 @@ const AdminKloyPage: React.FC = () => {
     b.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleSendMessage = async (e?: React.FormEvent) => {
+  const handleSendMessage = async (text?: string, e?: React.FormEvent) => {
     e?.preventDefault();
-    if (!input.trim() || !selectedBusiness || isTyping) return;
+    const messageToSend = text || input.trim();
+    if (!messageToSend || !selectedBusiness || isTyping) return;
 
-    const userMessage = input.trim();
     setInput('');
-    setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
+    setMessages(prev => [...prev, { role: 'user', content: messageToSend }]);
     setIsTyping(true);
 
     try {
+      if (!process.env.GEMINI_API_KEY) {
+        throw new Error("GEMINI_API_KEY is not defined");
+      }
+
       const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
       
       // Prepare context for Kloy
@@ -123,9 +135,14 @@ const AdminKloyPage: React.FC = () => {
       5. Usa Markdown para dar formato a tus respuestas (negritas, listas, etc.).
       6. No inventes datos que no estén en el contexto. Si no sabes algo, admítelo y sugiere cómo obtener esa información.`;
 
+      // Gemini requires the first message to be from 'user'. 
+      // We skip the initial 'model' greeting if it's the first message.
+      const history = messages.concat({ role: 'user', content: messageToSend });
+      const validHistory = history[0].role === 'model' ? history.slice(1) : history;
+
       const response = await ai.models.generateContent({
-        model: "gemini-3.1-pro-preview",
-        contents: messages.concat({ role: 'user', content: userMessage }).map(m => ({
+        model: "gemini-3-flash-preview",
+        contents: validHistory.map(m => ({
           role: m.role,
           parts: [{ text: m.content }]
         })),
@@ -292,12 +309,28 @@ const AdminKloyPage: React.FC = () => {
                     </div>
                   </div>
                 )}
+                
+                {/* Quick Questions */}
+                {!isTyping && messages.length > 0 && messages[messages.length - 1].role === 'model' && (
+                  <div className="flex flex-wrap gap-2 pt-2">
+                    {quickQuestions.map((q, i) => (
+                      <button
+                        key={i}
+                        onClick={() => handleSendMessage(q)}
+                        className="text-xs bg-white border border-gray-200 hover:border-[#4D17FF] hover:text-[#4D17FF] text-gray-600 px-3 py-2 rounded-full transition-all shadow-sm font-medium"
+                      >
+                        {q}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                
                 <div ref={chatEndRef} />
               </div>
 
               {/* Input Area */}
               <div className="p-4 border-t border-gray-100 bg-white">
-                <form onSubmit={handleSendMessage} className="relative">
+                <form onSubmit={(e) => handleSendMessage(undefined, e)} className="relative">
                   <input 
                     type="text" 
                     placeholder="Pregúntale a Kloy sobre este negocio..."
