@@ -53,7 +53,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         navigate('/login');
     };
 
-    const navLinkClasses = "flex items-center space-x-3 px-4 py-3 rounded-xl text-lg font-semibold transition-all duration-200";
+    const navLinkClasses = "flex items-center space-x-3 px-4 py-3 rounded-xl text-base font-medium transition-all duration-200";
     const activeClass = "bg-gray-200 text-[#4D17FF]";
     const inactiveClass = "text-gray-500 hover:bg-gray-100 hover:text-gray-900";
 
