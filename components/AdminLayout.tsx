@@ -26,9 +26,9 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) => {
         navigate('/admin/login');
     };
 
-    const navLinkClasses = "flex items-center space-x-3 px-3 py-2.5 rounded-md text-base font-medium transition-colors";
-    const activeClass = "bg-black text-white";
-    const inactiveClass = "text-gray-600 hover:bg-gray-200 hover:text-black";
+    const navLinkClasses = "flex items-center space-x-3 px-4 py-3 rounded-xl text-lg font-semibold transition-all duration-200";
+    const activeClass = "bg-gray-200 text-[#4D17FF]";
+    const inactiveClass = "text-gray-500 hover:bg-gray-100 hover:text-gray-900";
     
     return (
         <>
@@ -40,12 +40,12 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) => {
             ></div>
 
             <aside 
-                className={`fixed inset-y-0 left-0 z-30 w-64 bg-white border-r border-gray-200 flex flex-col transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+                className={`fixed inset-y-0 left-0 z-30 w-64 bg-gray-50 flex flex-col transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
                     isOpen ? 'translate-x-0' : '-translate-x-full'
                 }`}
                 aria-label="Sidebar"
             >
-                <div className="p-4 border-b border-gray-200 h-16 flex items-center">
+                <div className="p-4 h-16 flex items-center">
                     <Link to="/admin/dashboard" onClick={onClose}>
                         <img src="https://raw.githubusercontent.com/thebananasmx/loyalfly-3-5/refs/heads/main/assets/logo_desk.svg" alt="Loyalfly" className="h-7 w-auto" />
                     </Link>
@@ -85,7 +85,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) => {
                         <span>Blog</span>
                     </NavLink>
                 </nav>
-                <div className="p-4 border-t border-gray-200">
+                <div className="p-4">
                     <button
                         onClick={handleLogout}
                         className={`${navLinkClasses} w-full ${inactiveClass}`}
@@ -104,7 +104,7 @@ const AdminLayout: React.FC = () => {
 
   return (
     <ToastProvider>
-      <div className="min-h-screen bg-gray-50 font-sans">
+      <div className="min-h-screen bg-white font-sans">
         <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         <div className="flex-1 flex flex-col lg:ml-64">
           {/* Mobile Header */}

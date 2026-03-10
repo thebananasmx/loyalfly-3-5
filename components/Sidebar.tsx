@@ -53,9 +53,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         navigate('/login');
     };
 
-    const navLinkClasses = "flex items-center space-x-3 px-3 py-2.5 rounded-md text-base font-medium transition-colors";
-    const activeClass = "bg-black text-white";
-    const inactiveClass = "text-gray-600 hover:bg-gray-200 hover:text-black";
+    const navLinkClasses = "flex items-center space-x-3 px-4 py-3 rounded-xl text-lg font-semibold transition-all duration-200";
+    const activeClass = "bg-gray-200 text-[#4D17FF]";
+    const inactiveClass = "text-gray-500 hover:bg-gray-100 hover:text-gray-900";
 
     const plan = businessData?.plan || 'Gratis';
     const limit = plan === 'Entrepreneur' ? 1000 : (plan === 'Pro' ? 1000000 : 100);
@@ -73,23 +73,31 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             ></div>
 
             <aside 
-                className={`fixed inset-y-0 left-0 z-30 w-64 bg-white border-r border-gray-200 flex flex-col transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+                className={`fixed inset-y-0 left-0 z-30 w-64 bg-gray-50 flex flex-col transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
                     isOpen ? 'translate-x-0' : '-translate-x-full'
                 }`}
                 aria-label="Sidebar"
             >
-                <div className="p-4 border-b border-gray-200 h-16 flex items-center">
-                    <Link to="/app/dashboard" onClick={onClose}>
-                        <img src="https://raw.githubusercontent.com/thebananasmx/loyalfly-3-5/refs/heads/main/assets/logo_desk.svg" alt="Loyalfly" className="h-7 w-auto" />
-                    </Link>
-                </div>
-
-                <div className="p-4 border-b border-gray-200 relative" ref={dropdownRef}>
+                <div className="p-4 relative" ref={dropdownRef}>
                     <button 
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                         className="w-full flex justify-between items-center p-2 rounded-md hover:bg-gray-100 transition-colors"
                     >
-                        <span className="font-semibold text-black truncate">{businessData?.name || 'Mi Negocio'}</span>
+                        <div className="flex items-center space-x-3 truncate">
+                            {businessData?.cardSettings?.logoUrl ? (
+                                <img 
+                                    src={businessData.cardSettings.logoUrl} 
+                                    alt={businessData.name} 
+                                    className="h-8 w-8 rounded-md object-contain bg-gray-50 border border-gray-100"
+                                    referrerPolicy="no-referrer"
+                                />
+                            ) : (
+                                <div className="h-8 w-8 rounded-md bg-black flex items-center justify-center text-white text-xs font-bold">
+                                    {businessData?.name?.charAt(0) || 'L'}
+                                </div>
+                            )}
+                            <span className="font-semibold text-black truncate">{businessData?.name || 'Mi Negocio'}</span>
+                        </div>
                         <ChevronDownIcon />
                     </button>
                     {isDropdownOpen && (
@@ -143,26 +151,26 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
                 {/* Usage Widget */}
                 <div className="px-4 mb-6">
-                    <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 shadow-sm">
+                    <div className="p-4 bg-white rounded-xl">
                         <div className="flex justify-between items-center mb-2">
-                            <span className="text-xs font-bold text-gray-500 uppercase tracking-tight">{t('sidebar.usage.clients')}</span>
-                            <span className="text-sm font-black text-black">
+                            <span className="text-sm text-gray-500">{t('sidebar.usage.clients')}</span>
+                            <span className="text-sm text-black">
                                 {customerCount} / {limitLabel}
                             </span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-1.5 mb-3">
+                        <div className="w-full rounded-full h-1.5 mb-3" style={{ backgroundColor: '#ede8ff' }}>
                             <div 
                                 className="bg-[#4D17FF] h-1.5 rounded-full transition-all duration-1000 ease-out" 
                                 style={{ width: `${progressPercentage}%` }}
                             ></div>
                         </div>
-                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
-                            {t('sidebar.usage.plan')}: <span className="text-[#4D17FF]">{plan}</span>
+                        <p className="text-xs text-gray-400">
+                            {t('sidebar.usage.plan')}: <span className="text-[#4D17FF] font-medium">{plan}</span>
                         </p>
                     </div>
                 </div>
 
-                <div className="border-t border-gray-200">
+                <div className="">
                     <LanguageSelector variant="sidebar" />
                 </div>
                 <div className="p-4">

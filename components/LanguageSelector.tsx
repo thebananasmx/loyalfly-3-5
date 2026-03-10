@@ -38,7 +38,7 @@ const LanguageSelector: React.FC<{ variant?: 'header' | 'sidebar' }> = ({ varian
   if (variant === 'sidebar') {
     return (
         <div className="px-3 pt-2">
-            <p className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Idioma / Language</p>
+            <p className="px-3 text-sm text-gray-500 mb-2">Idioma / Language</p>
             <div className="flex space-x-2 px-3">
                 {languages.map((lang) => (
                     <button
@@ -46,8 +46,8 @@ const LanguageSelector: React.FC<{ variant?: 'header' | 'sidebar' }> = ({ varian
                         onClick={() => handleLanguageChange(lang.code)}
                         className={`px-2 py-1 text-xs font-medium rounded-md transition-colors ${
                             currentLang.code === lang.code 
-                            ? 'bg-black text-white' 
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                            ? 'bg-[#4D17FF] text-white' 
+                            : 'bg-white text-gray-600 hover:bg-gray-200'
                         }`}
                     >
                         {lang.code.toUpperCase()}
