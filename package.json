@@ -10,19 +10,22 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": {
-    "react": "^19.2.0",
-    "qrcode": "1.5.3",
-    "react-router-dom": "^7.9.3",
-    "react-dom": "^19.2.0",
+    "@firebase/app": "^0.14.8",
+    "@firebase/auth": "^1.12.0",
+    "@firebase/firestore": "^4.11.0",
+    "@firebase/storage": "^0.14.0",
+    "@google/genai": "^1.44.0",
     "firebase": "^12.3.0",
     "html5-qrcode": "^2.3.8",
     "i18next": "23.10.0",
-    "react-i18next": "14.0.5",
     "i18next-browser-languagedetector": "7.2.0",
-    "@firebase/firestore": "^4.11.0",
-    "@firebase/app": "^0.14.8",
-    "@firebase/auth": "^1.12.0",
-    "@firebase/storage": "^0.14.0"
+    "lucide-react": "^0.577.0",
+    "qrcode": "1.5.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-i18next": "14.0.5",
+    "react-markdown": "^10.1.0",
+    "react-router-dom": "^7.9.3"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
