@@ -23,6 +23,44 @@ const ChangelogPage: React.FC = () => {
         Un historial de todas las mejoras y nuevas funcionalidades que hemos agregado a Loyalfly para ayudarte a crecer.
       </p>
 
+      {/* --- VERSION v3.5.0.24 --- */}
+      <section className="mb-12">
+        <div className="pb-4 border-b border-gray-200">
+          <h2 className="text-3xl font-bold text-black">Versión 3.5.0.24</h2>
+          <p className="text-base text-gray-500 mt-1">Lanzada el 10 de Marzo de 2026</p>
+        </div>
+        
+        <ul className="mt-8 space-y-6">
+           <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Rediseño Minimalista de la Barra Lateral</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha implementado una evolución visual en la barra lateral (sidebar) para lograr una estética más limpia y profesional. Se invirtieron los colores (fondo gris claro <code>bg-gray-50</code>) y se eliminaron todas las líneas divisorias internas y externas, reduciendo significativamente la carga visual y permitiendo que el contenido respire mejor.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Optimización de Tipografía y Estados del Menú</h3>
+                  <p className="text-gray-600 mt-1">
+                      Los elementos del menú ahora utilizan una fuente de 16px con peso <code>medium</code>, mejorando el equilibrio entre legibilidad y elegancia. El estado activo se ha refinado con un fondo gris suave y texto en el morado característico de Loyalfly (<code>#4D17FF</code>), proporcionando una retroalimentación visual clara y moderna.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Simplificación del Widget de Uso y Plan</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se rediseñó el recuadro de conteo de clientes eliminando bordes y sombras para un aspecto más ligero. Se estandarizó el uso de mayúsculas y minúsculas con un peso de fuente regular, y se actualizó el fondo de la barra de progreso a un morado suave (<code>#ede8ff</code>) para un contraste más armonioso y estético.
+                  </p>
+              </div>
+          </li>
+        </ul>
+      </section>
+
       {/* --- VERSION v3.5.0.23 --- */}
       <section className="mb-12">
         <div className="pb-4 border-b border-gray-200">
