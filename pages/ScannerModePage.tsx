@@ -342,7 +342,7 @@ const ScannerModePage: React.FC = () => {
     }
 
     if (scannerState === 'CUSTOMER_VIEW' && customer) {
-        const stampsNeeded = business?.cardSettings?.stamps || 10;
+        const stampsNeeded = business?.cardSettings?.stampsGoal || 10;
         const canRedeem = customer.stamps >= stampsNeeded;
 
         return (

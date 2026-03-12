@@ -24,6 +24,7 @@ import PublicCardPage from './pages/PublicCardPage';
 import NewCustomerPage from './pages/NewCustomerPage';
 import ChangelogPage from './pages/ChangelogPage';
 import EditCustomerPage from './pages/EditCustomerPage';
+import CustomerDetailPage from './pages/CustomerDetailPage';
 import SurveyPage from './pages/SurveyPage';
 import PublicVotePage from './pages/PublicVotePage';
 import AdminLoginPage from './pages/AdminLoginPage';
@@ -96,6 +97,7 @@ function App() {
             <Route path="metricas" element={<MetricasPage />} />
             <Route path="nuevo-cliente" element={<NewCustomerPage />} />
             <Route path="editar-cliente/:customerId" element={<EditCustomerPage />} />
+            <Route path="cliente/:id" element={<CustomerDetailPage />} />
             <Route path="vote" element={<SurveyPage />} />
             <Route path="settings" element={<AccountSettingsPage />} />
           </Route>

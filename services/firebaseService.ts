@@ -385,6 +385,18 @@ export const getCustomerByPhone = async (businessId: string, phone: string): Pro
     }
 };
 
+export const getCustomerTransactions = async (businessId: string, customerId: string): Promise<any[]> => {
+    const transactionsRef = collection(db, `businesses/${businessId}/customers/${customerId}/transactions`);
+    const q = query(transactionsRef, orderBy('date', 'desc'));
+    const snapshot = await getDocs(q);
+    
+    return snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        date: (doc.data().date as Timestamp)?.toDate().toISOString() || new Date().toISOString()
+    }));
+};
+
 export const addStampToCustomer = async (businessId: string, customerId: string, quantity: number = 1, purchaseAmount?: number): Promise<Customer> => {
     const customerDocRef = doc(db, `businesses/${businessId}/customers`, customerId);
     const customerSnap = await getDoc(customerDocRef);

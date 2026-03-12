@@ -487,7 +487,11 @@ const DashboardPage: React.FC = () => {
         if (customers.length > 0) {
             return customers.map((customer) => (
                 <tr key={customer.id} className="bg-white border-b border-gray-200 hover:bg-gray-50">
-                    <td className="px-4 py-4 sm:px-6 font-medium text-gray-900 whitespace-nowrap">{customer.name}</td>
+                    <td className="px-4 py-4 sm:px-6 font-medium text-gray-900 whitespace-nowrap">
+                        <Link to={`/app/cliente/${customer.id}`} className="hover:text-[#4D17FF] hover:underline transition-colors">
+                            {customer.name}
+                        </Link>
+                    </td>
                     <td className="px-4 py-4 sm:px-6">{customer.phone}</td>
                     <td className="px-4 py-4 sm:px-6 hidden md:table-cell">{customer.email}</td>
                     <td className="px-4 py-4 sm:px-6 hidden lg:table-cell">{customer.enrollmentDate}</td>
