@@ -284,6 +284,31 @@ export const es = {
       subscribe: "Suscribirse",
       contact: "Contáctanos"
     }
+  },
+  accountSettings: {
+    title: "Ajustes de Cuenta",
+    subtitle: "Gestiona la información de tu negocio y la seguridad de tu cuenta.",
+    businessInfo: "Información del Negocio",
+    businessName: "Nombre del Negocio",
+    email: "Email de Registro",
+    security: "Seguridad",
+    currentPassword: "Contraseña Actual",
+    newPassword: "Nueva Contraseña",
+    confirmPassword: "Confirmar Nueva Contraseña",
+    savePassword: "Cambiar Contraseña",
+    saving: "Guardando...",
+    subscription: "Suscripción",
+    subscriptionDesc: "Actualmente estás en el plan <1>{{plan}}</1>. Si deseas cancelar tu suscripción, puedes hacerlo desde el portal de facturación de Stripe.",
+    cancelSubscription: "Cancelar Suscripción",
+    errors: {
+      currentRequired: "La contraseña actual es requerida.",
+      newLength: "La nueva contraseña debe tener al menos 6 caracteres.",
+      mismatch: "Las contraseñas no coinciden.",
+      wrongPassword: "La contraseña actual es incorrecta.",
+      general: "No se pudo cambiar la contraseña. Inténtalo de nuevo."
+    },
+    success: "¡Contraseña actualizada con éxito!",
+    fetchError: "No se pudieron cargar los datos de la cuenta."
   }
 };
 
@@ -573,6 +598,31 @@ export const en = {
       subscribe: "Subscribe",
       contact: "Contact Us"
     }
+  },
+  accountSettings: {
+    title: "Account Settings",
+    subtitle: "Manage your business information and account security.",
+    businessInfo: "Business Information",
+    businessName: "Business Name",
+    email: "Registration Email",
+    security: "Security",
+    currentPassword: "Current Password",
+    newPassword: "New Password",
+    confirmPassword: "Confirm New Password",
+    savePassword: "Change Password",
+    saving: "Saving...",
+    subscription: "Subscription",
+    subscriptionDesc: "You are currently on the <1>{{plan}}</1> plan. If you wish to cancel your subscription, you can do so from the Stripe billing portal.",
+    cancelSubscription: "Cancel Subscription",
+    errors: {
+      currentRequired: "Current password is required.",
+      newLength: "New password must be at least 6 characters long.",
+      mismatch: "Passwords do not match.",
+      wrongPassword: "Current password is incorrect.",
+      general: "Could not change password. Please try again."
+    },
+    success: "Password updated successfully!",
+    fetchError: "Could not load account data."
   }
 };
 
@@ -862,5 +912,30 @@ export const pt = {
       subscribe: "Assinar",
       contact: "Contate-nos"
     }
+  },
+  accountSettings: {
+    title: "Configurações da Conta",
+    subtitle: "Gerencie as informações do seu negócio e a segurança da sua conta.",
+    businessInfo: "Informações do Negócio",
+    businessName: "Nome do Negócio",
+    email: "Email de Registro",
+    security: "Segurança",
+    currentPassword: "Senha Atual",
+    newPassword: "Nova Senha",
+    confirmPassword: "Confirmar Nova Senha",
+    savePassword: "Mudar Senha",
+    saving: "Salvando...",
+    subscription: "Assinatura",
+    subscriptionDesc: "Atualmente você está no plano <1>{{plan}}</1>. Se desejar cancelar sua assinatura, você pode fazê-lo a partir do portal de faturamento do Stripe.",
+    cancelSubscription: "Cancelar Assinatura",
+    errors: {
+      currentRequired: "A senha atual é obrigatória.",
+      newLength: "A nova senha deve ter pelo menos 6 caracteres.",
+      mismatch: "As senhas não coincidem.",
+      wrongPassword: "A senha atual está incorreta.",
+      general: "Não foi possível alterar a senha. Tente novamente."
+    },
+    success: "Senha atualizada com sucesso!",
+    fetchError: "Não foi possível carregar os dados da conta."
   }
 };
