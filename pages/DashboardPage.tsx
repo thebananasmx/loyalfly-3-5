@@ -97,6 +97,7 @@ const DashboardPage: React.FC = () => {
     const [isStampModalOpen, setIsStampModalOpen] = useState(false);
     const [isRedeemModalOpen, setIsRedeemModalOpen] = useState(false);
     const [stampQuantity, setStampQuantity] = useState(1);
+    const [purchaseAmount, setPurchaseAmount] = useState<string>('');
     const [isUpdating, setIsUpdating] = useState(false);
     
     const [isDownloading, setIsDownloading] = useState(false);
@@ -215,6 +216,7 @@ const DashboardPage: React.FC = () => {
     const handleOpenStampModal = (customer: Customer) => {
         setSelectedCustomer(customer);
         setStampQuantity(1);
+        setPurchaseAmount('');
         setIsStampModalOpen(true);
     };
 
@@ -231,7 +233,8 @@ const DashboardPage: React.FC = () => {
         if (!selectedCustomer || !user) return;
         setIsUpdating(true);
         try {
-            const updatedCustomer = await addStampToCustomer(user.uid, selectedCustomer.id, stampQuantity);
+            const amount = purchaseAmount ? parseFloat(purchaseAmount) : undefined;
+            const updatedCustomer = await addStampToCustomer(user.uid, selectedCustomer.id, stampQuantity, amount);
             setCustomers(prevCustomers => 
                 prevCustomers.map(c => 
                     c.id === updatedCustomer.id ? updatedCustomer : c
@@ -248,6 +251,7 @@ const DashboardPage: React.FC = () => {
             setIsUpdating(false);
             setIsStampModalOpen(false);
             setSelectedCustomer(null);
+            setPurchaseAmount('');
         }
     };
 
@@ -708,6 +712,23 @@ const DashboardPage: React.FC = () => {
                         >
                             +
                         </button>
+                    </div>
+
+                    <div className="mt-6">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Monto de compra (Opcional)</label>
+                        <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <span className="text-gray-500 sm:text-sm">$</span>
+                            </div>
+                            <input
+                                type="number"
+                                value={purchaseAmount}
+                                onChange={(e) => setPurchaseAmount(e.target.value)}
+                                className="block w-full pl-7 pr-12 py-2 border-gray-300 rounded-md focus:ring-black focus:border-black sm:text-sm border"
+                                placeholder="0.00"
+                                disabled={isUpdating}
+                            />
+                        </div>
                     </div>
                     <div className="mt-4 text-center bg-gray-50 p-3 rounded-md border border-gray-200">
                         <p className="font-semibold">{selectedCustomer.name}</p>
