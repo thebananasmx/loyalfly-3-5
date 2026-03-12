@@ -204,6 +204,29 @@ export const getBusinessData = async (businessId: string): Promise<Business | nu
     }
 }
 
+export const getScannerBusinessData = async (businessId: string): Promise<Business | null> => {
+    const businessDocRef = doc(db, "businesses", businessId);
+    const cardConfigRef = doc(db, "businesses", businessId, "config", "card");
+
+    const [businessSnap, cardConfigSnap] = await Promise.all([
+        getDoc(businessDocRef),
+        getDoc(cardConfigRef)
+    ]);
+
+    if (businessSnap.exists()) {
+        const businessData = businessSnap.data();
+        const cardSettings = cardConfigSnap.exists() ? cardConfigSnap.data() : null;
+        
+        return {
+            id: businessId,
+            ...businessData,
+            cardSettings: cardSettings ? { ...cardSettings, stampsGoal: cardSettings.stampsGoal || 10 } : null,
+        } as Business;
+    } else {
+        return null;
+    }
+}
+
 export const getBusinessIdBySlug = async (slug: string): Promise<string | null> => {
     const slugDocRef = doc(db, "businessSlugs", slug);
     const slugDocSnap = await getDoc(slugDocRef);
@@ -400,7 +423,7 @@ export const addStampToCustomer = async (businessId: string, customerId: string,
 };
 
 export const redeemRewardForCustomer = async (businessId: string, customerId: string): Promise<Customer> => {
-    const businessData = await getBusinessData(businessId);
+    const businessData = await getScannerBusinessData(businessId);
     if (!businessData) throw new Error("Business not found");
     const stampsGoal = businessData.cardSettings?.stampsGoal || 10;
 
@@ -417,6 +440,15 @@ export const redeemRewardForCustomer = async (businessId: string, customerId: st
         await updateDoc(customerDocRef, {
             stamps: currentStamps - stampsGoal,
             rewardsRedeemed: currentRewards + 1
+        });
+
+        // Log transaction
+        const transactionsRef = collection(db, `businesses/${businessId}/customers/${customerId}/transactions`);
+        await addDoc(transactionsRef, {
+            type: 'reward',
+            quantity: 1,
+            amount: 0,
+            date: serverTimestamp()
         });
 
         const updatedSnap = await getDoc(customerDocRef);

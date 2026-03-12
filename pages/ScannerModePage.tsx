@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getBusinessIdBySlug, getBusinessData, getCustomerById, addStampToCustomer, redeemRewardForCustomer } from '../services/firebaseService';
+import { getBusinessIdBySlug, getScannerBusinessData, getCustomerById, addStampToCustomer, redeemRewardForCustomer } from '../services/firebaseService';
 import type { Business, Customer } from '../types';
 import { Html5Qrcode } from 'html5-qrcode';
 import { CheckCircle } from 'lucide-react';
@@ -41,11 +41,24 @@ const ScannerModePage: React.FC = () => {
                     return;
                 }
                 setBusinessId(bId);
-                const data = await getBusinessData(bId);
+                const data = await getScannerBusinessData(bId);
                 setBusiness(data);
                 
                 if (!data?.scannerPin) {
                     setScannerState('IDLE');
+                } else {
+                    // Check local storage for existing valid session
+                    const savedAuth = localStorage.getItem(`scanner_auth_${bId}`);
+                    if (savedAuth) {
+                        try {
+                            const parsedAuth = JSON.parse(savedAuth);
+                            if (parsedAuth.pin === data.scannerPin && parsedAuth.expiresAt > Date.now()) {
+                                setScannerState('IDLE');
+                            }
+                        } catch (e) {
+                            console.error("Error parsing saved auth", e);
+                        }
+                    }
                 }
             } catch (error) {
                 console.error("Error fetching business:", error);
@@ -128,10 +141,25 @@ const ScannerModePage: React.FC = () => {
         if (business?.scannerPin === pinToVerify) {
             setScannerState('IDLE');
             setPinInput('');
+            
+            // Save to local storage for 24 hours
+            if (businessId) {
+                localStorage.setItem(`scanner_auth_${businessId}`, JSON.stringify({
+                    pin: pinToVerify,
+                    expiresAt: Date.now() + 24 * 60 * 60 * 1000 // 24 hours in ms
+                }));
+            }
         } else {
             setPinError(true);
             setTimeout(() => setPinInput(''), 500);
         }
+    };
+
+    const handleManualLock = () => {
+        if (businessId) {
+            localStorage.removeItem(`scanner_auth_${businessId}`);
+        }
+        setScannerState('LOCKED');
     };
 
     const handleAddStamp = async () => {
@@ -244,7 +272,7 @@ const ScannerModePage: React.FC = () => {
             <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 relative">
                 {business?.scannerPin && (
                     <button 
-                        onClick={() => setScannerState('LOCKED')}
+                        onClick={handleManualLock}
                         className="absolute top-6 right-6 text-gray-400 hover:text-gray-900"
                         title="Bloquear pantalla"
                     >
