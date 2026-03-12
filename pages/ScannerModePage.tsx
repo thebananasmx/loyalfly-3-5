@@ -220,45 +220,47 @@ const ScannerModePage: React.FC = () => {
 
     if (scannerState === 'LOCKED') {
         return (
-            <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
-                <div className="w-full max-w-sm bg-white rounded-2xl shadow-xl p-8 flex flex-col items-center">
+            <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4">
+                <div className="w-full max-w-xs flex flex-col items-center">
                     <h1 className="text-2xl font-bold text-gray-900 mb-2">Modo Escáner</h1>
-                    <p className="text-gray-500 mb-8 text-center">Ingresa el PIN de {business?.name}</p>
+                    <p className="text-gray-500 mb-10 text-center">Ingresa el PIN de {business?.name}</p>
 
-                    <div className="flex gap-4 mb-8">
+                    <div className="flex gap-6 mb-12">
                         {[0, 1, 2, 3].map(i => (
                             <div 
                                 key={i} 
-                                className={`w-4 h-4 rounded-full transition-colors ${
-                                    pinInput.length > i ? 'bg-black' : 'bg-gray-200'
-                                } ${pinError ? 'bg-red-500' : ''}`}
+                                className={`w-3.5 h-3.5 rounded-full border-2 transition-all duration-200 ${
+                                    pinInput.length > i 
+                                        ? 'bg-gray-400 border-gray-400' 
+                                        : 'bg-transparent border-gray-300'
+                                } ${pinError ? 'border-red-500 bg-red-500' : ''}`}
                             />
                         ))}
                     </div>
 
-                    <div className="grid grid-cols-3 gap-4 w-full max-w-[240px]">
+                    <div className="grid grid-cols-3 gap-x-6 gap-y-5 w-full">
                         {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
                             <button
                                 key={num}
                                 onClick={() => handlePinPress(num.toString())}
-                                className="w-16 h-16 rounded-full bg-gray-50 text-2xl font-semibold text-gray-900 hover:bg-gray-100 active:bg-gray-200 flex items-center justify-center mx-auto transition-colors"
+                                className="w-20 h-20 rounded-full bg-gray-50/80 text-3xl font-semibold text-gray-900 hover:bg-gray-100 active:bg-gray-200 flex items-center justify-center mx-auto transition-all duration-150 active:scale-95"
                             >
                                 {num}
                             </button>
                         ))}
-                        <div className="w-16 h-16"></div>
+                        <div className="w-20 h-20"></div>
                         <button
                             onClick={() => handlePinPress('0')}
-                            className="w-16 h-16 rounded-full bg-gray-50 text-2xl font-semibold text-gray-900 hover:bg-gray-100 active:bg-gray-200 flex items-center justify-center mx-auto transition-colors"
+                            className="w-20 h-20 rounded-full bg-gray-50/80 text-3xl font-semibold text-gray-900 hover:bg-gray-100 active:bg-gray-200 flex items-center justify-center mx-auto transition-all duration-150 active:scale-95"
                         >
                             0
                         </button>
                         <button
                             onClick={handleDelete}
-                            className="w-16 h-16 rounded-full bg-gray-50 text-gray-600 hover:bg-gray-100 active:bg-gray-200 flex items-center justify-center mx-auto transition-colors"
+                            className="w-20 h-20 rounded-full flex items-center justify-center mx-auto text-gray-400 hover:text-gray-600 active:scale-90 transition-all"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414a2 2 0 001.414.586H19a2 2 0 002-2V7a2 2 0 00-2-2h-8.172a2 2 0 00-1.414.586L3 12z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
                     </div>
