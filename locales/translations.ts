@@ -305,10 +305,18 @@ export const es = {
       newLength: "La nueva contraseña debe tener al menos 6 caracteres.",
       mismatch: "Las contraseñas no coinciden.",
       wrongPassword: "La contraseña actual es incorrecta.",
-      general: "No se pudo cambiar la contraseña. Inténtalo de nuevo."
+      general: "No se pudo cambiar la contraseña. Inténtalo de nuevo.",
+      invalidPin: "El PIN debe ser de 4 dígitos.",
+      pinUpdateFailed: "No se pudo actualizar el PIN."
     },
     success: "¡Contraseña actualizada con éxito!",
-    fetchError: "No se pudieron cargar los datos de la cuenta."
+    fetchError: "No se pudieron cargar los datos de la cuenta.",
+    scannerMode: "Modo Escáner (POS)",
+    scannerModeDesc: "Configura un PIN de 4 dígitos para proteger el acceso al Modo Escáner en tu punto de venta.",
+    scannerPin: "PIN de Escáner",
+    scannerPinHelp: "Este PIN será requerido para desbloquear la pantalla de escaneo.",
+    savePin: "Guardar PIN",
+    pinSuccess: "¡PIN de escáner actualizado!"
   }
 };
 
@@ -619,10 +627,18 @@ export const en = {
       newLength: "New password must be at least 6 characters long.",
       mismatch: "Passwords do not match.",
       wrongPassword: "Current password is incorrect.",
-      general: "Could not change password. Please try again."
+      general: "Could not change password. Please try again.",
+      invalidPin: "PIN must be 4 digits.",
+      pinUpdateFailed: "Could not update PIN."
     },
     success: "Password updated successfully!",
-    fetchError: "Could not load account data."
+    fetchError: "Could not load account data.",
+    scannerMode: "Scanner Mode (POS)",
+    scannerModeDesc: "Set a 4-digit PIN to protect access to the Scanner Mode at your point of sale.",
+    scannerPin: "Scanner PIN",
+    scannerPinHelp: "This PIN will be required to unlock the scanning screen.",
+    savePin: "Save PIN",
+    pinSuccess: "Scanner PIN updated!"
   }
 };
 
@@ -933,9 +949,17 @@ export const pt = {
       newLength: "A nova senha deve ter pelo menos 6 caracteres.",
       mismatch: "As senhas não coincidem.",
       wrongPassword: "A senha atual está incorreta.",
-      general: "Não foi possível alterar a senha. Tente novamente."
+      general: "Não foi possível alterar a senha. Tente novamente.",
+      invalidPin: "O PIN deve ter 4 dígitos.",
+      pinUpdateFailed: "Não foi possível atualizar o PIN."
     },
     success: "Senha atualizada com sucesso!",
-    fetchError: "Não foi possível carregar os dados da conta."
+    fetchError: "Não foi possível carregar os dados da conta.",
+    scannerMode: "Modo Scanner (POS)",
+    scannerModeDesc: "Configure um PIN de 4 dígitos para proteger o acesso ao Modo Scanner no seu ponto de venda.",
+    scannerPin: "PIN do Scanner",
+    scannerPinHelp: "Este PIN será necessário para desbloquear a tela de escaneamento.",
+    savePin: "Salvar PIN",
+    pinSuccess: "PIN do scanner atualizado!"
   }
 };

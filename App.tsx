@@ -40,6 +40,7 @@ import AdminKpisPage from './pages/AdminKpisPage';
 import AdminKloyPage from './pages/AdminKloyPage';
 import AccountSettingsPage from './pages/AccountSettingsPage';
 import AdminBusinessDetailPage from './pages/AdminBusinessDetailPage';
+import ScannerModePage from './pages/ScannerModePage';
 
 function App() {
   const isProductionLike = window.location.hostname.endsWith('loyalfly.com.mx') || window.location.hostname.includes('vercel.app');
@@ -80,6 +81,14 @@ function App() {
           <Route path="/vote/:slug" element={<PublicVotePage />} />
 
           {/* Business App Routes */}
+          <Route 
+            path="/scan"
+            element={
+              <ProtectedRoute>
+                <ScannerModePage />
+              </ProtectedRoute>
+            }
+          />
           <Route 
             path="/app"
             element={

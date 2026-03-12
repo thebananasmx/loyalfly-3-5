@@ -19,6 +19,7 @@ export interface Customer {
   enrollmentDate: string;
   stamps: number;
   rewardsRedeemed: number;
+  totalSpent?: number;
 }
 
 export interface Business {
@@ -30,6 +31,7 @@ export interface Business {
   customerCount: number;
   cardSettings: any;
   surveySettings: any;
+  scannerPin?: string;
 }
 
 export interface BlogPost {

@@ -167,6 +167,13 @@ export const reauthenticateAndChangePassword = async (currentPassword: string, n
 
 // --- FIRESTORE FUNCTIONS ---
 
+export const updateScannerPin = async (businessId: string, pin: string) => {
+    const businessRef = doc(db, 'businesses', businessId);
+    await updateDoc(businessRef, {
+        scannerPin: pin
+    });
+};
+
 export const getBusinessData = async (businessId: string): Promise<Business | null> => {
     const businessDocRef = doc(db, "businesses", businessId);
     const cardConfigRef = doc(db, "businesses", businessId, "config", "card");
@@ -355,14 +362,32 @@ export const getCustomerByPhone = async (businessId: string, phone: string): Pro
     }
 };
 
-export const addStampToCustomer = async (businessId: string, customerId: string, quantity: number = 1): Promise<Customer> => {
+export const addStampToCustomer = async (businessId: string, customerId: string, quantity: number = 1, purchaseAmount?: number): Promise<Customer> => {
     const customerDocRef = doc(db, `businesses/${businessId}/customers`, customerId);
     const customerSnap = await getDoc(customerDocRef);
     if (customerSnap.exists()) {
         const currentStamps = customerSnap.data().stamps || 0;
-        await updateDoc(customerDocRef, {
+        const currentTotalSpent = customerSnap.data().totalSpent || 0;
+        
+        const updates: any = {
             stamps: currentStamps + quantity
+        };
+
+        if (purchaseAmount !== undefined) {
+            updates.totalSpent = currentTotalSpent + purchaseAmount;
+        }
+
+        await updateDoc(customerDocRef, updates);
+
+        // Log transaction
+        const transactionsRef = collection(db, `businesses/${businessId}/customers/${customerId}/transactions`);
+        await addDoc(transactionsRef, {
+            type: 'stamp',
+            quantity: quantity,
+            amount: purchaseAmount || 0,
+            date: serverTimestamp()
         });
+
         const updatedSnap = await getDoc(customerDocRef);
         return { 
             id: updatedSnap.id, 

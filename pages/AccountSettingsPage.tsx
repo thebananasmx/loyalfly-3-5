@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { getBusinessData, reauthenticateAndChangePassword } from '../services/firebaseService';
+import { getBusinessData, reauthenticateAndChangePassword, updateScannerPin } from '../services/firebaseService';
 import type { Business } from '../types';
 import ErrorMessage from '../components/ErrorMessage';
 import { useTranslation, Trans } from 'react-i18next';
@@ -20,6 +20,9 @@ const AccountSettingsPage: React.FC = () => {
     const [passwordErrors, setPasswordErrors] = useState<{ current?: string; new?: string; confirm?: string; form?: string }>({});
     const [isSaving, setIsSaving] = useState(false);
 
+    const [scannerPin, setScannerPin] = useState('');
+    const [isSavingPin, setIsSavingPin] = useState(false);
+
     useEffect(() => {
         document.title = `${t('accountSettings.title')} | Loyalfly App`;
         const fetchData = async () => {
@@ -28,6 +31,9 @@ const AccountSettingsPage: React.FC = () => {
             try {
                 const data = await getBusinessData(user.uid);
                 setBusinessData(data);
+                if (data?.scannerPin) {
+                    setScannerPin(data.scannerPin);
+                }
             } catch (error) {
                 console.error("Failed to fetch business data:", error);
                 showToast(t('accountSettings.fetchError'), 'error');
@@ -70,6 +76,27 @@ const AccountSettingsPage: React.FC = () => {
             setIsSaving(false);
         }
     };
+
+    const handlePinChange = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!user) return;
+        
+        if (scannerPin.length !== 4 || !/^\d+$/.test(scannerPin)) {
+            showToast(t('accountSettings.errors.invalidPin'), 'error');
+            return;
+        }
+
+        setIsSavingPin(true);
+        try {
+            await updateScannerPin(user.uid, scannerPin);
+            showToast(t('accountSettings.pinSuccess'), 'success');
+        } catch (error) {
+            console.error("Failed to update scanner PIN:", error);
+            showToast(t('accountSettings.errors.pinUpdateFailed'), 'error');
+        } finally {
+            setIsSavingPin(false);
+        }
+    };
     
     if (loading) {
         return (
@@ -100,6 +127,32 @@ const AccountSettingsPage: React.FC = () => {
                     <label htmlFor="email" className="block text-base font-medium text-gray-700">{t('accountSettings.email')}</label>
                     <input id="email" type="email" value={user?.email || ''} disabled className={inputClasses} />
                 </div>
+            </div>
+
+            <div className="p-6 bg-white border border-gray-200 rounded-lg">
+                <h2 className="text-xl font-bold text-black">{t('accountSettings.scannerMode')}</h2>
+                <p className="text-gray-600 mt-1">{t('accountSettings.scannerModeDesc')}</p>
+                <form onSubmit={handlePinChange} className="space-y-6 mt-4">
+                    <div>
+                        <label htmlFor="scannerPin" className="block text-base font-medium text-gray-700">{t('accountSettings.scannerPin')}</label>
+                        <input 
+                            id="scannerPin" 
+                            type="text" 
+                            maxLength={4}
+                            placeholder="Ej. 1234"
+                            value={scannerPin} 
+                            onChange={e => setScannerPin(e.target.value.replace(/\D/g, ''))} 
+                            required 
+                            className={inputClasses} 
+                        />
+                        <p className="text-sm text-gray-500 mt-1">{t('accountSettings.scannerPinHelp')}</p>
+                    </div>
+                    <div className="text-right">
+                        <button type="submit" disabled={isSavingPin} className="px-6 py-2 bg-black text-white font-semibold rounded-md hover:bg-gray-800 disabled:bg-gray-400">
+                            {isSavingPin ? t('accountSettings.saving') : t('accountSettings.savePin')}
+                        </button>
+                    </div>
+                </form>
             </div>
 
             <div className="p-6 bg-white border border-gray-200 rounded-lg">
