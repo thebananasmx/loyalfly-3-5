@@ -22,6 +22,44 @@ const ChangelogPage: React.FC = () => {
       <p className="text-lg text-gray-600 mb-12">
         Un historial de todas las mejoras y nuevas funcionalidades que hemos agregado a Loyalfly para ayudarte a crecer.
       </p>
+      
+      {/* --- VERSION v3.5.0.25 --- */}
+      <section className="mb-12">
+        <div className="pb-4 border-b border-gray-200">
+          <h2 className="text-3xl font-bold text-black">Versión 3.5.0.25</h2>
+          <p className="text-base text-gray-500 mt-1">Lanzada el 12 de Marzo de 2026</p>
+        </div>
+        
+        <ul className="mt-8 space-y-6">
+           <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Página de Detalle de Cliente y Análisis de Valor</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha implementado una nueva vista detallada para cada cliente, accesible al hacer clic en su nombre desde el dashboard. Esta página centraliza la información clave: datos de contacto, <strong>Total Gastado</strong> acumulado y un historial cronológico completo de transacciones (sellos agregados y recompensas canjeadas), permitiendo una gestión más profesional y personalizada.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Campo de Monto de Compra Opcional</h3>
+                  <p className="text-gray-600 mt-1">
+                      El modal para agregar sellos en el dashboard de negocio ahora incluye un campo opcional para registrar el <strong>Monto de compra</strong>. Esto permite a los negocios rastrear el valor de vida del cliente (LTV) y vincular cada sello a una transacción económica real.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Sincronización Dinámica de Meta de Sellos en Escáner</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se optimizó el Modo Escáner para que respete el <code>stampsGoal</code> configurado por cada negocio. Ahora, el botón de redimir se activa o desactiva automáticamente según la meta específica (ej. 10 sellos por defecto o metas personalizadas en planes Entrepreneur/Pro), eliminando inconsistencias visuales.
+                  </p>
+              </div>
+          </li>
+        </ul>
+      </section>
 
       {/* --- VERSION v3.5.0.24 --- */}
       <section className="mb-12">
