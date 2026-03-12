@@ -79,16 +79,9 @@ function App() {
           {/* Public Card & Vote Routes (no layout) */}
           <Route path="/view/:slug" element={<PublicCardPage />} />
           <Route path="/vote/:slug" element={<PublicVotePage />} />
+          <Route path="/scan/:slug" element={<ScannerModePage />} />
 
           {/* Business App Routes */}
-          <Route 
-            path="/scan"
-            element={
-              <ProtectedRoute>
-                <ScannerModePage />
-              </ProtectedRoute>
-            }
-          />
           <Route 
             path="/app"
             element={
