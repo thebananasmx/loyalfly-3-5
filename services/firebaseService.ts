@@ -531,9 +531,14 @@ export const deleteCustomer = async (businessId: string, customerId: string): Pr
 
 export const isSuperAdmin = async (userId: string): Promise<boolean> => {
     if (!userId) return false;
-    const adminDocRef = doc(db, "super_admins", userId);
-    const adminDocSnap = await getDoc(adminDocRef);
-    return adminDocSnap.exists();
+    try {
+        const adminDocRef = doc(db, "super_admins", userId);
+        const adminDocSnap = await getDoc(adminDocRef);
+        return adminDocSnap.exists();
+    } catch (error) {
+        console.error("Error checking super admin status:", error);
+        return false;
+    }
 };
 
 export const registerSuperAdmin = async (email: string, password: string) => {

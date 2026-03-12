@@ -45,7 +45,7 @@ const ScannerModePage: React.FC = () => {
                 setBusiness(data);
                 
                 if (!data?.scannerPin) {
-                    setScannerState('IDLE');
+                    setError("Consulta a tu Administrador para configurar el PIN de Escáner");
                 } else {
                     // Check local storage for existing valid session
                     const savedAuth = localStorage.getItem(`scanner_auth_${bId}`);
