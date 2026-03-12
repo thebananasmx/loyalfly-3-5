@@ -133,7 +133,7 @@ const ScannerModePage: React.FC = () => {
     };
 
     const handleDelete = () => {
-        setPinInput(prev => prev.slice(0, -1));
+        setPinInput('');
         setPinError(false);
     };
 
