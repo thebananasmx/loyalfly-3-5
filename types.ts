@@ -32,6 +32,19 @@ export interface Business {
   cardSettings: any;
   surveySettings: any;
   scannerPin?: string;
+  isTrial?: boolean;
+  trialEndDate?: any;
+  hasUsedTrial?: boolean;
+  lastPromoShownAt?: any;
+}
+
+export interface PromotionSettings {
+  isActive: boolean;
+  title: string;
+  message: string;
+  imageUrl: string;
+  frequencyDays: number;
+  updatedAt: any;
 }
 
 export interface BlogPost {

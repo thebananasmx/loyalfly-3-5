@@ -11,12 +11,17 @@ import {
     getCustomerByPhone,
     createNewCustomer,
     getBusinessData,
-    getCustomerById
+    getCustomerById,
+    getPromotionSettings,
+    activateTrial,
+    updateLastPromoShownAt
 } from '../services/firebaseService';
-import type { Customer, Business } from '../types';
+import type { Customer, Business, PromotionSettings } from '../types';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import ConfirmationModal from '../components/ConfirmationModal';
+import PromotionModal from '../components/PromotionModal';
+import TrialCountdownBanner from '../components/TrialCountdownBanner';
 import { useTranslation } from 'react-i18next';
 
 const UserPlusIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 11a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1v-1z" /></svg>;
@@ -81,6 +86,8 @@ const DashboardPage: React.FC = () => {
     
     const [customers, setCustomers] = useState<Customer[]>([]);
     const [businessData, setBusinessData] = useState<Business | null>(null);
+    const [promoSettings, setPromoSettings] = useState<PromotionSettings | null>(null);
+    const [showPromoModal, setShowPromoModal] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(true);
     const [isSearching, setIsSearching] = useState(false);
@@ -130,11 +137,38 @@ const DashboardPage: React.FC = () => {
     };
     
     useEffect(() => {
-        document.title = 'Dashboard | Loyalfly App';
         if (user) {
             fetchInitialData();
         }
     }, [user]);
+
+    useEffect(() => {
+        const checkPromotion = async () => {
+            if (!businessData || businessData.plan !== 'Gratis' || businessData.hasUsedTrial) return;
+
+            try {
+                const settings = await getPromotionSettings();
+                if (settings && settings.isActive) {
+                    setPromoSettings(settings);
+                    
+                    // Check frequency
+                    const lastShown = businessData.lastPromoShownAt?.toDate ? businessData.lastPromoShownAt.toDate() : new Date(0);
+                    const now = new Date();
+                    const diffDays = Math.floor((now.getTime() - lastShown.getTime()) / (1000 * 60 * 60 * 24));
+                    
+                    if (diffDays >= (settings.frequencyDays || 7)) {
+                        setShowPromoModal(true);
+                    }
+                }
+            } catch (error) {
+                console.error("Error checking promotion:", error);
+            }
+        };
+
+        if (businessData) {
+            checkPromotion();
+        }
+    }, [businessData]);
 
     useEffect(() => {
         const performSearch = async () => {
@@ -272,6 +306,30 @@ const DashboardPage: React.FC = () => {
             setIsUpdating(false);
             setIsRedeemModalOpen(false);
             setSelectedCustomer(null);
+        }
+    };
+
+    const handleActivateTrial = async () => {
+        if (!user) return;
+        try {
+            await activateTrial(user.uid);
+            showToast('¡Prueba de 30 días activada! Bienvenido al plan Entrepreneur.', 'success');
+            setShowPromoModal(false);
+            fetchInitialData();
+        } catch (error) {
+            console.error("Error activating trial:", error);
+            showToast('Error al activar la prueba. Inténtalo de nuevo.', 'error');
+        }
+    };
+
+    const handleClosePromo = async () => {
+        setShowPromoModal(false);
+        if (user) {
+            try {
+                await updateLastPromoShownAt(user.uid);
+            } catch (error) {
+                console.error("Error updating last promo shown at:", error);
+            }
         }
     };
 
@@ -586,6 +644,9 @@ const DashboardPage: React.FC = () => {
 
     return (
         <div>
+            {businessData?.isTrial && businessData?.trialEndDate && (
+                <TrialCountdownBanner trialEndDate={businessData.trialEndDate} />
+            )}
             {isLimitReached && businessData?.plan && businessData.plan !== 'Pro' && (
                 <AlertBar plan={businessData.plan} />
             )}
@@ -815,6 +876,15 @@ const DashboardPage: React.FC = () => {
                         )}
                     </div>
                 </div>
+            )}
+
+            {promoSettings && (
+                <PromotionModal
+                    isOpen={showPromoModal}
+                    onClose={handleClosePromo}
+                    onActivate={handleActivateTrial}
+                    settings={promoSettings}
+                />
             )}
 
             {isScannerOpen && (

@@ -1,0 +1,46 @@
+{
+  "entities": {
+    "Business": {
+      "title": "Business",
+      "description": "A business using the Loyalfly platform.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "slug": { "type": "string" },
+        "plan": { "type": "string", "enum": ["Gratis", "Entrepreneur", "Pro"] },
+        "customerCount": { "type": "number" },
+        "isTrial": { "type": "boolean" },
+        "trialEndDate": { "type": "object" },
+        "hasUsedTrial": { "type": "boolean" },
+        "lastPromoShownAt": { "type": "object" }
+      },
+      "required": ["id", "name", "email", "slug"]
+    },
+    "PromotionSettings": {
+      "title": "PromotionSettings",
+      "description": "Global settings for promotional popups.",
+      "type": "object",
+      "properties": {
+        "isActive": { "type": "boolean" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "frequencyDays": { "type": "number" },
+        "updatedAt": { "type": "object" }
+      },
+      "required": ["isActive", "title", "message", "frequencyDays"]
+    }
+  },
+  "firestore": {
+    "/businesses/{businessId}": {
+      "schema": "Business",
+      "description": "Business profile and settings."
+    },
+    "/settings/promotion": {
+      "schema": "PromotionSettings",
+      "description": "Global promotion settings."
+    }
+  }
+}

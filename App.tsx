@@ -39,6 +39,7 @@ import AdminBlogEditorPage from './pages/AdminBlogEditorPage';
 import MetricasPage from './pages/MetricasPage';
 import AdminKpisPage from './pages/AdminKpisPage';
 import AdminKloyPage from './pages/AdminKloyPage';
+import AdminPromotionsPage from './pages/AdminPromotionsPage';
 import AccountSettingsPage from './pages/AccountSettingsPage';
 import AdminBusinessDetailPage from './pages/AdminBusinessDetailPage';
 import ScannerModePage from './pages/ScannerModePage';
@@ -120,6 +121,7 @@ function App() {
             <Route path="blog" element={<AdminBlogListPage />} />
             <Route path="blog/nuevo" element={<AdminBlogEditorPage />} />
             <Route path="blog/editar/:postId" element={<AdminBlogEditorPage />} />
+            <Route path="marketing" element={<AdminPromotionsPage />} />
           </Route>
 
         </Routes>

@@ -1,0 +1,88 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Funciones de ayuda
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isBusinessOwner(businessId) {
+      return isAuthenticated() && request.auth.uid == businessId;
+    }
+    
+    function isSuperAdmin() {
+      return isAuthenticated() && 
+        exists(/databases/$(database)/documents/super_admins/$(request.auth.uid));
+    }
+
+    // Slugs de los negocios
+    match /businessSlugs/{slug} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Registros de nuevos negocios (Zapier)
+    match /new_business_registrations/{docId} {
+      allow create: if isAuthenticated();
+      allow read: if isSuperAdmin();
+    }
+
+    // Super Admins
+    match /super_admins/{userId} {
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+      allow write: if false;
+    }
+
+    // Negocios
+    match /businesses/{businessId} {
+      // Permitir 'get' para que el público vea la info básica del negocio
+      allow get: if true; 
+      // Solo super admins pueden listar todos los negocios
+      allow list: if isSuperAdmin();
+      allow write: if isBusinessOwner(businessId) || isSuperAdmin();
+      
+      // Configuración de tarjeta y encuestas
+      match /config/{configId} {
+        allow read: if true;
+        allow write: if isBusinessOwner(businessId) || isSuperAdmin();
+      }
+      
+      // Clientes
+      match /customers/{customerId} {
+        // Permitir lectura y creación pública para el flujo de tarjeta digital
+        allow read, create: if true; 
+        // Permitir actualización pública para que el escáner (que usa PIN) funcione
+        allow update: if true;
+        allow delete: if isBusinessOwner(businessId) || isSuperAdmin();
+        
+        match /transactions/{transactionId} {
+          allow read: if true;
+          allow write: if true;
+        }
+      }
+      
+      // Respuestas de encuestas
+      match /surveyResponses/{responseId} {
+        // CORRECCIÓN CRÍTICA: Permitir lectura pública para verificar si ya votó
+        // Antes estaba restringido solo a dueños, lo que bloqueaba la vista pública
+        allow read: if true; 
+        allow write: if true; 
+      }
+    }
+    
+    // Blogs
+    match /blogPosts/{postId} {
+      allow read: if true;
+      allow write: if isSuperAdmin();
+    }
+
+    // Configuración de Marketing (Popups, Promociones)
+    match /marketing_settings/{docId} {
+      // Todos los negocios autenticados necesitan leer esto para saber si mostrar el popup
+      allow read: if isAuthenticated();
+      // Solo el Super Admin puede crear o editar promociones
+      allow write: if isSuperAdmin();
+    }
+  }
+}

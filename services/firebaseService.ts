@@ -34,7 +34,7 @@ import {
   uploadString,
   getDownloadURL
 } from "@firebase/storage";
-import type { Customer, Business, BlogPost } from '../types';
+import type { Customer, Business, BlogPost, PromotionSettings } from '../types';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAnW9n-Ou53G1RmD0amMXJfQ_OadfefVug",
@@ -886,7 +886,6 @@ export const getBusinessMetrics = async (businessId: string): Promise<BusinessMe
         count: customerGrowth[monthKey] || 0
     }));
 
-
     const topCustomers = [...customers]
         .sort((a, b) => (b.stamps || 0) - (a.stamps || 0))
         .slice(0, 5);
@@ -898,4 +897,41 @@ export const getBusinessMetrics = async (businessId: string): Promise<BusinessMe
         newCustomersByMonth,
         topCustomers
     };
+};
+
+// --- PROMOTION FUNCTIONS ---
+
+export const getPromotionSettings = async (): Promise<PromotionSettings | null> => {
+    const promoDocRef = doc(db, "settings", "promotion");
+    const promoSnap = await getDoc(promoDocRef);
+    if (promoSnap.exists()) {
+        return promoSnap.data() as PromotionSettings;
+    }
+    return null;
+};
+
+export const updatePromotionSettings = async (settings: Partial<PromotionSettings>) => {
+    const promoDocRef = doc(db, "settings", "promotion");
+    await setDoc(promoDocRef, { ...settings, updatedAt: serverTimestamp() }, { merge: true });
+};
+
+export const activateTrial = async (businessId: string) => {
+    const businessDocRef = doc(db, "businesses", businessId);
+    const trialEndDate = new Date();
+    trialEndDate.setDate(trialEndDate.getDate() + 30);
+    
+    await updateDoc(businessDocRef, {
+        plan: 'Entrepreneur',
+        isTrial: true,
+        trialEndDate: Timestamp.fromDate(trialEndDate),
+        hasUsedTrial: true,
+        lastPromoShownAt: serverTimestamp()
+    });
+};
+
+export const updateLastPromoShownAt = async (businessId: string) => {
+    const businessDocRef = doc(db, "businesses", businessId);
+    await updateDoc(businessDocRef, {
+        lastPromoShownAt: serverTimestamp()
+    });
 };
