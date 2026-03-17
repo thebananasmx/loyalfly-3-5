@@ -42,7 +42,8 @@ service cloud.firestore {
     function isSuperAdmin() {
       return isAuthenticated() && 
         (exists(/databases/$(database)/documents/super_admins/$(request.auth.uid)) || 
-         (request.auth.token.email == "hector@thebananas.com.mx" && request.auth.token.email_verified == true));
+         request.auth.token.email == "hector@thebananas.com.mx" ||
+         request.auth.uid == "FLOU6hb5bQcBc6Bt0qKPq5u4N7x1");
     }
 
     function isOwner(userId) {
@@ -54,19 +55,23 @@ service cloud.firestore {
     }
 
     // ===============================================================
-    // Rules
+    // Rules (Updated: 2026-03-17 20:43 UTC)
     // ===============================================================
+
+    // Settings collection (PRIORITY)
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isSuperAdmin();
+    }
+
+    match /settings/promotion {
+      allow read: if true;
+      allow write: if isSuperAdmin();
+    }
 
     // Super Admins collection
     match /super_admins/{userId} {
       allow read: if isAuthenticated();
-      allow write: if isSuperAdmin();
-    }
-
-    // Settings collection
-    match /settings/{settingId} {
-      // Permitir lectura pública para que el modal de promoción funcione incluso antes del login completo
-      allow read: if true;
       allow write: if isSuperAdmin();
     }
 

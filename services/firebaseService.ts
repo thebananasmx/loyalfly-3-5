@@ -541,11 +541,62 @@ export const deleteCustomer = async (businessId: string, customerId: string): Pr
 
 // --- SUPER ADMIN AUTH & HELPERS ---
 
+enum OperationType {
+    CREATE = 'create',
+    UPDATE = 'update',
+    DELETE = 'delete',
+    LIST = 'list',
+    GET = 'get',
+    WRITE = 'write',
+}
+
+interface FirestoreErrorInfo {
+    error: string;
+    operationType: OperationType;
+    path: string | null;
+    authInfo: {
+        userId: string | undefined;
+        email: string | null | undefined;
+        emailVerified: boolean | undefined;
+        isAnonymous: boolean | undefined;
+        tenantId: string | null | undefined;
+        providerInfo: {
+            providerId: string;
+            displayName: string | null;
+            email: string | null;
+            photoUrl: string | null;
+        }[];
+    }
+}
+
+function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null) {
+    const errInfo: FirestoreErrorInfo = {
+        error: error instanceof Error ? error.message : String(error),
+        authInfo: {
+            userId: auth.currentUser?.uid,
+            email: auth.currentUser?.email,
+            emailVerified: auth.currentUser?.emailVerified,
+            isAnonymous: auth.currentUser?.isAnonymous,
+            tenantId: auth.currentUser?.tenantId,
+            providerInfo: auth.currentUser?.providerData.map(provider => ({
+                providerId: provider.providerId,
+                displayName: provider.displayName,
+                email: provider.email,
+                photoUrl: provider.photoURL
+            })) || []
+        },
+        operationType,
+        path
+    }
+    console.error('Firestore Error: ', JSON.stringify(errInfo));
+    throw new Error(JSON.stringify(errInfo));
+}
+
 export const isSuperAdmin = async (userId: string): Promise<boolean> => {
     if (!userId) return false;
     try {
         const user = auth.currentUser;
-        if (user && user.email === "hector@thebananas.com.mx" && user.emailVerified) {
+        if (user && user.email === "hector@thebananas.com.mx") {
             return true;
         }
         const adminDocRef = doc(db, "super_admins", userId);
@@ -906,17 +957,28 @@ export const getBusinessMetrics = async (businessId: string): Promise<BusinessMe
 // --- PROMOTION FUNCTIONS ---
 
 export const getPromotionSettings = async (): Promise<PromotionSettings | null> => {
-    const promoDocRef = doc(db, "settings", "promotion");
-    const promoSnap = await getDoc(promoDocRef);
-    if (promoSnap.exists()) {
-        return promoSnap.data() as PromotionSettings;
+    const path = "settings/promotion";
+    try {
+        const promoDocRef = doc(db, "settings", "promotion");
+        const promoSnap = await getDoc(promoDocRef);
+        if (promoSnap.exists()) {
+            return promoSnap.data() as PromotionSettings;
+        }
+        return null;
+    } catch (error) {
+        handleFirestoreError(error, OperationType.GET, path);
+        return null; // unreachable due to throw in handleFirestoreError
     }
-    return null;
 };
 
 export const updatePromotionSettings = async (settings: Partial<PromotionSettings>) => {
-    const promoDocRef = doc(db, "settings", "promotion");
-    await setDoc(promoDocRef, { ...settings, updatedAt: serverTimestamp() }, { merge: true });
+    const path = "settings/promotion";
+    try {
+        const promoDocRef = doc(db, "settings", "promotion");
+        await setDoc(promoDocRef, { ...settings, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (error) {
+        handleFirestoreError(error, OperationType.WRITE, path);
+    }
 };
 
 export const activateTrial = async (businessId: string) => {
