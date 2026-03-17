@@ -61,7 +61,7 @@ const RefundsPage: React.FC = () => {
         <section>
             <h2 className="text-xl font-semibold text-black mb-3">{t('legal.refundsContactTitle')}</h2>
             <p>
-                {t('legal.refundsContactDesc')} <a href="mailto:hector@thebananas.com.mx" className="text-[#4D17FF] font-bold underline">hector@thebananas.com.mx</a>.
+                {t('legal.refundsContactDesc')} <a href="mailto:contacto@loyalfly.com.mx" className="text-[#4D17FF] font-bold underline">contacto@loyalfly.com.mx</a>.
             </p>
         </section>
       </div>

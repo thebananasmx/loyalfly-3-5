@@ -20,7 +20,7 @@ const TermsPage: React.FC = () => {
     <div className="max-w-3xl">
         <h1 className="text-3xl font-bold text-black mb-6 tracking-tight">Términos y Condiciones del Servicio</h1>
         <div className="prose prose-lg text-gray-700 space-y-4">
-          <p className='text-sm text-gray-500'>Última actualización: 9 de Octubre de 2025</p>
+          <p className='text-sm text-gray-500'>Última actualización: 17 de Marzo de 2026</p>
           <p>
             Bienvenido a Loyalfly. Estos Términos y Condiciones rigen el uso de nuestra plataforma tecnológica. Al utilizar nuestros servicios, usted acepta estos términos en su totalidad.
           </p>
@@ -80,6 +80,16 @@ const TermsPage: React.FC = () => {
           <p>
             Estos términos se regirán e interpretarán de acuerdo con las leyes de los Estados Unidos Mexicanos. Para cualquier controversia, las partes se someten a la jurisdicción de los tribunales competentes de la Ciudad de México, renunciando a cualquier otro fuero que pudiera corresponderles.
           </p>
+
+          <h2 className="text-2xl font-semibold text-black">7. Uso de Marca y Marketing</h2>
+          <p>
+            Al registrarse en Loyalfly, el Negocio autoriza a Loyalfly el uso de su nombre comercial, logotipos e imágenes de marca con fines promocionales y de marketing. Esto incluye, pero no se limita a, su exhibición en nuestro sitio web, redes sociales, presentaciones comerciales y otras activaciones de marketing de Loyalfly, con el fin de mostrar al Negocio como usuario de nuestra plataforma. Este uso se realiza de conformidad con la Ley Federal de Protección a la Propiedad Industrial (LFPPI) de México.
+          </p>
+          <ul>
+            <li><strong>Buen Uso</strong>: Loyalfly se compromete a no alterar los logotipos y a utilizarlos de manera que no afecte el prestigio o la reputación del Negocio.</li>
+            <li><strong>Titularidad y Responsabilidad</strong>: El Negocio garantiza que es el titular legítimo de los derechos de propiedad industrial (marcas, logotipos, nombres comerciales) que proporciona a la plataforma, o que cuenta con las autorizaciones necesarias para su uso. El Negocio asume total responsabilidad legal ante cualquier reclamación de terceros por el uso de dichos activos, deslindando a Loyalfly de cualquier responsabilidad derivada de infracciones a derechos de propiedad intelectual.</li>
+            <li><strong>Vigencia</strong>: Esta autorización estará vigente mientras el Negocio mantenga una cuenta activa en la plataforma o hasta que se solicite su revocación por escrito al correo <a href="mailto:contacto@loyalfly.com.mx" className="text-[#4D17FF] font-bold underline">contacto@loyalfly.com.mx</a>.</li>
+          </ul>
         </div>
     </div>
   );

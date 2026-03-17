@@ -66,12 +66,12 @@ export const es = {
     refunds: "Reembolsos",
     lastUpdated: "Última actualización",
     cancellationsTitle: "Política de Cancelaciones",
-    cancellationsIntro: "En Loyalfly queremos que el proceso sea lo más sencillo posible. Para solicitar la cancelación de cualquier plan de pago (Entrepreneur o Pro), el proceso es el siguiente:",
-    cancellationsEmailProcess: "Debe contactar a nuestro equipo de servicio al cliente mediante correo electrónico.",
-    cancellationsEmailAddress: "Envíe su solicitud a",
-    cancellationsDetail: "Incluya en el correo el nombre de su negocio y el correo electrónico asociado a la cuenta.",
+    cancellationsIntro: "Puedes cancelar tu suscripción en cualquier momento entrando al dashboard de negocio. En la sección de ajustes (en la flecha junto al nombre de tu negocio), busca la opción 'Suscripción' y 'Cancelar suscripción'. Serás redirigido a tu cuenta en Stripe con el mismo correo que registraste el pago y ahí podrás cancelar la suscripción.",
+    cancellationsEmailProcess: "",
+    cancellationsEmailAddress: "",
+    cancellationsDetail: "",
     cancellationsTimeframeTitle: "Tiempos de procesamiento",
-    cancellationsTimeframeDesc: "Una vez recibida su solicitud por correo electrónico, nuestro equipo procesará la cancelación en un plazo máximo de 24 horas hábiles. Recibirá una confirmación por la misma vía una vez que la suscripción haya sido dada de baja.",
+    cancellationsTimeframeDesc: "Si en 24hrs el cambio de tu plan no se ha ejecutado nos contactes al email <1>contacto@loyalfly.com.mx</1> con el asunto cancelacion, Recibirá una confirmación por la misma vía una vez que la suscripción haya sido dada de baja.",
     cancellationsAccessTitle: "Acceso al servicio tras la cancelación",
     cancellationsAccessDesc: "Tras procesar la cancelación, su cuenta volverá automáticamente al Plan Gratis al finalizar su periodo de facturación actual, o podrá ser desactivada según su preferencia. Los datos de sus clientes se mantendrán seguros de acuerdo a nuestras políticas de retención de datos.",
     refundsTitle: "Política de Reembolsos",
@@ -154,7 +154,7 @@ export const es = {
     registrationDisclaimer: {
       prefix: "Al dar clic en Crear cuenta aceptas los ",
       link: "términos de uso",
-      suffix: ", términos y condiciones, política de privacidad, y recibir ofertas, novedades y actualizaciones del servicio de Loyalfly."
+      suffix: ", términos y condiciones, política de privacidad, uso de marca para marketing, y recibir ofertas, novedades y actualizaciones del servicio de Loyalfly."
     }
   },
   dashboard: {
@@ -387,13 +387,12 @@ export const en = {
     cancellations: "Cancellations",
     refunds: "Refunds",
     lastUpdated: "Last updated",
-    cancellationsTitle: "Cancellation Policy",
-    cancellationsIntro: "At Loyalfly, we want the process to be as simple as possible. To request a cancellation for any paid plan (Entrepreneur or Pro), the process is as follows:",
-    cancellationsEmailProcess: "You must contact our customer service team via email.",
-    cancellationsEmailAddress: "Send your request to",
-    cancellationsDetail: "Include your business name and the email address associated with the account in the email.",
+    cancellationsIntro: "You can cancel your subscription at any time by entering the business dashboard. In the settings section (in the arrow next to your business name), look for the 'Subscription' and 'Cancel subscription' option. You will be redirected to your Stripe account with the same email you registered the payment with, and there you can cancel the subscription.",
+    cancellationsEmailProcess: "",
+    cancellationsEmailAddress: "",
+    cancellationsDetail: "",
     cancellationsTimeframeTitle: "Processing Times",
-    cancellationsTimeframeDesc: "Once your request is received by email, our team will process the cancellation within a maximum period of 24 business hours. You will receive a confirmation via the same method once the subscription has been cancelled.",
+    cancellationsTimeframeDesc: "If in 24 hours the change of your plan has not been executed, please contact us at <1>contacto@loyalfly.com.mx</1> with the subject 'cancellation'. You will receive a confirmation via the same method once the subscription has been cancelled.",
     cancellationsAccessTitle: "Service Access After Cancellation",
     cancellationsAccessDesc: "After processing the cancellation, your account will automatically return to the Free Plan at the end of your current billing period, or it can be deactivated according to your preference. Your customer data will remain secure in accordance with our data retention policies.",
     refundsTitle: "Refund Policy",
@@ -476,7 +475,7 @@ export const en = {
     registrationDisclaimer: {
       prefix: "By clicking Create Account, you accept the ",
       link: "terms of use",
-      suffix: ", terms and conditions, privacy policy, and to receive offers, news and service updates from Loyalfly."
+      suffix: ", terms and conditions, privacy policy, brand usage for marketing, and to receive offers, news and service updates from Loyalfly."
     }
   },
   dashboard: {
@@ -711,11 +710,11 @@ export const pt = {
     lastUpdated: "Última atualização",
     cancellationsTitle: "Política de Cancelamento",
     cancellationsIntro: "No Loyalfly, queremos que o processo seja o mais simples posible. Para solicitar o cancelamento de qualquer plano pago (Entrepreneur ou Pro), o processo é o siguiente:",
-    cancellationsEmailProcess: "Você deve entrar em contato com nossa equipe de atendimento ao cliente por e-mail.",
-    cancellationsEmailAddress: "Envie sua solicitação para",
-    cancellationsDetail: "Inclua o nome da sua empresa e o endereço de e-mail associado à conta no e-mail.",
+    cancellationsEmailProcess: "",
+    cancellationsEmailAddress: "",
+    cancellationsDetail: "",
     cancellationsTimeframeTitle: "Prazos de processamento",
-    cancellationsTimeframeDesc: "Assim que sua solicitação for recebida por e-mail, nossa equipe processará o cancelamento em um prazo máximo de 24 horas úteis. Você receberá uma confirmação pelo mesmo meio assim que a assinatura for cancelada.",
+    cancellationsTimeframeDesc: "Se em 24 horas a alteração do seu plano não for executada, contacte-nos através do email <1>contacto@loyalfly.com.mx</1> com o assunto 'cancelamento'. Você receberá uma confirmação pelo mesmo meio assim que a assinatura for cancelada.",
     cancellationsAccessTitle: "Acesso ao serviço após o cancelamento",
     cancellationsAccessDesc: "Após processar o cancelamento, sua conta retornará automaticamente ao Plano Gratuito no final do seu período de faturamento atual, ou poderá ser desativada de acordo com sua preferência. Os dados de seus clientes permanecerão seguros de acordo com nossas políticas de retenção de dados.",
     refundsTitle: "Política de Reembolso",
@@ -798,7 +797,7 @@ export const pt = {
     registrationDisclaimer: {
       prefix: "Ao clicar em Criar Conta, você aceita os ",
       link: "termos de uso",
-      suffix: ", termos e condições, política de privacidade e em receber ofertas, novidades e atualizaciones do serviço da Loyalfly."
+      suffix: ", termos e condições, política de privacidade, uso da marca para marketing e em receber ofertas, novidades e atualizaciones do serviço da Loyalfly."
     }
   },
   dashboard: {
