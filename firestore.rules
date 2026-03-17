@@ -1,88 +1,138 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: businesses
+    // Document ID: businessId (User UID)
+    // Fields:
+    //   - name: string (required)
+    //   - email: string (required)
+    //   - slug: string (required)
+    //   - plan: string (Gratis, Entrepreneur, Pro)
+    //   - isTrial: bool
+    //   - trialEndDate: timestamp
+    //   - hasUsedTrial: bool
+    //   - lastPromoShownAt: timestamp
+    //
+    // Collection: settings
+    // Document ID: promotion
+    // Fields:
+    //   - isActive: bool
+    //   - title: string
+    //   - message: string
+    //   - imageUrl: string
+    //   - frequencyDays: number
+    //
+    // Collection: super_admins
+    // Document ID: userId
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
     
-    // Funciones de ayuda
     function isAuthenticated() {
       return request.auth != null;
     }
-    
-    function isBusinessOwner(businessId) {
-      return isAuthenticated() && request.auth.uid == businessId;
-    }
-    
+
     function isSuperAdmin() {
       return isAuthenticated() && 
-        exists(/databases/$(database)/documents/super_admins/$(request.auth.uid));
+        (exists(/databases/$(database)/documents/super_admins/$(request.auth.uid)) || 
+         (request.auth.token.email == "hector@thebananas.com.mx" && request.auth.token.email_verified == true));
     }
 
-    // Slugs de los negocios
-    match /businessSlugs/{slug} {
-      allow read: if true;
-      allow write: if isAuthenticated();
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
     }
 
-    // Registros de nuevos negocios (Zapier)
-    match /new_business_registrations/{docId} {
-      allow create: if isAuthenticated();
-      allow read: if isSuperAdmin();
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
     }
 
-    // Super Admins
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    // Super Admins collection
     match /super_admins/{userId} {
-      allow read: if isAuthenticated() && request.auth.uid == userId;
-      allow write: if false;
+      allow read: if isAuthenticated();
+      allow write: if isSuperAdmin();
     }
 
-    // Negocios
+    // Settings collection
+    match /settings/{settingId} {
+      // Permitir lectura pública para que el modal de promoción funcione incluso antes del login completo
+      allow read: if true;
+      allow write: if isSuperAdmin();
+    }
+
+    // Businesses collection
     match /businesses/{businessId} {
-      // Permitir 'get' para que el público vea la info básica del negocio
-      allow get: if true; 
-      // Solo super admins pueden listar todos los negocios
-      allow list: if isSuperAdmin();
-      allow write: if isBusinessOwner(businessId) || isSuperAdmin();
+      // Permitir 'get' público para la tarjeta digital y el scanner
+      allow get: if true;
+      // Solo el dueño o super admin pueden listar o leer todo el documento (incluyendo campos sensibles si los hubiera)
+      allow read: if isOwner(businessId) || isSuperAdmin();
       
-      // Configuración de tarjeta y encuestas
+      // Allow business owner to update specific fields related to promotion and trial
+      allow update: if isOwner(businessId) && 
+        (
+          // Case 1: Updating lastPromoShownAt
+          (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['lastPromoShownAt'])) ||
+          // Case 2: Activating trial
+          (
+            request.resource.data.diff(resource.data).affectedKeys().hasOnly(['plan', 'isTrial', 'trialEndDate', 'hasUsedTrial', 'lastPromoShownAt']) &&
+            request.resource.data.plan == 'Entrepreneur' &&
+            request.resource.data.isTrial == true &&
+            request.resource.data.hasUsedTrial == true &&
+            resource.data.hasUsedTrial != true // Prevent re-using trial
+          )
+        );
+      
+      allow write: if isSuperAdmin();
+      
+      // Subcollections
       match /config/{configId} {
-        allow read: if true;
-        allow write: if isBusinessOwner(businessId) || isSuperAdmin();
+        allow read: if true; // Publicly readable for the digital card
+        allow write: if isOwner(businessId) || isSuperAdmin();
       }
-      
-      // Clientes
+
       match /customers/{customerId} {
-        // Permitir lectura y creación pública para el flujo de tarjeta digital
-        allow read, create: if true; 
-        // Permitir actualización pública para que el escáner (que usa PIN) funcione
-        allow update: if true;
-        allow delete: if isBusinessOwner(businessId) || isSuperAdmin();
-        
+        allow read, create: if true; // Public for digital card registration
+        allow update: if true; // Public for scanner (PIN validation)
+        allow delete: if isOwner(businessId) || isSuperAdmin();
+
         match /transactions/{transactionId} {
           allow read: if true;
           allow write: if true;
         }
       }
-      
-      // Respuestas de encuestas
+
       match /surveyResponses/{responseId} {
-        // CORRECCIÓN CRÍTICA: Permitir lectura pública para verificar si ya votó
-        // Antes estaba restringido solo a dueños, lo que bloqueaba la vista pública
-        allow read: if true; 
-        allow write: if true; 
+        allow read: if true;
+        allow write: if true;
       }
     }
-    
-    // Blogs
-    match /blogPosts/{postId} {
+
+    // Slugs collection
+    match /businessSlugs/{slug} {
+      allow read: if true; // Publicly readable for routing
+      allow write: if isAuthenticated() || isSuperAdmin();
+    }
+
+    // Blog posts
+    match /blog_posts/{postId} {
       allow read: if true;
       allow write: if isSuperAdmin();
     }
 
-    // Configuración de Marketing (Popups, Promociones)
-    match /marketing_settings/{docId} {
-      // Todos los negocios autenticados necesitan leer esto para saber si mostrar el popup
-      allow read: if isAuthenticated();
-      // Solo el Super Admin puede crear o editar promociones
-      allow write: if isSuperAdmin();
+    // Zapier triggers
+    match /new_business_registrations/{id} {
+      allow create: if isAuthenticated();
+      allow read, update, delete: if isSuperAdmin();
     }
   }
 }
