@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Clock, ArrowRight, Sparkles } from 'lucide-react';
+import { Clock, ArrowRight } from 'lucide-react';
 
 interface TrialCountdownBannerProps {
     trialEndDate: any; // Firebase Timestamp
@@ -32,14 +32,8 @@ const TrialCountdownBanner: React.FC<TrialCountdownBannerProps> = ({ trialEndDat
         <motion.div
             initial={{ y: -50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="bg-gradient-to-r from-[#4D17FF] via-[#7B52FF] to-[#4D17FF] text-white py-3 px-4 sm:px-6 shadow-lg relative overflow-hidden"
+            className="bg-[#4D17FF] text-white py-3 px-4 sm:px-6 shadow-lg relative overflow-hidden"
         >
-            {/* Animated Background Sparkles */}
-            <div className="absolute inset-0 pointer-events-none opacity-20">
-                <Sparkles className="absolute top-2 left-1/4 h-4 w-4 animate-pulse" />
-                <Sparkles className="absolute bottom-2 right-1/3 h-3 w-3 animate-pulse delay-700" />
-            </div>
-
             <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 relative z-10">
                 <div className="flex items-center space-x-3">
                     <div className="bg-white/20 p-1.5 rounded-lg backdrop-blur-md">
