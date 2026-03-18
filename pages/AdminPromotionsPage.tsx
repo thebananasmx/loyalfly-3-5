@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { getPromotionSettings, updatePromotionSettings, getBusinessesOnTrial, type BusinessAdminData } from '../services/firebaseService';
+import { getPromotionSettings, updatePromotionSettings, getBusinessesOnTrial, updateBusinessPlan, type BusinessAdminData } from '../services/firebaseService';
 import { useToast } from '../context/ToastContext';
-import { Calendar, Building2, Mail, Clock, Eye, Layout } from 'lucide-react';
+import { Calendar, Building2, Mail, Clock, Eye, Layout, X } from 'lucide-react';
 import type { PromotionSettings } from '../types';
 import PromotionModal from '../components/PromotionModal';
 import TrialCountdownBanner from '../components/TrialCountdownBanner';
+import ConfirmationModal from '../components/ConfirmationModal';
 
 const AdminPromotionsPage: React.FC = () => {
     const [settings, setSettings] = useState<PromotionSettings>({
@@ -19,6 +20,7 @@ const AdminPromotionsPage: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [isModalPreviewOpen, setIsModalPreviewOpen] = useState(false);
+    const [businessToRevoke, setBusinessToRevoke] = useState<BusinessAdminData | null>(null);
     const { showToast } = useToast();
 
     // Mock date for banner preview (30 days from now)
@@ -68,6 +70,20 @@ const AdminPromotionsPage: React.FC = () => {
             showToast('Error al guardar la configuración.', 'error');
         } finally {
             setSaving(false);
+        }
+    };
+
+    const handleRevokeTrial = async () => {
+        if (!businessToRevoke) return;
+        try {
+            await updateBusinessPlan(businessToRevoke.id, 'Gratis');
+            showToast('Prueba revocada con éxito.', 'success');
+            setBusinessesOnTrial(prev => prev.filter(b => b.id !== businessToRevoke.id));
+        } catch (error) {
+            console.error("Error revoking trial:", error);
+            showToast('Error al revocar la prueba.', 'error');
+        } finally {
+            setBusinessToRevoke(null);
         }
     };
 
@@ -252,6 +268,7 @@ const AdminPromotionsPage: React.FC = () => {
                                         <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Email</th>
                                         <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Días Restantes</th>
                                         <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Estado</th>
+                                        <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest text-right">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-50">
@@ -283,6 +300,15 @@ const AdminPromotionsPage: React.FC = () => {
                                                         {daysLeft > 0 ? 'Activo' : 'Vencido'}
                                                     </span>
                                                 </td>
+                                                <td className="px-6 py-4 text-right">
+                                                    <button
+                                                        onClick={() => setBusinessToRevoke(business)}
+                                                        className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                                        title="Revocar Prueba"
+                                                    >
+                                                        <X className="h-5 w-5" />
+                                                    </button>
+                                                </td>
                                             </tr>
                                         );
                                     })}
@@ -302,6 +328,17 @@ const AdminPromotionsPage: React.FC = () => {
                     setIsModalPreviewOpen(false);
                 }}
                 settings={settings}
+            />
+
+            {/* Confirmation Modal for Revoking Trial */}
+            <ConfirmationModal
+                isOpen={!!businessToRevoke}
+                onClose={() => setBusinessToRevoke(null)}
+                onConfirm={handleRevokeTrial}
+                title="Revocar Prueba"
+                message={`¿Estás seguro que quieres revocar la prueba para el negocio "${businessToRevoke?.name}"? Esto cambiará su plan a Gratis y reiniciará su estado de promoción.`}
+                confirmText="Aceptar"
+                cancelText="Cancelar"
             />
         </div>
     );
