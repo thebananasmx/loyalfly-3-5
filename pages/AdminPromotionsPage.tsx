@@ -234,7 +234,7 @@ const AdminPromotionsPage: React.FC = () => {
             <div className="space-y-4">
                 <div className="flex items-center space-x-2">
                     <Calendar className="h-6 w-6 text-[#4D17FF]" />
-                    <h2 className="text-2xl font-bold text-gray-900">Negocios en Periodo de Prueba</h2>
+                    <h2 className="text-2xl font-bold text-gray-900">Negocios</h2>
                 </div>
                 
                 <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
@@ -260,12 +260,7 @@ const AdminPromotionsPage: React.FC = () => {
                                         return (
                                             <tr key={business.id} className="hover:bg-gray-50 transition-colors">
                                                 <td className="px-6 py-4">
-                                                    <div className="flex items-center space-x-3">
-                                                        <div className="h-10 w-10 bg-[#4D17FF]/10 rounded-xl flex items-center justify-center">
-                                                            <Building2 className="h-5 w-5 text-[#4D17FF]" />
-                                                        </div>
-                                                        <span className="font-semibold text-gray-900">{business.name}</span>
-                                                    </div>
+                                                    <span className="font-semibold text-gray-900">{business.name}</span>
                                                 </td>
                                                 <td className="px-6 py-4">
                                                     <div className="flex items-center space-x-2 text-gray-500">

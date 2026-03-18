@@ -27,6 +27,7 @@ import {
   orderBy,
   limit,
   startAfter,
+  deleteField,
 } from "@firebase/firestore";
 import {
   getStorage,
@@ -712,7 +713,16 @@ export const getGlobalStats = async (): Promise<{ totalBusinesses: number; total
 
 export const updateBusinessPlan = async (businessId: string, plan: 'Gratis' | 'Entrepreneur' | 'Pro') => {
     const businessDocRef = doc(db, "businesses", businessId);
-    await updateDoc(businessDocRef, { plan });
+    const updates: any = { plan };
+
+    if (plan === 'Gratis') {
+        updates.isTrial = false;
+        updates.hasUsedTrial = false;
+        updates.trialEndDate = deleteField();
+        updates.lastPromoShownAt = deleteField();
+    }
+
+    await updateDoc(businessDocRef, updates);
 };
 
 export const deleteBusinessForSuperAdmin = async (businessId: string): Promise<void> => {
