@@ -956,6 +956,37 @@ export const getBusinessMetrics = async (businessId: string): Promise<BusinessMe
 
 // --- PROMOTION FUNCTIONS ---
 
+export const getBusinessesOnTrial = async (): Promise<BusinessAdminData[]> => {
+    const path = "businesses";
+    try {
+        const q = query(collection(db, "businesses"), where("isTrial", "==", true));
+        const querySnapshot = await getDocs(q);
+        const businesses: BusinessAdminData[] = [];
+        
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            businesses.push({
+                id: doc.id,
+                name: data.name || 'Sin nombre',
+                email: data.email || 'Sin email',
+                slug: data.slug || '',
+                plan: data.plan || 'Gratis',
+                customerCount: data.customerCount || 0,
+                totalStamps: data.totalStamps || 0,
+                totalRewards: data.totalRewards || 0,
+                isTrial: data.isTrial,
+                trialEndDate: data.trialEndDate,
+                hasUsedTrial: data.hasUsedTrial
+            });
+        });
+        
+        return businesses;
+    } catch (error) {
+        handleFirestoreError(error, OperationType.LIST, path);
+        return [];
+    }
+};
+
 export const getPromotionSettings = async (): Promise<PromotionSettings | null> => {
     const path = "settings/promotion";
     try {

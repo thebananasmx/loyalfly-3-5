@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { getPromotionSettings, updatePromotionSettings } from '../services/firebaseService';
+import { getPromotionSettings, updatePromotionSettings, getBusinessesOnTrial, type BusinessAdminData } from '../services/firebaseService';
 import { useToast } from '../context/ToastContext';
+import { Calendar, Building2, Mail, Clock } from 'lucide-react';
 import type { PromotionSettings } from '../types';
 
 const AdminPromotionsPage: React.FC = () => {
@@ -12,27 +13,42 @@ const AdminPromotionsPage: React.FC = () => {
         frequencyDays: 7,
         updatedAt: null
     });
+    const [businessesOnTrial, setBusinessesOnTrial] = useState<BusinessAdminData[]>([]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const { showToast } = useToast();
 
     useEffect(() => {
         document.title = 'Marketing & Popups | Super Admin';
-        const fetchSettings = async () => {
+        const fetchData = async () => {
             try {
-                const data = await getPromotionSettings();
-                if (data) {
-                    setSettings(data);
+                const [promoData, trialBusinesses] = await Promise.all([
+                    getPromotionSettings(),
+                    getBusinessesOnTrial()
+                ]);
+                
+                if (promoData) {
+                    setSettings(promoData);
                 }
+                setBusinessesOnTrial(trialBusinesses);
             } catch (error) {
-                console.error("Error fetching promotion settings:", error);
-                showToast('Error al cargar la configuración de promociones.', 'error');
+                console.error("Error fetching data:", error);
+                showToast('Error al cargar la información.', 'error');
             } finally {
                 setLoading(false);
             }
         };
-        fetchSettings();
+        fetchData();
     }, [showToast]);
+
+    const calculateDaysLeft = (endDate: any) => {
+        if (!endDate) return 0;
+        const end = endDate.toDate ? endDate.toDate() : new Date(endDate);
+        const now = new Date();
+        const diffTime = end.getTime() - now.getTime();
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return diffDays > 0 ? diffDays : 0;
+    };
 
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -177,6 +193,74 @@ const AdminPromotionsPage: React.FC = () => {
                             <li>La activación es manual por parte del usuario desde el popup.</li>
                         </ul>
                     </div>
+                </div>
+            </div>
+
+            {/* Lista de Negocios en Prueba */}
+            <div className="space-y-4">
+                <div className="flex items-center space-x-2">
+                    <Calendar className="h-6 w-6 text-[#4D17FF]" />
+                    <h2 className="text-2xl font-bold text-gray-900">Negocios en Periodo de Prueba</h2>
+                </div>
+                
+                <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+                    {businessesOnTrial.length === 0 ? (
+                        <div className="p-12 text-center">
+                            <Building2 className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                            <p className="text-gray-500 font-medium">No hay negocios activos en periodo de prueba actualmente.</p>
+                        </div>
+                    ) : (
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left border-collapse">
+                                <thead>
+                                    <tr className="bg-gray-50 border-b border-gray-100">
+                                        <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Negocio</th>
+                                        <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Email</th>
+                                        <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Días Restantes</th>
+                                        <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-50">
+                                    {businessesOnTrial.map((business) => {
+                                        const daysLeft = calculateDaysLeft(business.trialEndDate);
+                                        return (
+                                            <tr key={business.id} className="hover:bg-gray-50 transition-colors">
+                                                <td className="px-6 py-4">
+                                                    <div className="flex items-center space-x-3">
+                                                        <div className="h-10 w-10 bg-[#4D17FF]/10 rounded-xl flex items-center justify-center">
+                                                            <Building2 className="h-5 w-5 text-[#4D17FF]" />
+                                                        </div>
+                                                        <span className="font-semibold text-gray-900">{business.name}</span>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="flex items-center space-x-2 text-gray-500">
+                                                        <Mail className="h-4 w-4" />
+                                                        <span className="text-sm">{business.email}</span>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="flex items-center space-x-2">
+                                                        <Clock className={`h-4 w-4 ${daysLeft <= 5 ? 'text-red-500' : 'text-emerald-500'}`} />
+                                                        <span className={`font-bold ${daysLeft <= 5 ? 'text-red-600' : 'text-emerald-600'}`}>
+                                                            {daysLeft} días
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
+                                                        daysLeft > 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'
+                                                    }`}>
+                                                        {daysLeft > 0 ? 'Activo' : 'Vencido'}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
