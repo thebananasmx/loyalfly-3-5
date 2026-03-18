@@ -186,20 +186,20 @@ const AdminPromotionsPage: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end items-center space-x-4">
+                <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end items-center space-x-3 sm:space-x-4">
                     <button
                         type="button"
                         onClick={() => setIsModalPreviewOpen(true)}
-                        className="px-6 py-2.5 bg-white border border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-all shadow-sm flex items-center space-x-2"
+                        className="px-4 sm:px-6 py-2.5 bg-white border border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-all shadow-sm flex items-center space-x-2"
                     >
                         <Eye className="h-4 w-4" />
-                        <span>Preview Popup</span>
+                        <span>Preview</span>
                     </button>
 
                     <button
                         type="submit"
                         disabled={saving}
-                        className={`px-8 py-2.5 bg-black text-white font-semibold rounded-xl hover:bg-gray-800 transition-all shadow-sm flex items-center space-x-2 ${saving ? 'opacity-70 cursor-not-allowed' : ''}`}
+                        className={`px-6 sm:px-8 py-2.5 bg-black text-white font-semibold rounded-xl hover:bg-gray-800 transition-all shadow-sm flex items-center space-x-2 ${saving ? 'opacity-70 cursor-not-allowed' : ''}`}
                     >
                         {saving ? (
                             <>
@@ -207,7 +207,7 @@ const AdminPromotionsPage: React.FC = () => {
                                 <span>Guardando...</span>
                             </>
                         ) : (
-                            <span>Guardar Configuración</span>
+                            <span>Guardar</span>
                         )}
                     </button>
                 </div>
