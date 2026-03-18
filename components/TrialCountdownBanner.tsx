@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Clock, ArrowRight, Sparkles } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
 interface TrialCountdownBannerProps {
     trialEndDate: any; // Firebase Timestamp
@@ -52,13 +51,15 @@ const TrialCountdownBanner: React.FC<TrialCountdownBannerProps> = ({ trialEndDat
                 </div>
 
                 <div className="flex items-center space-x-4">
-                    <Link
-                        to="/app/settings"
+                    <a
+                        href="https://buy.stripe.com/3cI6oI2dX1Rrfpy9XP5c400"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="bg-white text-[#4D17FF] px-5 py-1.5 rounded-full text-sm font-bold hover:bg-gray-100 transition-all flex items-center space-x-2 group"
                     >
                         <span>Inicia tu suscripción Entrepreneur</span>
                         <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                    </Link>
+                    </a>
                 </div>
             </div>
         </motion.div>
