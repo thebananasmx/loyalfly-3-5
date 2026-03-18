@@ -67,7 +67,9 @@ const AdminPromotionsPage: React.FC = () => {
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#4D17FF]"></div>
+                <div className="animate-spin rounded-full h-10 w-10 border-2 border-gray-200 border-t-black" role="status">
+                    <span className="sr-only">Cargando...</span>
+                </div>
             </div>
         );
     }
