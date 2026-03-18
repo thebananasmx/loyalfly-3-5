@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { getPromotionSettings, updatePromotionSettings, getBusinessesOnTrial, type BusinessAdminData } from '../services/firebaseService';
 import { useToast } from '../context/ToastContext';
-import { Calendar, Building2, Mail, Clock } from 'lucide-react';
+import { Calendar, Building2, Mail, Clock, Eye, Layout } from 'lucide-react';
 import type { PromotionSettings } from '../types';
+import PromotionModal from '../components/PromotionModal';
+import TrialCountdownBanner from '../components/TrialCountdownBanner';
 
 const AdminPromotionsPage: React.FC = () => {
     const [settings, setSettings] = useState<PromotionSettings>({
@@ -16,7 +18,12 @@ const AdminPromotionsPage: React.FC = () => {
     const [businessesOnTrial, setBusinessesOnTrial] = useState<BusinessAdminData[]>([]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [isModalPreviewOpen, setIsModalPreviewOpen] = useState(false);
     const { showToast } = useToast();
+
+    // Mock date for banner preview (30 days from now)
+    const mockTrialEndDate = new Date();
+    mockTrialEndDate.setDate(mockTrialEndDate.getDate() + 30);
 
     useEffect(() => {
         document.title = 'Marketing & Popups | Super Admin';
@@ -76,9 +83,25 @@ const AdminPromotionsPage: React.FC = () => {
 
     return (
         <div className="max-w-4xl mx-auto space-y-8">
-            <div>
-                <h1 className="text-3xl font-bold text-black tracking-tight">Marketing / Popups</h1>
-                <p className="text-gray-500 mt-2">Administra el popup de promoción para negocios en plan Gratis.</p>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-3xl font-bold text-black tracking-tight">Marketing / Popups</h1>
+                    <p className="text-gray-500 mt-2">Administra el popup de promoción para negocios en plan Gratis.</p>
+                </div>
+            </div>
+
+            {/* Banner Preview Section */}
+            <div className="space-y-4">
+                <div className="flex items-center space-x-2">
+                    <Layout className="h-5 w-5 text-gray-400" />
+                    <h2 className="text-sm font-bold text-gray-400 uppercase tracking-widest">Vista Previa de la Barra de Prueba</h2>
+                </div>
+                <div className="rounded-2xl overflow-hidden border border-gray-200 shadow-sm">
+                    <TrialCountdownBanner trialEndDate={mockTrialEndDate} />
+                    <div className="bg-white p-4 text-center text-xs text-gray-400 italic">
+                        Así es como los negocios verán la barra superior una vez que acepten la prueba de 30 días.
+                    </div>
+                </div>
             </div>
 
             <form onSubmit={handleSave} className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
@@ -163,7 +186,16 @@ const AdminPromotionsPage: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end">
+                <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end items-center space-x-4">
+                    <button
+                        type="button"
+                        onClick={() => setIsModalPreviewOpen(true)}
+                        className="px-6 py-2.5 bg-white border border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-all shadow-sm flex items-center space-x-2"
+                    >
+                        <Eye className="h-4 w-4" />
+                        <span>Preview Popup</span>
+                    </button>
+
                     <button
                         type="submit"
                         disabled={saving}
@@ -265,6 +297,17 @@ const AdminPromotionsPage: React.FC = () => {
                     )}
                 </div>
             </div>
+
+            {/* Modal Preview */}
+            <PromotionModal 
+                isOpen={isModalPreviewOpen}
+                onClose={() => setIsModalPreviewOpen(false)}
+                onActivate={() => {
+                    showToast('Esto es solo una vista previa.', 'alert');
+                    setIsModalPreviewOpen(false);
+                }}
+                settings={settings}
+            />
         </div>
     );
 };
