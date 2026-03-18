@@ -643,9 +643,11 @@ const DashboardPage: React.FC = () => {
     );
 
     return (
-        <div>
+        <div className="flex flex-col h-full">
             {businessData?.isTrial && businessData?.trialEndDate && (
-                <TrialCountdownBanner trialEndDate={businessData.trialEndDate} />
+                <div className="-mt-4 -mx-4 sm:-mt-6 sm:-mx-6 lg:-mt-8 lg:-mx-8 mb-8">
+                    <TrialCountdownBanner trialEndDate={businessData.trialEndDate} />
+                </div>
             )}
             {isLimitReached && businessData?.plan && businessData.plan !== 'Pro' && (
                 <AlertBar plan={businessData.plan} />
