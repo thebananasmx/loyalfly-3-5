@@ -23,6 +23,44 @@ const ChangelogPage: React.FC = () => {
         Un historial de todas las mejoras y nuevas funcionalidades que hemos agregado a Loyalfly para ayudarte a crecer.
       </p>
       
+      {/* --- VERSION v3.5.0.26 --- */}
+      <section className="mb-12">
+        <div className="pb-4 border-b border-gray-200">
+          <h2 className="text-3xl font-bold text-black">Versión 3.5.0.26</h2>
+          <p className="text-base text-gray-500 mt-1">Lanzada el 20 de Marzo de 2026</p>
+        </div>
+        
+        <ul className="mt-8 space-y-6">
+           <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Personalización Avanzada de Sellos (Iconos y Colores)</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha expandido significativamente la capacidad de personalización de la tarjeta. Los negocios ahora pueden elegir entre una biblioteca de iconos temáticos (<strong>Café, Corazón, Tijeras, Regalo</strong>) además de la estrella clásica. También se añadió un selector de color para el sello, permitiendo que el icono combine perfectamente con la identidad visual de la marca.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Sellos Personalizados mediante Carga de PNG (Plan Entrepreneur)</h3>
+                  <p className="text-gray-600 mt-1">
+                      Los usuarios del plan <strong>Entrepreneur</strong> ahora pueden subir su propio diseño de sello en formato PNG transparente. Esta funcionalidad permite una personalización total, convirtiendo la tarjeta de lealtad en una pieza única de branding.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Infraestructura de Almacenamiento para Recursos de Marca</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se optimizó el manejo de archivos pesados integrando <strong>Firebase Storage</strong> para los sellos personalizados. El sistema ahora realiza una migración automática de Base64 a URLs de almacenamiento, garantizando que los documentos de Firestore permanezcan ligeros y que la carga de la tarjeta sea instantánea para los clientes.
+                  </p>
+              </div>
+          </li>
+        </ul>
+      </section>
+
       {/* --- VERSION v3.5.0.25 --- */}
       <section className="mb-12">
         <div className="pb-4 border-b border-gray-200">
