@@ -52,6 +52,15 @@ const ChangelogPage: React.FC = () => {
            <li className="flex items-start gap-4">
               <FeatureTag type="improvement" />
               <div>
+                  <h3 className="font-semibold text-black">Optimización de Botones de Wallet</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ajustó el tamaño de los botones "Añadir a Apple Wallet" y "Añadir a Google Wallet" a <strong>52px</strong> de altura, mejorando significativamente la visibilidad y facilidad de uso en dispositivos móviles.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
                   <h3 className="font-semibold text-black">Infraestructura de Almacenamiento para Recursos de Marca</h3>
                   <p className="text-gray-600 mt-1">
                       Se optimizó el manejo de archivos pesados integrando <strong>Firebase Storage</strong> para los sellos personalizados. El sistema ahora realiza una migración automática de Base64 a URLs de almacenamiento, garantizando que los documentos de Firestore permanezcan ligeros y que la carga de la tarjeta sea instantánea para los clientes.

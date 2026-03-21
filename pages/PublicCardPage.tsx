@@ -441,14 +441,14 @@ const PublicCardPage: React.FC = () => {
                                     className="transition-transform hover:scale-105 active:scale-95 focus:outline-none"
                                     aria-label="Add to Apple Wallet"
                                 >
-                                    <img src={getAppleWalletBadgeUrl()} alt="Add to Apple Wallet" className="h-[44px] w-auto" />
+                                    <img src={getAppleWalletBadgeUrl()} alt="Add to Apple Wallet" className="h-[52px] w-auto" />
                                 </button>
                                 <button 
                                     onClick={handleAddToGoogleWallet} 
                                     className="transition-transform hover:scale-105 active:scale-95 focus:outline-none"
                                     aria-label="Add to Google Wallet"
                                 >
-                                    <img src={getGoogleWalletBadgeUrl()} alt="Add to Google Wallet" className="h-[44px] w-auto" />
+                                    <img src={getGoogleWalletBadgeUrl()} alt="Add to Google Wallet" className="h-[52px] w-auto" />
                                 </button>
                             </div>
                         )}
