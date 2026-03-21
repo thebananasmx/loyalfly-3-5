@@ -22,6 +22,9 @@ interface CardSettings {
     logoUrl?: string;
     plan?: string;
     stampsGoal?: number;
+    stampIconType?: 'star' | 'coffee' | 'heart' | 'scissors' | 'gift' | 'custom';
+    stampColor?: string;
+    customStampUrl?: string;
 }
 
 interface SurveySettings {
@@ -426,6 +429,9 @@ const PublicCardPage: React.FC = () => {
                           customerPhone={customer?.phone}
                           customerId={customer?.id}
                           stampsGoal={settings?.stampsGoal}
+                          stampIconType={settings?.stampIconType}
+                          stampColor={settings?.stampColor}
+                          customStampUrl={settings?.customStampUrl}
                         />
 
                         {customer && (settings?.plan?.toLowerCase() === 'entrepreneur' || settings?.plan?.toLowerCase() === 'pro') && (

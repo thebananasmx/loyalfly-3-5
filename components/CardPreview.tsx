@@ -2,6 +2,13 @@
 import React from 'react';
 import QRCode from './QRCode';
 import { useTranslation } from 'react-i18next';
+import { 
+  StarIcon, 
+  CoffeeIcon, 
+  HeartIcon, 
+  ScissorsIcon, 
+  GiftIcon 
+} from './StampIcons';
 
 interface CardPreviewProps {
   businessName: string;
@@ -14,13 +21,10 @@ interface CardPreviewProps {
   customerPhone?: string;
   customerId?: string;
   stampsGoal?: number;
+  stampIconType?: 'star' | 'coffee' | 'heart' | 'scissors' | 'gift' | 'custom';
+  stampColor?: string;
+  customStampUrl?: string;
 }
-
-const StarIcon: React.FC = () => (
-    <svg className="w-8 h-8 text-[#FFC700]" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-    </svg>
-);
 
 const CardPreview: React.FC<CardPreviewProps> = ({ 
     businessName, 
@@ -32,7 +36,10 @@ const CardPreview: React.FC<CardPreviewProps> = ({
     customerName, 
     customerPhone, 
     customerId,
-    stampsGoal = 10 
+    stampsGoal = 10,
+    stampIconType = 'star',
+    stampColor = '#FFC700',
+    customStampUrl
 }) => {
   const { t } = useTranslation();
   const totalStamps = stampsGoal;
@@ -46,6 +53,24 @@ const CardPreview: React.FC<CardPreviewProps> = ({
   const filledStampBgColor = isLight ? 'bg-white' : 'bg-black';
   const unfilledStampBgColor = 'bg-white/30';
   const rewardReadyTextColor = isLight ? 'text-green-300' : 'text-green-600';
+
+  const renderStampIcon = () => {
+    if (stampIconType === 'custom' && customStampUrl) {
+      return <img src={customStampUrl} alt="stamp" className="w-8 h-8 object-contain" />;
+    }
+
+    const iconProps = { className: "w-8 h-8", style: { color: stampColor } };
+
+    switch (stampIconType) {
+      case 'coffee': return <CoffeeIcon {...iconProps} />;
+      case 'heart': return <HeartIcon {...iconProps} />;
+      case 'scissors': return <ScissorsIcon {...iconProps} />;
+      case 'gift': return <GiftIcon {...iconProps} />;
+      case 'star':
+      default:
+        return <StarIcon {...iconProps} />;
+    }
+  };
 
   return (
     <div 
@@ -79,7 +104,8 @@ const CardPreview: React.FC<CardPreviewProps> = ({
                         index < stamps ? filledStampBgColor : unfilledStampBgColor
                     }`}
                 >
-                    {index < stamps && <StarIcon />}
+                    {/* Only render icon if stamp is obtained */}
+                    {index < stamps && renderStampIcon()}
                 </div>
             ))}
         </div>

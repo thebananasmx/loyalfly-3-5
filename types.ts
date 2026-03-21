@@ -22,6 +22,20 @@ export interface Customer {
   totalSpent?: number;
 }
 
+export interface CardSettings {
+  name?: string;
+  reward?: string;
+  color?: string;
+  textColorScheme?: 'dark' | 'light';
+  logoUrl?: string;
+  bannerUrl?: string;
+  stampsGoal?: number;
+  stampIconType?: 'star' | 'coffee' | 'heart' | 'scissors' | 'gift' | 'custom';
+  stampColor?: string;
+  customStampUrl?: string;
+  termsAndConditions?: string;
+}
+
 export interface Business {
   id: string;
   name: string;
@@ -29,7 +43,7 @@ export interface Business {
   slug: string;
   plan?: 'Gratis' | 'Entrepreneur' | 'Pro';
   customerCount: number;
-  cardSettings: any;
+  cardSettings: CardSettings;
   surveySettings: any;
   scannerPin?: string;
   isTrial?: boolean;

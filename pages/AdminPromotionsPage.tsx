@@ -336,10 +336,10 @@ const AdminPromotionsPage: React.FC = () => {
                 onClose={() => setBusinessToRevoke(null)}
                 onConfirm={handleRevokeTrial}
                 title="Revocar Prueba"
-                message={`¿Estás seguro que quieres revocar la prueba para el negocio "${businessToRevoke?.name}"? Esto cambiará su plan a Gratis y reiniciará su estado de promoción.`}
                 confirmText="Aceptar"
-                cancelText="Cancelar"
-            />
+            >
+                <p>¿Estás seguro que quieres revocar la prueba para el negocio "{businessToRevoke?.name}"? Esto cambiará su plan a Gratis y reiniciará su estado de promoción.</p>
+            </ConfirmationModal>
         </div>
     );
 };

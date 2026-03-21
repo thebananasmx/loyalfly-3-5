@@ -2,18 +2,25 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import CardPreview from '../components/CardPreview';
 import { useAuth } from '../context/AuthContext';
-import { updateCardSettings, getBusinessData } from '../services/firebaseService';
+import { updateCardSettings, getBusinessData, uploadCustomStamp } from '../services/firebaseService';
 import { useToast } from '../context/ToastContext';
 import { useTranslation } from 'react-i18next';
 import type { Business } from '../types';
+import { 
+  StarIcon, 
+  CoffeeIcon, 
+  HeartIcon, 
+  ScissorsIcon, 
+  GiftIcon 
+} from '../components/StampIcons';
 
 const CopyIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>;
 const CheckIconSuccess = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#00AA00]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>;
 const ExternalLinkIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>;
 const ArrowLeftIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>;
 const QRIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v1m6 11h-1m-1-6v1m-1-1h-1m-1 6h1m-1-1v1m0-1h1m4-4h1m-5 5v1m-1-1h1M4 4h4v4H4zm0 12h4v4H4zm12 0h4v4h-4zm0-12h4v4h-4z" /></svg>;
-const LockIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" /></svg>;
-const UploadIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>;
+const LockIcon = ({ className }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className || "h-4 w-4"} viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" /></svg>;
+const UploadIcon = ({ className }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className || "h-5 w-5"} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>;
 const TrashIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>;
 
 const CardEditorPage: React.FC = () => {
@@ -29,6 +36,9 @@ const CardEditorPage: React.FC = () => {
   const [cardColor, setCardColor] = useState('#FEF3C7');
   const [textColorScheme, setTextColorScheme] = useState<'dark' | 'light'>('dark');
   const [stampsGoal, setStampsGoal] = useState(10);
+  const [stampIconType, setStampIconType] = useState<'star' | 'coffee' | 'heart' | 'scissors' | 'gift' | 'custom'>('star');
+  const [stampColor, setStampColor] = useState('#FFC700');
+  const [customStampUrl, setCustomStampUrl] = useState('');
   const [sampleStamps, setSampleStamps] = useState(4);
   const [slug, setSlug] = useState('');
   const [isSaving, setIsSaving] = useState(false);
@@ -52,6 +62,9 @@ const CardEditorPage: React.FC = () => {
                       setTextColorScheme(data.cardSettings.textColorScheme || 'dark');
                       setLogoUrl(data.cardSettings.logoUrl || '');
                       setStampsGoal(data.cardSettings.stampsGoal || 10);
+                      setStampIconType(data.cardSettings.stampIconType || 'star');
+                      setStampColor(data.cardSettings.stampColor || '#FFC700');
+                      setCustomStampUrl(data.cardSettings.customStampUrl || '');
                   } else {
                       setBusinessName(data.name || '');
                   }
@@ -80,7 +93,10 @@ const CardEditorPage: React.FC = () => {
             color: cardColor,
             textColorScheme: textColorScheme,
             logoUrl: logoUrl,
-            stampsGoal: stampsGoal
+            stampsGoal: stampsGoal,
+            stampIconType: stampIconType,
+            stampColor: stampColor,
+            customStampUrl: customStampUrl
         });
         showToast(t('cardEditor.saveSuccess'), 'success');
     } catch (error) {
@@ -123,6 +139,23 @@ const CardEditorPage: React.FC = () => {
   const removeLogo = () => {
     setLogoUrl('');
     if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleCustomStampUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 300 * 1024) {
+      showToast(t('card.fileSizeError'), 'error');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setCustomStampUrl(reader.result as string);
+      setStampIconType('custom');
+    };
+    reader.readAsDataURL(file);
   };
 
   if (isLoadingData) {
@@ -284,6 +317,117 @@ const CardEditorPage: React.FC = () => {
                 />
             </div>
           </div>
+
+          {/* Stamp Customization Section */}
+          <div className="space-y-4 pt-4 border-t border-gray-100">
+            <h3 className="text-lg font-bold text-black">Personalización de Sellos</h3>
+            
+            {/* Icon Selector */}
+            <div>
+              <label className="block text-base font-medium text-gray-700 mb-2">
+                Icono del Sello
+              </label>
+              <div className="grid grid-cols-5 gap-2">
+                {[
+                  { id: 'star', component: StarIcon },
+                  { id: 'coffee', component: CoffeeIcon },
+                  { id: 'heart', component: HeartIcon },
+                  { id: 'scissors', component: ScissorsIcon },
+                  { id: 'gift', component: GiftIcon },
+                ].map((icon) => (
+                  <button
+                    key={icon.id}
+                    onClick={() => setStampIconType(icon.id as any)}
+                    className={`aspect-square rounded-lg border-2 flex items-center justify-center transition-all ${
+                      stampIconType === icon.id 
+                        ? 'border-black bg-gray-50' 
+                        : 'border-gray-100 hover:border-gray-200'
+                    }`}
+                  >
+                    <icon.component className="w-6 h-6" style={{ color: stampIconType === icon.id ? stampColor : '#9CA3AF' }} />
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Stamp Color Picker */}
+            <div>
+              <label htmlFor="stampColorHex" className="block text-base font-medium text-gray-700 mb-1">
+                Color del Sello
+              </label>
+              <div className="mt-1 flex items-center gap-3">
+                <div className="relative w-12 h-10">
+                    <div 
+                        className="w-full h-full rounded-md border border-gray-300"
+                        style={{ backgroundColor: stampColor }}
+                    ></div>
+                    <input
+                        type="color"
+                        value={stampColor}
+                        onChange={(e) => setStampColor(e.target.value)}
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                        title="Seleccionar color del sello"
+                    />
+                </div>
+                <input
+                    id="stampColorHex"
+                    type="text"
+                    value={stampColor.toUpperCase()}
+                    onChange={(e) => setStampColor(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black"
+                />
+              </div>
+            </div>
+
+            {/* Custom Stamp Upload (Premium) */}
+            <div>
+              <label className="flex items-center gap-2 text-base font-medium text-gray-700 mb-2">
+                Sello Personalizado (PNG)
+                {isFreePlan && <span className="inline-flex items-center gap-1 text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full"><LockIcon /> Premium</span>}
+              </label>
+              
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-lg border border-gray-200 bg-gray-50 flex items-center justify-center overflow-hidden flex-shrink-0">
+                  {customStampUrl ? (
+                    <img src={customStampUrl} alt="Custom stamp" className="w-full h-full object-contain" />
+                  ) : (
+                    <UploadIcon className="text-gray-300" />
+                  )}
+                </div>
+                <div className="flex-grow">
+                  <input 
+                    type="file" 
+                    id="customStampInput"
+                    onChange={handleCustomStampUpload}
+                    accept="image/png"
+                    disabled={isFreePlan}
+                    className="hidden"
+                  />
+                  <button
+                    onClick={() => document.getElementById('customStampInput')?.click()}
+                    disabled={isFreePlan}
+                    className={`w-full py-2 px-3 text-sm font-medium rounded-md border transition-colors flex items-center justify-center gap-2 ${
+                      isFreePlan 
+                      ? 'bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed' 
+                      : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    <UploadIcon className="w-4 h-4" />
+                    {customStampUrl ? 'Cambiar Sello' : 'Subir PNG transparente'}
+                  </button>
+                  {customStampUrl && !isFreePlan && (
+                    <button 
+                      onClick={() => { setCustomStampUrl(''); setStampIconType('star'); }}
+                      className="mt-2 text-xs text-red-600 hover:underline"
+                    >
+                      Eliminar y volver a icono estándar
+                    </button>
+                  )}
+                </div>
+              </div>
+              {isFreePlan && <p className="mt-1.5 text-xs text-gray-500">Mejora al Plan Entrepreneur para usar tu propio diseño de sello.</p>}
+            </div>
+          </div>
            <div>
             <label className="block text-base font-medium text-gray-700 mb-1">
               {t('card.textColorLabel')}
@@ -386,6 +530,9 @@ const CardEditorPage: React.FC = () => {
             textColorScheme={textColorScheme}
             logoUrl={logoUrl}
             stampsGoal={stampsGoal}
+            stampIconType={stampIconType}
+            stampColor={stampColor}
+            customStampUrl={customStampUrl}
          />
       </div>
     </div>
