@@ -24,14 +24,34 @@ import PromotionModal from '../components/PromotionModal';
 import TrialCountdownBanner from '../components/TrialCountdownBanner';
 import { useTranslation } from 'react-i18next';
 
-const UserPlusIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 11a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1v-1z" /></svg>;
+const UserPlusIcon = () => (
+  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M20 18L14 18M17 15V21M4 21C4 17.134 7.13401 14 11 14C11.695 14 12.3663 14.1013 13 14.2899M15 7C15 9.20914 13.2091 11 11 11C8.79086 11 7 9.20914 7 7C7 4.79086 8.79086 3 11 3C13.2091 3 15 4.79086 15 7Z" />
+  </svg>
+);
 const StampIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd" /></svg>;
 const EditIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" /></svg>;
 const SearchIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" /></svg>;
 const StarIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>;
 const DownloadIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 9.707a1 1 0 011.414 0L9 11.293V3a1 1 0 112 0v8.293l1.293-1.586a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" /></svg>;
 const UploadIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M4 12a1 1 0 011 1v3a1 1 0 001 1h8a1 1 0 001-1v-3a1 1 0 112 0v3a3 3 0 01-3 3H6a3 3 0 01-3-3v-3a1 1 0 011-1z" /><path d="M10 2a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 2z" /></svg>;
-const QRIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v1m6 11h-1m-1-6v1m-1-1h-1m-1 6h1m-1-1v1m0-1h1m4-4h1m-5 5v1m-1-1h1M4 4h4v4H4zm0 12h4v4H4zm12 0h4v4h-4zm0-12h4v4h-4z" /></svg>;
+const QRIcon = () => (
+  <svg className="h-5 w-5" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+    <g id="Layer_2" data-name="Layer 2">
+      <g id="Health_Icons" data-name="Health Icons">
+        <g>
+          <path d="M4,22H22V4H4ZM8,8H18V18H8Z"/>
+          <path d="M4,44H22V26H4ZM8,30H18V40H8Z"/>
+          <path d="M26,4V22H44V4ZM40,18H30V8H40Z"/>
+          <rect x="11" y="11" width="4" height="4"/>
+          <polygon points="30 33 26 33 26 44 44 44 44 40 30 40 30 33"/>
+          <polygon points="40 33 33 33 33 37 44 37 44 26 40 26 40 33"/>
+          <rect x="26" y="26" width="11" height="4"/>
+        </g>
+      </g>
+    </g>
+  </svg>
+);
 
 const PLAN_LIMITS = {
     Gratis: 100,
@@ -659,18 +679,20 @@ const DashboardPage: React.FC = () => {
                         <button
                             onClick={() => setIsScannerOpen(true)}
                             disabled={isLimitReached}
-                            className="inline-flex items-center justify-center gap-2 px-4 py-2 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="inline-flex items-center justify-center p-2 sm:px-4 sm:py-2 gap-0 sm:gap-2 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black disabled:opacity-50 disabled:cursor-not-allowed"
+                            title={t('dashboard.scanQr')}
                         >
                             <QRIcon />
-                            {t('dashboard.scanQr')}
+                            <span className="hidden sm:inline">{t('dashboard.scanQr')}</span>
                         </button>
                          <button
                             onClick={() => !isLimitReached && navigate('/app/nuevo-cliente')}
                             disabled={isLimitReached}
-                            className="inline-flex items-center justify-center gap-2 px-4 py-2 text-base font-medium text-white bg-black rounded-md hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="inline-flex items-center justify-center p-2 sm:px-4 sm:py-2 gap-0 sm:gap-2 text-base font-medium text-white bg-black rounded-md hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black disabled:opacity-50 disabled:cursor-not-allowed"
+                            title={t('dashboard.newCustomer')}
                         >
                             <UserPlusIcon />
-                            {t('dashboard.newCustomer')}
+                            <span className="hidden sm:inline">{t('dashboard.newCustomer')}</span>
                         </button>
                         <button
                             onClick={() => {
@@ -679,22 +701,26 @@ const DashboardPage: React.FC = () => {
                                 setIsUploadModalOpen(true);
                             }}
                             disabled={isLimitReached}
-                            className="inline-flex items-center justify-center gap-2 px-4 py-2 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="inline-flex items-center justify-center p-2 sm:px-4 sm:py-2 gap-0 sm:gap-2 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black disabled:opacity-50 disabled:cursor-not-allowed"
+                            title={t('dashboard.bulkUpload')}
                         >
                             <UploadIcon />
-                            {t('dashboard.bulkUpload')}
+                            <span className="hidden sm:inline">{t('dashboard.bulkUpload')}</span>
                         </button>
                         <button
                             onClick={handleDownload}
                             disabled={isDownloading}
-                            className="inline-flex items-center justify-center gap-2 px-4 py-2 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black disabled:opacity-50"
+                            className="inline-flex items-center justify-center p-2 sm:px-4 sm:py-2 gap-0 sm:gap-2 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black disabled:opacity-50"
+                            title={t('dashboard.downloadCsv')}
                         >
                             {isDownloading ? (
                                 <div className="animate-spin rounded-full h-5 w-5 border-2 border-gray-200 border-t-black"></div>
                             ) : (
                                 <DownloadIcon />
                             )}
-                            {isDownloading ? t('common.loading') : t('dashboard.downloadCsv')}
+                            <span className="hidden sm:inline">
+                                {isDownloading ? t('common.loading') : t('dashboard.downloadCsv')}
+                            </span>
                         </button>
                     </div>
                 </div>
