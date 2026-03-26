@@ -23,7 +23,7 @@ const Footer: React.FC = () => {
           <div className="flex justify-center">
             <div className="flex flex-col items-center gap-3">
               <img 
-                src="https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto,w_400/v1770771936/Powered_by_Stripe_-_black_xt4ja3.svg" 
+                src="https://res.cloudinary.com/dg4wbuppq/image/upload/v1770771936/Powered_by_Stripe_-_black_xt4ja3.svg" 
                 alt="Powered by Stripe - Pagos Seguros" 
                 className="h-8 w-auto"
               />

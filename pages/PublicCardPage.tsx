@@ -85,16 +85,16 @@ const PublicCardPage: React.FC = () => {
 
     const getGoogleWalletBadgeUrl = () => {
         const lang = i18n.language.split('-')[0];
-        if (lang === 'es') return 'https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto/v1770771245/esUS_add_to_google_wallet_add-wallet-badge_qmkpl1.svg';
-        if (lang === 'pt') return 'https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto/v1770771211/br_add_to_google_wallet_add-wallet-badge_zpnazi.svg';
-        return 'https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto/v1770771222/enUS_add_to_google_wallet_add-wallet-badge_lfceip.svg';
+        if (lang === 'es') return 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1770771245/esUS_add_to_google_wallet_add-wallet-badge_qmkpl1.svg';
+        if (lang === 'pt') return 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1770771211/br_add_to_google_wallet_add-wallet-badge_zpnazi.svg';
+        return 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1770771222/enUS_add_to_google_wallet_add-wallet-badge_lfceip.svg';
     };
 
     const getAppleWalletBadgeUrl = () => {
         const lang = i18n.language.split('-')[0];
-        if (lang === 'es') return 'https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto/v1770770709/ESMX_Add_to_Apple_Wallet_RGB_101821_in2cem.svg';
-        if (lang === 'pt') return 'https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto/v1770770808/PT_Add_to_Apple_Wallet_RGB_102021_m9ggwe.svg';
-        return 'https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto/v1770770828/US-UK_Add_to_Apple_Wallet_RGB_101421_hkprrj.svg';
+        if (lang === 'es') return 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1770770709/ESMX_Add_to_Apple_Wallet_RGB_101821_in2cem.svg';
+        if (lang === 'pt') return 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1770770808/PT_Add_to_Apple_Wallet_RGB_102021_m9ggwe.svg';
+        return 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1770770828/US-UK_Add_to_Apple_Wallet_RGB_101421_hkprrj.svg';
     };
 
     useEffect(() => {
