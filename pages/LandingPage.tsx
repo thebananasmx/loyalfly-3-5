@@ -34,35 +34,35 @@ const LandingPage: React.FC = () => {
             title: t('landing.industries.slides.cafe.title'),
             description: t('landing.industries.slides.cafe.desc'),
             color: "bg-yellow-100 text-yellow-800",
-            imageUrl: "https://res.cloudinary.com/dg4wbuppq/image/upload/v1762011139/coffee_loyalfly_mg9r2p.png"
+            imageUrl: "https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto,w_600/v1762011139/coffee_loyalfly_mg9r2p.png"
         },
         {
             industry: t('landing.industries.slides.restaurant.industry'),
             title: t('landing.industries.slides.restaurant.title'),
             description: t('landing.industries.slides.restaurant.desc'),
             color: "bg-red-100 text-red-800",
-            imageUrl: "https://res.cloudinary.com/dg4wbuppq/image/upload/v1762011138/restaurant_loyalfly_hs7cwc.png"
+            imageUrl: "https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto,w_600/v1762011138/restaurant_loyalfly_hs7cwc.png"
         },
         {
             industry: t('landing.industries.slides.entrepreneur.industry'),
             title: t('landing.industries.slides.entrepreneur.title'),
             description: t('landing.industries.slides.entrepreneur.desc'),
             color: "bg-blue-100 text-blue-800",
-            imageUrl: "https://res.cloudinary.com/dg4wbuppq/image/upload/v1762011139/paint_loyalfly_aqcand.png"
+            imageUrl: "https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto,w_600/v1762011139/paint_loyalfly_aqcand.png"
         },
         {
             industry: t('landing.industries.slides.makeup.industry'),
             title: t('landing.industries.slides.makeup.title'),
             description: t('landing.industries.slides.makeup.desc'),
             color: "bg-pink-100 text-pink-800",
-            imageUrl: "https://res.cloudinary.com/dg4wbuppq/image/upload/v1762011141/makeup_loyalfly_s0yta0.png"
+            imageUrl: "https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto,w_600/v1762011141/makeup_loyalfly_s0yta0.png"
         },
         {
             industry: t('landing.industries.slides.barber.industry'),
             title: t('landing.industries.slides.barber.title'),
             description: t('landing.industries.slides.barber.desc'),
             color: "bg-gray-200 text-gray-800",
-            imageUrl: "https://res.cloudinary.com/dg4wbuppq/image/upload/v1762011138/barber_loyalfly_r8ymwd.png"
+            imageUrl: "https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto,w_600/v1762011138/barber_loyalfly_r8ymwd.png"
         }
     ];
 
@@ -72,28 +72,28 @@ const LandingPage: React.FC = () => {
         title: t('landing.designs.tabs.entrepreneur.title'),
         icon: <StoreIcon />,
         description: t('landing.designs.tabs.entrepreneur.desc'),
-        imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1762055851/card_loyalfly_tmx9vh.png'
+        imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto,w_600/v1762055851/card_loyalfly_tmx9vh.png'
       },
       {
         id: 'cafeterias',
         title: t('landing.designs.tabs.cafe.title'),
         icon: <CoffeeIcon />,
         description: t('landing.designs.tabs.cafe.desc'),
-        imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1762057146/card_cafe_mzjj0q.png'
+        imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto,w_600/v1762057146/card_cafe_mzjj0q.png'
       },
       {
         id: 'barberias',
         title: t('landing.designs.tabs.barber.title'),
         icon: <ScissorsIcon />,
         description: t('landing.designs.tabs.barber.desc'),
-        imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1762057493/card_barber_ftfyxa.png'
+        imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto,w_600/v1762057493/card_barber_ftfyxa.png'
       },
       {
         id: 'belleza',
         title: t('landing.designs.tabs.beauty.title'),
         icon: <SparklesIcon />,
         description: t('landing.designs.tabs.beauty.desc'),
-        imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/v1762057298/card_beauty_cu1r3n.png'
+        imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto,w_600/v1762057298/card_beauty_cu1r3n.png'
       }
     ];
 
@@ -161,12 +161,12 @@ const LandingPage: React.FC = () => {
                             <div className="mt-14 flex flex-col items-center md:items-start gap-3 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
                                 <div className="flex flex-wrap justify-center md:justify-start gap-4">
                                     <img 
-                                        src="https://res.cloudinary.com/dg4wbuppq/image/upload/v1770770709/ESMX_Add_to_Apple_Wallet_RGB_101821_in2cem.svg" 
+                                        src="https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto/v1770770709/ESMX_Add_to_Apple_Wallet_RGB_101821_in2cem.svg" 
                                         alt="Add to Apple Wallet" 
                                         className="h-[40px] w-auto opacity-90" 
                                     />
                                     <img 
-                                        src="https://res.cloudinary.com/dg4wbuppq/image/upload/v1770771245/esUS_add_to_google_wallet_add-wallet-badge_qmkpl1.svg" 
+                                        src="https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto/v1770771245/esUS_add_to_google_wallet_add-wallet-badge_qmkpl1.svg" 
                                         alt="Add to Google Wallet" 
                                         className="h-[40px] w-auto opacity-90" 
                                     />
@@ -180,7 +180,7 @@ const LandingPage: React.FC = () => {
                         {/* Right side: Image */}
                         <div className="md:w-1/2">
                             <img
-                                src="https://res.cloudinary.com/dg4wbuppq/image/upload/w_1000/q_auto/f_webp,fl_awebp/v1762014799/loyalfly_hero_p4fkee.png"
+                                src="https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto,w_1000/v1762014799/loyalfly_hero_p4fkee.png"
                                 alt="Tarjeta de lealtad digital de Loyalfly en un smartphone"
                                 className="rounded-lg shadow-xl"
                             />
@@ -233,6 +233,55 @@ const LandingPage: React.FC = () => {
                                 </div>
                             </div>
                         )}
+                    </div>
+                </div>
+            </section>
+
+            {/* Help for Professionals Section */}
+            <section className="py-24 bg-gray-50/50">
+                <div className="container mx-auto px-4">
+                    <div className="max-w-5xl mx-auto bg-white rounded-[40px] shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-500 flex flex-col md:flex-row-reverse group">
+                        <div className="w-full md:w-72 h-64 md:h-auto overflow-hidden flex-shrink-0 relative">
+                            <img 
+                                src="https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto,w_600/v1774490135/expert_hv5frs.png" 
+                                alt="Hector Leon - Loyalty Expert" 
+                                className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                                referrerPolicy="no-referrer"
+                            />
+                            <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm">
+                                <span className="text-[10px] font-bold text-[#4D17FF] uppercase tracking-widest">Soporte VIP</span>
+                            </div>
+                        </div>
+                        <div className="p-10 md:p-14 flex flex-col justify-center flex-1">
+                            <div className="mb-2">
+                                <span className="text-[#4D17FF] font-semibold text-sm tracking-wide uppercase">Asesoría Personalizada</span>
+                            </div>
+                            <h2 className="text-3xl md:text-4xl font-bold text-black mb-6 tracking-tight leading-tight">
+                                Lanza tu programa de lealtad con un experto
+                            </h2>
+                            <p className="text-gray-500 text-lg md:text-xl leading-relaxed mb-10">
+                                No lo hagas solo. Te ayudamos a configurar tu tarjeta digital y a diseñar la estrategia perfecta para que tus clientes vuelvan siempre.
+                            </p>
+                            
+                            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 pt-8 border-t border-gray-100 mt-auto">
+                                <div>
+                                    <p className="text-sm font-bold text-black">Hector Leon</p>
+                                    <p className="text-xs text-gray-400 font-medium">Loyalty Associate Manager</p>
+                                </div>
+                                <a 
+                                    href="https://calendar.app.google/nzKuGt45RLVu1on97" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center justify-center px-6 py-3 md:px-10 md:py-4 text-base md:text-lg font-bold text-white bg-black rounded-full hover:bg-[#4D17FF] transition-all hover:scale-105 shadow-xl shadow-black/10 whitespace-nowrap group/btn"
+                                >
+                                    <span className="md:hidden">Agendar asesoría</span>
+                                    <span className="hidden md:inline">Agendar asesoría gratuita</span>
+                                    <svg className="ml-2 w-5 h-5 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
