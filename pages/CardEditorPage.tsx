@@ -406,7 +406,7 @@ const CardEditorPage: React.FC = () => {
                   <button
                     onClick={() => document.getElementById('customStampInput')?.click()}
                     disabled={isFreePlan}
-                    className={`w-full py-2 px-3 text-sm font-medium rounded-md border transition-colors flex items-center justify-center gap-2 ${
+                    className={`w-fit py-2 px-3 text-sm font-medium rounded-md border transition-colors flex items-center justify-center gap-2 ${
                       isFreePlan 
                       ? 'bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed' 
                       : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
