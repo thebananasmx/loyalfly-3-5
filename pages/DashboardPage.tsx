@@ -566,24 +566,15 @@ const DashboardPage: React.FC = () => {
             return customers.map((customer) => (
                 <tr key={customer.id} className="bg-white border-b border-gray-200 hover:bg-gray-50">
                     <td className="px-4 py-4 sm:px-6 font-medium text-gray-900 whitespace-nowrap">
-                        <div className="flex items-center gap-3">
-                            <div className="w-11 h-11 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border border-gray-200">
-                                <img 
-                                    src={`https://ui-avatars.com/api/?name=${encodeURIComponent(customer.name)}&background=random&color=fff`} 
-                                    alt={customer.name}
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-                            <Link to={`/app/cliente/${customer.id}`} className="hover:text-[#4D17FF] hover:underline transition-colors">
-                                {customer.name}
-                            </Link>
-                        </div>
+                        <Link to={`/app/cliente/${customer.id}`} className="hover:text-[#4D17FF] hover:underline transition-colors">
+                            {customer.name}
+                        </Link>
                     </td>
                     <td className="px-4 py-4 sm:px-6">{customer.phone}</td>
                     <td className="px-4 py-4 sm:px-6 hidden md:table-cell">{customer.email}</td>
-                    <td className="px-4 py-4 sm:px-6 hidden lg:table-cell">{customer.enrollmentDate}</td>
                     <td className="px-4 py-4 sm:px-6 text-center">{customer.stamps}</td>
                     <td className="px-4 py-4 sm:px-6 text-center">{customer.rewardsRedeemed}</td>
+                    <td className="px-4 py-4 sm:px-6 hidden lg:table-cell">{customer.enrollmentDate}</td>
                     <td className="px-4 py-4 sm:px-6 text-right">
                         <div className="flex justify-end items-center gap-2">
                             {customer.stamps >= stampsGoal ? (
@@ -764,9 +755,9 @@ const DashboardPage: React.FC = () => {
                                     <th scope="col" className="px-4 py-3 sm:px-6">{t('common.name')}</th>
                                     <th scope="col" className="px-4 py-3 sm:px-6">{t('common.phone')}</th>
                                     <th scope="col" className="px-4 py-3 sm:px-6 hidden md:table-cell">{t('common.email')}</th>
-                                    <th scope="col" className="px-4 py-3 sm:px-6 hidden lg:table-cell">{t('dashboard.table.joined')}</th>
                                     <th scope="col" className="px-4 py-3 sm:px-6 text-center">{t('dashboard.table.stamps')}</th>
                                     <th scope="col" className="px-4 py-3 sm:px-6 text-center">{t('dashboard.table.rewards')}</th>
+                                    <th scope="col" className="px-4 py-3 sm:px-6 hidden lg:table-cell">{t('dashboard.table.joined')}</th>
                                     <th scope="col" className="px-4 py-3 sm:px-6 text-right">{t('common.actions')}</th>
                                 </tr>
                             </thead>
