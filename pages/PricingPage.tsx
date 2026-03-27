@@ -166,6 +166,34 @@ const PricingPage: React.FC = () => {
                         isContact={true}
                     />
                 </div>
+
+                {/* Promo Banner (Downsell) */}
+                <div className="mt-20 max-w-5xl mx-auto border-[#4D17FF] border-2 rounded-lg p-6 sm:p-8 bg-white flex flex-col md:flex-row items-center justify-between gap-8 text-left">
+                    <div className="flex-grow">
+                        <div className="inline-block px-3 py-1 bg-[#4D17FF] text-white text-[10px] font-bold rounded-full uppercase tracking-widest mb-3">
+                            ⭐ Oferta de Lanzamiento
+                        </div>
+                        <h3 className="text-2xl font-bold text-black">Promo Entrepreneur</h3>
+                        <p className="mt-2 text-gray-600 text-base leading-relaxed max-w-xl">
+                            ¿Aún lo estás pensando? Digitaliza tu programa de lealtad hoy mismo con todas las herramientas premium por un precio especial de bienvenida.
+                        </p>
+                    </div>
+                    <div className="flex flex-col items-center md:items-end shrink-0">
+                        <div className="flex items-baseline gap-1">
+                            <span className="text-5xl font-black text-[#4D17FF]">$99</span>
+                            <span className="text-gray-500 font-medium">MXN</span>
+                        </div>
+                        <p className="text-xs text-gray-400 font-bold uppercase tracking-tighter mb-4">AL MES POR LOS PRIMEROS TRES MESES</p>
+                        <a 
+                            href="https://buy.stripe.com/3cI6oI2dX1Rrfpy9XP5c400?prefilled_promo_code=3x99" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="w-full md:w-auto px-12 py-3 font-semibold text-white bg-[#4D17FF] rounded-md hover:bg-opacity-90 transition-colors text-center"
+                        >
+                            Suscríbete ahora
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     );
