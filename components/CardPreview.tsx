@@ -56,10 +56,10 @@ const CardPreview: React.FC<CardPreviewProps> = ({
 
   const renderStampIcon = () => {
     if (stampIconType === 'custom' && customStampUrl) {
-      return <img src={customStampUrl} alt="stamp" className="w-8 h-8 object-contain" />;
+      return <img src={customStampUrl} alt="stamp" className="w-11 h-11 object-contain" />;
     }
 
-    const iconProps = { className: "w-8 h-8", style: { color: stampColor } };
+    const iconProps = { className: "w-11 h-11", style: { color: stampColor } };
 
     switch (stampIconType) {
       case 'coffee': return <CoffeeIcon {...iconProps} />;

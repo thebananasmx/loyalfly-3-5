@@ -566,9 +566,18 @@ const DashboardPage: React.FC = () => {
             return customers.map((customer) => (
                 <tr key={customer.id} className="bg-white border-b border-gray-200 hover:bg-gray-50">
                     <td className="px-4 py-4 sm:px-6 font-medium text-gray-900 whitespace-nowrap">
-                        <Link to={`/app/cliente/${customer.id}`} className="hover:text-[#4D17FF] hover:underline transition-colors">
-                            {customer.name}
-                        </Link>
+                        <div className="flex items-center gap-3">
+                            <div className="w-11 h-11 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border border-gray-200">
+                                <img 
+                                    src={`https://ui-avatars.com/api/?name=${encodeURIComponent(customer.name)}&background=random&color=fff`} 
+                                    alt={customer.name}
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                            <Link to={`/app/cliente/${customer.id}`} className="hover:text-[#4D17FF] hover:underline transition-colors">
+                                {customer.name}
+                            </Link>
+                        </div>
                     </td>
                     <td className="px-4 py-4 sm:px-6">{customer.phone}</td>
                     <td className="px-4 py-4 sm:px-6 hidden md:table-cell">{customer.email}</td>
