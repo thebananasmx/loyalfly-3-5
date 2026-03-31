@@ -24,7 +24,7 @@ const ICON_PATHS = {
 /**
  * Genera una imagen de sellos dinámica y la sube a Firebase Storage.
  */
-export async function generateStampsImage(bid, cid, stampsCount, stampsGoal, cardColor, stampIconType, stampColor, customStampUrl) {
+export async function generateStampsImage(bid, cid, stampsCount, stampsGoal, cardColor, stampIconType, stampColor, customStampUrl, textColorScheme) {
     const width = 1125;
     const height = 432; 
     const canvas = new Canvas(width, height);
@@ -33,18 +33,19 @@ export async function generateStampsImage(bid, cid, stampsCount, stampsGoal, car
     // 1. Fondo
     ctx.clearRect(0, 0, width, height);
 
-    // 2. Configuración de la cuadrícula
+    // 2. Configuración de la cuadrícula (Optimizada para 177px de diámetro)
     const goal = stampsGoal || 10;
-    const cols = goal > 10 ? Math.ceil(goal / 2) : 5;
+    const cols = 5; // Forzamos 5 columnas para mantener la simetría de 1125px
     const rows = Math.ceil(goal / cols);
     
-    const padding = 40;
-    const availableWidth = width - (padding * 2);
-    const availableHeight = height - (padding * 2);
-    
-    const cellWidth = availableWidth / cols;
-    const cellHeight = availableHeight / rows;
-    const radius = Math.min(cellWidth, cellHeight) * 0.35;
+    const colGap = 40;
+    const rowGap = 26;
+    const radius = 88.5; // Diámetro de 177px
+    const diameter = 177;
+
+    // Color del círculo de fondo basado en textColorScheme
+    const bgCircleColor = textColorScheme === 'light' ? '#FFFFFF' : '#000000';
+    const iconPaddingScale = 0.75; // Factor para el padding interno
 
     // 3. Cargar el icono del sello si es custom
     let customIcon = null;
@@ -61,20 +62,30 @@ export async function generateStampsImage(bid, cid, stampsCount, stampsGoal, car
         const col = i % cols;
         const row = Math.floor(i / cols);
         
-        const x = padding + (col * cellWidth) + (cellWidth / 2);
-        const y = padding + (row * cellHeight) + (cellHeight / 2);
+        // Posicionamiento exacto con márgenes de 40px (X) y 26px (Y)
+        const x = colGap + radius + (col * (diameter + colGap));
+        const y = rowGap + radius + (row * (diameter + rowGap));
 
         if (i < stampsCount) {
             // Sello Ganado
+            
+            // Dibujar círculo de fondo sólido
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.fillStyle = bgCircleColor;
+            ctx.fill();
+
+            const iconRadius = radius * iconPaddingScale;
+
             if (stampIconType === 'custom' && customIcon) {
-                const iconSize = radius * 2;
-                ctx.drawImage(customIcon, x - radius, y - radius, iconSize, iconSize);
+                const iconSize = iconRadius * 2;
+                ctx.drawImage(customIcon, x - iconRadius, y - iconRadius, iconSize, iconSize);
             } else if (stampIconType !== 'custom' && ICON_PATHS[stampIconType]) {
                 // Dibujar Icono Predefinido
                 ctx.save();
                 ctx.translate(x, y);
-                // Escalar el icono (que es 24x24) al radio deseado
-                const scale = (radius * 2) / 24;
+                // Escalar el icono (que es 24x24) al radio del icono (con padding)
+                const scale = (iconRadius * 2) / 24;
                 ctx.scale(scale, scale);
                 ctx.translate(-12, -12); // Centrar el icono de 24x24
                 
@@ -85,9 +96,9 @@ export async function generateStampsImage(bid, cid, stampsCount, stampsGoal, car
                 });
                 ctx.restore();
             } else {
-                // Fallback a círculo sólido
+                // Fallback a círculo sólido (más pequeño que el de fondo para que se vea el borde)
                 ctx.beginPath();
-                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.arc(x, y, iconRadius, 0, Math.PI * 2);
                 ctx.fillStyle = stampColor || '#FFC700';
                 ctx.fill();
             }
@@ -98,7 +109,7 @@ export async function generateStampsImage(bid, cid, stampsCount, stampsGoal, car
             ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
             ctx.lineWidth = 2;
             ctx.stroke();
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
             ctx.fill();
         }
     }

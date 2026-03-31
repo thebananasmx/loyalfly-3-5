@@ -159,7 +159,8 @@ async function createApplePassBuffer(bid, cid, secrets) {
             cardSettings.color || "#5134f9", 
             cardSettings.stampIconType || 'star',
             cardSettings.stampColor || '#FFC700',
-            cardSettings.customStampUrl || ''
+            cardSettings.customStampUrl || '',
+            cardSettings.textColorScheme || 'light'
         );
         
         // Esperar un momento para que Storage propague el archivo
@@ -283,7 +284,10 @@ export const updatewalletonstampchange = onDocumentUpdated({
             newData.stamps || 0, 
             cardSettings.stampsGoal || 10, 
             cardSettings.color || "#5134f9", 
-            cardSettings.logoUrl
+            cardSettings.stampIconType || 'star',
+            cardSettings.stampColor || '#FFC700',
+            cardSettings.customStampUrl || '',
+            cardSettings.textColorScheme || 'light'
         );
 
         const auth = new GoogleAuth({
@@ -404,7 +408,8 @@ export const generatewalletpass = onRequest({
             cardColor, 
             cardSettings.stampIconType || 'star',
             cardSettings.stampColor || '#FFC700',
-            cardSettings.customStampUrl || ''
+            cardSettings.customStampUrl || '',
+            cardSettings.textColorScheme || 'light'
         );
 
         const claims = {

@@ -267,12 +267,12 @@ const LandingPage: React.FC = () => {
                                 <div className="flex items-center gap-3">
                                     <img 
                                         src="https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto,w_100,c_fill,g_face/v1774967661/expert_avatar_0336a0.png" 
-                                        alt="Hector Leon" 
+                                        alt="Héctor León" 
                                         className="w-12 h-12 rounded-lg object-cover border border-gray-100 shadow-sm"
                                         referrerPolicy="no-referrer"
                                     />
                                     <div>
-                                        <p className="text-sm font-bold text-black">Hector Leon</p>
+                                        <p className="text-sm font-bold text-black">Héctor León</p>
                                         <p className="text-xs text-gray-400 font-medium">Loyalty Associate Manager</p>
                                     </div>
                                 </div>
