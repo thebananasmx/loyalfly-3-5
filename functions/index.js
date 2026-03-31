@@ -157,12 +157,20 @@ async function createApplePassBuffer(bid, cid, secrets) {
             customer.stamps || 0, 
             cardSettings.stampsGoal || 10, 
             cardSettings.color || "#5134f9", 
-            cardSettings.logoUrl
+            cardSettings.stampIconType || 'star',
+            cardSettings.stampColor || '#FFC700',
+            cardSettings.customStampUrl || ''
         );
+        
+        // Esperar un momento para que Storage propague el archivo
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
         const response = await fetch(stampsImageUrl);
         if (response.ok) {
             const imageBuffer = Buffer.from(await response.arrayBuffer());
             ["strip.png", "strip@2x.png", "strip@3x.png"].forEach(f => pass.addBuffer(f, imageBuffer));
+        } else {
+            console.warn(`Error al descargar imagen de sellos: ${response.status}`);
         }
     } catch (err) { console.warn("Error stamps image:", err.message); }
 
@@ -394,7 +402,9 @@ export const generatewalletpass = onRequest({
             stamps, 
             cardSettings.stampsGoal || 10, 
             cardColor, 
-            cardSettings.logoUrl
+            cardSettings.stampIconType || 'star',
+            cardSettings.stampColor || '#FFC700',
+            cardSettings.customStampUrl || ''
         );
 
         const claims = {
