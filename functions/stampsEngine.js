@@ -1,4 +1,4 @@
-import { createCanvas, loadImage } from 'canvas';
+import { Canvas, loadImage } from 'skia-canvas';
 import admin from 'firebase-admin';
 
 /**
@@ -13,11 +13,11 @@ import admin from 'firebase-admin';
  */
 export async function generateStampsImage(bid, cid, stampsCount, stampsGoal, cardColor, logoUrl) {
     const width = 1125;
-    const height = 375; // Aspecto 3:1 ideal para Apple Strip y Google Hero
-    const canvas = createCanvas(width, height);
+    const height = 375; 
+    const canvas = new Canvas(width, height);
     const ctx = canvas.getContext('2d');
 
-    // 1. Fondo (Transparente o color sólido suave si se desea)
+    // 1. Fondo
     ctx.clearRect(0, 0, width, height);
 
     // 2. Configuración de la cuadrícula
@@ -33,13 +33,13 @@ export async function generateStampsImage(bid, cid, stampsCount, stampsGoal, car
     const cellHeight = availableHeight / rows;
     const radius = Math.min(cellWidth, cellHeight) * 0.35;
 
-    // 3. Cargar el icono del sello (Logo del negocio)
+    // 3. Cargar el icono del sello
     let stampIcon = null;
     if (logoUrl) {
         try {
             stampIcon = await loadImage(logoUrl);
         } catch (e) {
-            console.warn("No se pudo cargar el logo para el sello, usando círculo sólido.");
+            console.warn("No se pudo cargar el logo para el sello.");
         }
     }
 
@@ -52,7 +52,6 @@ export async function generateStampsImage(bid, cid, stampsCount, stampsGoal, car
         const y = padding + (row * cellHeight) + (cellHeight / 2);
 
         if (i < stampsCount) {
-            // Sello Ganado
             if (stampIcon) {
                 const iconSize = radius * 2;
                 ctx.drawImage(stampIcon, x - radius, y - radius, iconSize, iconSize);
@@ -63,7 +62,6 @@ export async function generateStampsImage(bid, cid, stampsCount, stampsGoal, car
                 ctx.fill();
             }
         } else {
-            // Espacio Vacío (Círculo con opacidad)
             ctx.beginPath();
             ctx.arc(x, y, radius, 0, Math.PI * 2);
             ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
@@ -75,16 +73,18 @@ export async function generateStampsImage(bid, cid, stampsCount, stampsGoal, car
     }
 
     // 5. Subir a Firebase Storage
-    const buffer = canvas.toBuffer('image/png');
+    const buffer = await canvas.toBuffer('png');
     const bucket = admin.storage().bucket();
-    const filePath = `passes/${bid}/${cid}/stamps_v${Date.now()}.png`;
+    const filePath = `passes/${bid}/${cid}/stamps.png`;
     const file = bucket.file(filePath);
 
     await file.save(buffer, {
-        metadata: { contentType: 'image/png' },
+        metadata: { 
+            contentType: 'image/png',
+            cacheControl: 'public, max-age=0, no-cache'
+        },
         public: true
     });
 
-    // Retornar la URL pública (o firmada si el bucket no es público)
-    return `https://storage.googleapis.com/${bucket.name}/${filePath}`;
+    return `https://storage.googleapis.com/${bucket.name}/${filePath}?v=${Date.now()}`;
 }
