@@ -240,12 +240,12 @@ const LandingPage: React.FC = () => {
             {/* Help for Professionals Section */}
             <section className="py-24 bg-gray-50/50">
                 <div className="container mx-auto px-4">
-                    <div className="max-w-5xl mx-auto bg-white rounded-[40px] shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-500 flex flex-col md:flex-row-reverse group">
+                    <div className="max-w-5xl mx-auto bg-white rounded-[40px] shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden transition-all duration-500 flex flex-col md:flex-row-reverse group">
                         <div className="w-full md:w-72 h-64 md:h-auto overflow-hidden flex-shrink-0 relative">
                             <img 
-                                src="https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto,w_600/v1774490135/expert_hv5frs.png" 
-                                alt="Hector Leon - Loyalty Expert" 
-                                className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                                src="https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto,w_800/v1774967371/loyalfly_experts_xefusk.png" 
+                                alt="Loyalfly Experts" 
+                                className="w-full h-full object-cover object-center transition-transform duration-700"
                                 referrerPolicy="no-referrer"
                             />
                             <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm">
@@ -264,9 +264,17 @@ const LandingPage: React.FC = () => {
                             </p>
                             
                             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 pt-8 border-t border-gray-100 mt-auto">
-                                <div>
-                                    <p className="text-sm font-bold text-black">Hector Leon</p>
-                                    <p className="text-xs text-gray-400 font-medium">Loyalty Associate Manager</p>
+                                <div className="flex items-center gap-3">
+                                    <img 
+                                        src="https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto,w_100,c_fill,g_face/v1774967661/expert_avatar_0336a0.png" 
+                                        alt="Hector Leon" 
+                                        className="w-12 h-12 rounded-lg object-cover border border-gray-100 shadow-sm"
+                                        referrerPolicy="no-referrer"
+                                    />
+                                    <div>
+                                        <p className="text-sm font-bold text-black">Hector Leon</p>
+                                        <p className="text-xs text-gray-400 font-medium">Loyalty Associate Manager</p>
+                                    </div>
                                 </div>
                                 <a 
                                     href="https://calendar.app.google/nzKuGt45RLVu1on97" 
