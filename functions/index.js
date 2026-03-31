@@ -10,6 +10,7 @@ import { readFileSync } from "fs";
 import express from "express";
 import cors from "cors";
 import http2 from "http2";
+import { generateStampsImage } from "./stampsEngine.js";
 
 // Inicializar Firebase Admin
 if (!admin.apps.length) {
@@ -144,10 +145,26 @@ async function createApplePassBuffer(bid, cid, secrets) {
             const response = await fetch(cardSettings.logoUrl);
             if (response.ok) {
                 const imageBuffer = Buffer.from(await response.arrayBuffer());
-                ["logo.png", "logo@2x.png", "logo@3x.png", "icon.png", "icon@2x.png", "icon@3x.png", "strip.png", "strip@2x.png", "strip@3x.png"].forEach(f => pass.addBuffer(f, imageBuffer));
+                ["logo.png", "logo@2x.png", "logo@3x.png", "icon.png", "icon@2x.png", "icon@3x.png"].forEach(f => pass.addBuffer(f, imageBuffer));
             }
         } catch (err) { console.warn("Error logo:", err.message); }
     }
+
+    // --- IMAGEN DE SELLOS DINÁMICA (strip.png) ---
+    try {
+        const stampsImageUrl = await generateStampsImage(
+            bid, cid, 
+            customer.stamps || 0, 
+            cardSettings.stampsGoal || 10, 
+            cardSettings.color || "#5134f9", 
+            cardSettings.logoUrl
+        );
+        const response = await fetch(stampsImageUrl);
+        if (response.ok) {
+            const imageBuffer = Buffer.from(await response.arrayBuffer());
+            ["strip.png", "strip@2x.png", "strip@3x.png"].forEach(f => pass.addBuffer(f, imageBuffer));
+        }
+    } catch (err) { console.warn("Error stamps image:", err.message); }
 
     return await pass.getAsBuffer();
 }
@@ -247,6 +264,20 @@ export const updatewalletonstampchange = onDocumentUpdated({
         const safeBid = bid.replace(/[^a-zA-Z0-9]/g, '');
         const safeCid = cid.replace(/[^a-zA-Z0-9]/g, '');
         const objectId = `${ISSUER_ID}.OBJ_${safeBid}_${safeCid}`;
+        
+        // Generar nueva imagen de sellos
+        const busSnap = await db.doc(`businesses/${bid}`).get();
+        const cardSnap = await db.doc(`businesses/${bid}/config/card`).get();
+        const cardSettings = cardSnap.exists ? cardSnap.data() : {};
+        
+        const stampsImageUrl = await generateStampsImage(
+            bid, cid, 
+            newData.stamps || 0, 
+            cardSettings.stampsGoal || 10, 
+            cardSettings.color || "#5134f9", 
+            cardSettings.logoUrl
+        );
+
         const auth = new GoogleAuth({
             credentials: { client_email: serviceAccount.client_email, private_key: serviceAccount.private_key.replace(/\\n/g, '\n') },
             scopes: ["https://www.googleapis.com/auth/wallet_object.issuer"],
@@ -261,7 +292,11 @@ export const updatewalletonstampchange = onDocumentUpdated({
                 textModulesData: [
                     { id: "sellos", header: "Sellos acumulados", body: `${newData.stamps || 0}` },
                     { id: "recompensas", header: "Recompensas", body: `${newData.rewardsRedeemed || 0}` }
-                ]
+                ],
+                heroImage: {
+                    sourceUri: { uri: stampsImageUrl },
+                    contentDescription: { defaultValue: { language: "es-419", value: "Sellos" } }
+                }
             })
         });
     } catch (e) { console.error("Error Google Update:", e.message); }
@@ -354,6 +389,14 @@ export const generatewalletpass = onRequest({
         let cardColor = cardSettings.color || "#5134f9";
         if (!cardColor.startsWith('#')) cardColor = `#${cardColor}`;
 
+        const stampsImageUrl = await generateStampsImage(
+            bid, cid, 
+            stamps, 
+            cardSettings.stampsGoal || 10, 
+            cardColor, 
+            cardSettings.logoUrl
+        );
+
         const claims = {
             iss: serviceAccount.client_email,
             aud: "google",
@@ -384,6 +427,10 @@ export const generatewalletpass = onRequest({
                         sourceUri: { uri: cardSettings.logoUrl },
                         contentDescription: { defaultValue: { language: "es-419", value: "Logo" } }
                     } : undefined,
+                    heroImage: {
+                        sourceUri: { uri: stampsImageUrl },
+                        contentDescription: { defaultValue: { language: "es-419", value: "Sellos" } }
+                    },
                     textModulesData: [
                         { id: "sellos", header: "Sellos acumulados", body: `${stamps}` },
                         { id: "recompensas", header: "Recompensas", body: `${rewardsAvailable}` }
