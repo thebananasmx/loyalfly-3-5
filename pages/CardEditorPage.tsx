@@ -491,23 +491,26 @@ const CardEditorPage: React.FC = () => {
       {/* Card Preview */}
       <div className="lg:sticky lg:top-8 h-full">
         <div className="mb-8 flex justify-center">
-          <div className="relative flex items-center w-full max-w-md bg-white border border-gray-200 rounded-full px-6 py-3 shadow-sm" ref={shareMenuRef}>
-            <input 
-                type="text" 
-                readOnly 
-                value={publicCardUrl.replace(/^https?:\/\//, '')}
-                className="flex-1 bg-transparent text-center text-xl font-medium text-black focus:outline-none cursor-default"
-            />
-            <button
-                onClick={() => setShowShareMenu(!showShareMenu)}
-                className="ml-2 p-1 text-black hover:opacity-60 transition-opacity"
-                title={t('card.shareTitle')}
-            >
+          <div 
+            className="relative flex items-center w-full max-w-sm bg-white border border-gray-200 rounded-full px-6 py-3 shadow-sm cursor-pointer hover:bg-gray-50 transition-colors" 
+            ref={shareMenuRef}
+            onClick={() => setShowShareMenu(!showShareMenu)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && setShowShareMenu(!showShareMenu)}
+          >
+            <div className="flex-1 text-center text-xl font-medium text-black truncate select-none">
+                {publicCardUrl.replace(/^https?:\/\/(www\.)?/, '')}
+            </div>
+            <div className="ml-2 p-1 text-black">
                 <ShareIcon />
-            </button>
+            </div>
             
             {showShareMenu && (
-              <div className="absolute right-6 top-full mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-xl z-20 overflow-hidden">
+              <div 
+                className="absolute right-6 top-full mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-xl z-20 overflow-hidden"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <button
                   onClick={() => {
                     handleCopyUrl();
