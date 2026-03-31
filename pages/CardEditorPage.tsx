@@ -22,6 +22,7 @@ const QRIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5"
 const LockIcon = ({ className }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className || "h-4 w-4"} viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" /></svg>;
 const UploadIcon = ({ className }: { className?: string }) => <svg xmlns="http://www.w3.org/2000/svg" className={className || "h-5 w-5"} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>;
 const TrashIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>;
+const ShareIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>;
 
 const CardEditorPage: React.FC = () => {
   const { t } = useTranslation();
@@ -43,7 +44,19 @@ const CardEditorPage: React.FC = () => {
   const [slug, setSlug] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [showShareMenu, setShowShareMenu] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(true);
+  const shareMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (shareMenuRef.current && !shareMenuRef.current.contains(event.target as Node)) {
+        setShowShareMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
       document.title = 'Editor de Tarjeta | Loyalfly App';
@@ -473,55 +486,52 @@ const CardEditorPage: React.FC = () => {
             {isSaving ? t('common.saving') : t('common.save')}
           </button>
         </div>
-
-        <div className="p-6 bg-white border border-gray-200 rounded-lg">
-          <h3 className="text-lg font-semibold text-black mb-4">{t('card.shareTitle')}</h3>
-          <div>
-              <p className="text-base text-gray-600 mb-2">
-                  {t('card.shareText')}
-              </p>
-              <div className="flex items-center">
-                  <input 
-                      type="text" 
-                      readOnly 
-                      value={publicCardUrl}
-                      className="flex-1 w-full px-3 py-2 border border-gray-300 rounded-l-md bg-gray-50 text-base text-gray-700 focus:outline-none"
-                  />
-                  <button
-                      onClick={handleCopyUrl}
-                      className="px-3 py-2 bg-gray-200 text-gray-700 rounded-r-md hover:bg-gray-300 transition-colors flex items-center"
-                      title={t('card.copyUrl')}
-                  >
-                      {copied ? <CheckIconSuccess /> : <CopyIcon />}
-                  </button>
-              </div>
-              <div className="mt-4 flex flex-wrap gap-2">
-                <a
-                    href={publicCardUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
-                >
-                    <ExternalLinkIcon />
-                    {t('card.viewRegistration')}
-                </a>
-                <a
-                    href="https://loyalfly-qr-1-0.vercel.app/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
-                >
-                    <QRIcon />
-                    {t('card.generateQr')}
-                </a>
-              </div>
-          </div>
-        </div>
       </div>
       
       {/* Card Preview */}
       <div className="lg:sticky lg:top-8 h-full">
-         <h2 className="text-xl font-bold text-black mb-4 text-center">{t('card.previewTitle')}</h2>
+        <div className="mb-8 flex justify-center">
+          <div className="relative flex items-center w-full max-w-md bg-white border border-gray-200 rounded-full px-6 py-3 shadow-sm" ref={shareMenuRef}>
+            <input 
+                type="text" 
+                readOnly 
+                value={publicCardUrl.replace(/^https?:\/\//, '')}
+                className="flex-1 bg-transparent text-center text-xl font-medium text-black focus:outline-none cursor-default"
+            />
+            <button
+                onClick={() => setShowShareMenu(!showShareMenu)}
+                className="ml-2 p-1 text-black hover:opacity-60 transition-opacity"
+                title={t('card.shareTitle')}
+            >
+                <ShareIcon />
+            </button>
+            
+            {showShareMenu && (
+              <div className="absolute right-6 top-full mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-xl z-20 overflow-hidden">
+                <button
+                  onClick={() => {
+                    handleCopyUrl();
+                    setShowShareMenu(false);
+                  }}
+                  className="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-3 border-b border-gray-50"
+                >
+                  {copied ? <CheckIconSuccess /> : <CopyIcon />}
+                  {t('card.copyUrl')}
+                </button>
+                <a
+                  href="https://loyalfly-qr-1-0.vercel.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setShowShareMenu(false)}
+                  className="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-3"
+                >
+                  <QRIcon />
+                  {t('card.generateQr')}
+                </a>
+              </div>
+            )}
+          </div>
+        </div>
          <CardPreview 
             businessName={businessName}
             rewardText={rewardText}
