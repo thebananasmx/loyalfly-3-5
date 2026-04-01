@@ -23,6 +23,53 @@ const ChangelogPage: React.FC = () => {
         Un historial de todas las mejoras y nuevas funcionalidades que hemos agregado a Loyalfly para ayudarte a crecer.
       </p>
       
+      {/* --- VERSION v3.5.0.27 --- */}
+      <section className="mb-12">
+        <div className="pb-4 border-b border-gray-200">
+          <h2 className="text-3xl font-bold text-black">Versión 3.5.0.27</h2>
+          <p className="text-base text-gray-500 mt-1">Lanzada el 31 de Marzo de 2026</p>
+        </div>
+        
+        <ul className="mt-8 space-y-6">
+           <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Generación de QR Integrada y Descarga en Alta Resolución</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se ha implementado una nueva funcionalidad que permite generar el código QR de tu negocio directamente dentro del editor. Ahora puedes descargar tu QR en formato PNG de alta resolución (<strong>2000x2000 px</strong>), ideal para impresiones profesionales en material publicitario, menús o mostradores.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Rediseño del Menú de Compartir y Estabilidad Visual</h3>
+                  <p className="text-gray-600 mt-1">
+                      El menú desplegable de compartir se ha rediseñado para coincidir exactamente con el ancho de la píldora de URL. Este ajuste elimina saltos visuales al navegar entre opciones y proporciona una interfaz más robusta y equilibrada.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
+              <FeatureTag type="new" />
+              <div>
+                  <h3 className="font-semibold text-black">Acceso Directo "Ver mi tarjeta"</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se añadió una nueva opción en el menú de compartir que permite abrir la URL pública de tu tarjeta en una nueva pestaña con un solo clic, facilitando la revisión rápida de los cambios realizados en el editor.
+                  </p>
+              </div>
+          </li>
+           <li className="flex items-start gap-4">
+              <FeatureTag type="improvement" />
+              <div>
+                  <h3 className="font-semibold text-black">Consistencia de Iconografía y Guía de Usuario</h3>
+                  <p className="text-gray-600 mt-1">
+                      Se estandarizó el icono de QR en toda la plataforma para mantener la coherencia visual. Además, se añadió un texto informativo en la vista previa del QR que explica claramente su función a los dueños de negocios.
+                  </p>
+              </div>
+          </li>
+        </ul>
+      </section>
+      
       {/* --- VERSION v3.5.0.26 --- */}
       <section className="mb-12">
         <div className="pb-4 border-b border-gray-200">
