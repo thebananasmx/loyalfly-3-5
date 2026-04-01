@@ -6,6 +6,7 @@ import { updateCardSettings, getBusinessData, uploadCustomStamp } from '../servi
 import { useToast } from '../context/ToastContext';
 import { useTranslation } from 'react-i18next';
 import type { Business } from '../types';
+import QRCode from 'qrcode';
 import { 
   StarIcon, 
   CoffeeIcon, 
@@ -61,6 +62,7 @@ const CardEditorPage: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
+  const [showQrPreview, setShowQrPreview] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(true);
   const shareMenuRef = useRef<HTMLDivElement>(null);
 
@@ -68,6 +70,7 @@ const CardEditorPage: React.FC = () => {
     const handleClickOutside = (event: MouseEvent) => {
       if (shareMenuRef.current && !shareMenuRef.current.contains(event.target as Node)) {
         setShowShareMenu(false);
+        setShowQrPreview(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -142,6 +145,31 @@ const CardEditorPage: React.FC = () => {
         showToast(t('card.copied'), 'success');
         setTimeout(() => setCopied(false), 2000);
     });
+  };
+
+  const handleDownloadQr = async () => {
+    if (!publicCardUrl) return;
+    try {
+      const dataUrl = await QRCode.toDataURL(publicCardUrl, {
+        width: 2000,
+        margin: 2,
+        color: {
+          dark: '#000000',
+          light: '#ffffff',
+        },
+      });
+      
+      const link = document.createElement('a');
+      link.href = dataUrl;
+      link.download = `qr-${slug || 'business'}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast('QR descargado con éxito', 'success');
+    } catch (err) {
+      console.error('Error generating QR:', err);
+      showToast('Error al generar el QR', 'error');
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -524,39 +552,73 @@ const CardEditorPage: React.FC = () => {
             
             {showShareMenu && (
               <div 
-                className="absolute right-6 top-full mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-xl z-20 overflow-hidden"
+                className="absolute left-0 top-full mt-2 w-full bg-white border border-gray-200 rounded-2xl shadow-xl z-20 overflow-hidden"
                 onClick={(e) => e.stopPropagation()}
               >
-                <button
-                  onClick={() => {
-                    handleCopyUrl();
-                    setShowShareMenu(false);
-                  }}
-                  className="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-3 border-b border-gray-50"
-                >
-                  {copied ? <CheckIconSuccess /> : <CopyIcon />}
-                  {t('card.copyUrl')}
-                </button>
-                <a
-                  href="https://loyalfly-qr-1-0.vercel.app/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setShowShareMenu(false)}
-                  className="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-3 border-b border-gray-50"
-                >
-                  <QRIcon />
-                  {t('card.generateQr')}
-                </a>
-                <a
-                  href={publicCardUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setShowShareMenu(false)}
-                  className="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-3"
-                >
-                  <ExternalLinkIcon />
-                  Ver mi tarjeta
-                </a>
+                {!showQrPreview ? (
+                  <>
+                    <button
+                      onClick={() => {
+                        handleCopyUrl();
+                        setShowShareMenu(false);
+                      }}
+                      className="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-3 border-b border-gray-50"
+                    >
+                      {copied ? <CheckIconSuccess /> : <CopyIcon />}
+                      {t('card.copyUrl')}
+                    </button>
+                    <button
+                      onClick={() => setShowQrPreview(true)}
+                      className="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-3 border-b border-gray-50"
+                    >
+                      <QRIcon />
+                      {t('card.generateQr')}
+                    </button>
+                    <a
+                      href={publicCardUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => setShowShareMenu(false)}
+                      className="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-3"
+                    >
+                      <ExternalLinkIcon />
+                      Ver mi tarjeta
+                    </a>
+                  </>
+                ) : (
+                  <div className="p-6 flex flex-col items-center">
+                    <div className="flex items-center justify-between w-full mb-4">
+                      <button 
+                        onClick={() => setShowQrPreview(false)}
+                        className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                      >
+                        <ArrowLeftIcon />
+                      </button>
+                      <span className="font-bold text-gray-800">Código QR</span>
+                      <div className="w-7"></div> {/* Spacer */}
+                    </div>
+                    
+                    <p className="text-center text-xs text-gray-500 mb-6 px-2">
+                      Este es el código QR exclusivo de tu negocio. Al escanearlo, tus clientes accederán directamente a tu tarjeta de fidelización Loyalfly.
+                    </p>
+                    
+                    <div className="bg-white p-4 border border-gray-100 rounded-xl shadow-sm mb-6">
+                      <img 
+                        src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(publicCardUrl)}`} 
+                        alt="QR Preview" 
+                        className="w-40 h-40"
+                      />
+                    </div>
+                    
+                    <button
+                      onClick={handleDownloadQr}
+                      className="w-full py-3 px-4 bg-black text-white font-bold rounded-xl hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
+                    >
+                      <ShareIcon />
+                      Descargar PNG (2000x2000)
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>
