@@ -180,7 +180,7 @@ const LandingPage: React.FC = () => {
                         {/* Right side: Image */}
                         <div className="md:w-1/2">
                             <img
-                                src="https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto,w_1000/v1762014799/loyalfly_hero_p4fkee.png"
+                                src="https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto,w_1200/v1775413956/loyalfly_hero_p4fkee.png"
                                 alt="Tarjeta de lealtad digital de Loyalfly en un smartphone"
                                 className="rounded-lg shadow-xl"
                             />
