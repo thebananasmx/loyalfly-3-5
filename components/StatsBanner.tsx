@@ -6,9 +6,9 @@ const StatsBanner: React.FC = () => {
     
     // Static values to reduce Firestore reads on public landing page
     const stats = { 
-        businesses: 200, 
-        stamps: 2700, 
-        rewards: 250 
+        businesses: 400, 
+        stamps: 4000, 
+        rewards: 320 
     };
 
     return (

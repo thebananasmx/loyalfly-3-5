@@ -6,9 +6,9 @@ import StatsBanner from '../components/StatsBanner';
 const CheckCircleIcon = () => <svg className="w-6 h-6 text-[#00AA00]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>;
 
 const StoreIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" /></svg>;
-const CoffeeIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M3 1a1 1 0 011 1v12a1 1 0 11-2 0V2a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 7H16a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" /></svg>;
-const ScissorsIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M7.003 3.012a1 1 0 011.414 0l2.28 2.28a.5.5 0 010 .707l-1.586 1.586a1 1 0 01-1.414-1.414l.879-.88-1.17-1.17a1 1 0 010-1.414l-.293-.293zm2.28 9.28a.5.5 0 000 .707l1.586 1.586a1 1 0 001.414-1.414l-.879-.88 1.17-1.17a1 1 0 000-1.414l-2.28-2.28a1 1 0 00-1.414 0l-.293.293zm2.586-7.586a1 1 0 010 1.414l-8 8a1 1 0 01-1.414-1.414l8-8a1 1 0 011.414 0z" clipRule="evenodd" /><path d="M3 5a2 2 0 100 4 2 2 0 000-4zM11 11a2 2 0 100 4 2 2 0 000-4z" /></svg>;
-const SparklesIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5 2a1 1 0 00-1 1v1.5a1 1 0 002 0V3a1 1 0 00-1-1zM5 6.5a1 1 0 00-1 1V9a1 1 0 002 0V7.5a1 1 0 00-1-1zM5 11a1 1 0 00-1 1v1.5a1 1 0 002 0V12a1 1 0 00-1-1zM8 2a1 1 0 00-1 1v1.5a1 1 0 002 0V3a1 1 0 00-1-1zM8 6.5a1 1 0 00-1 1V9a1 1 0 002 0V7.5a1 1 0 00-1-1zM8 11a1 1 0 00-1 1v1.5a1 1 0 002 0V12a1 1 0 00-1-1zM11.5 2a1 1 0 011-1h1.5a1 1 0 010 2h-1.5a1 1 0 01-1-1zM11 6.5a1 1 0 00-1 1V9a1 1 0 002 0V7.5a1 1 0 00-1-1zM11 11a1 1 0 00-1 1v1.5a1 1 0 002 0V12a1 1 0 00-1-1zM14.5 6.5a1 1 0 011-1h1.5a1 1 0 010 2h-1.5a1 1 0 01-1-1z" clipRule="evenodd" /></svg>;
+const CoffeeIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="currentColor" viewBox="0 0 351.766 351.766"><path d="M313.397,28.204h-59.649c-0.967,0-1.922,0.048-2.871,0.119H53.14c-13.425,0-24.347,10.922-24.347,24.346v193.495 c0,13.424,10.922,24.346,24.347,24.346h6.265v13.559c0,0.979,0.002,2.373,0.124,3.965H10.435C4.682,288.034,0,292.715,0,298.468 v14.659c0,5.753,4.682,10.434,10.435,10.434h295.264c5.753,0,10.435-4.681,10.435-10.434v-14.659 c0-5.753-4.682-10.434-10.435-10.434h-49.093c0.122-1.591,0.124-2.985,0.124-3.965V270.51h6.265 c13.425,0,24.347-10.922,24.347-24.346v-72.276h26.058c21.156,0,38.368-17.212,38.368-38.368V66.573 C351.766,45.416,334.554,28.204,313.397,28.204z M316.766,135.519c0,1.826-1.542,3.368-3.368,3.368H287.34V63.204h26.058 c1.826,0,3.368,1.542,3.368,3.368V135.519z"/></svg>;
+const ScissorsIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="currentColor" viewBox="0 0 50 50"><path d="M34.781 6.664h-6.951c-1.256.004-1.209 1.876 0 1.865h6.951v.957h-6.951c-1.249-.011-1.203 1.86 0 1.865h6.951v.978h-6.951c-1.249 0-1.203 1.87 0 1.865h6.951v.932h-6.951c-1.223.009-1.203 1.881 0 1.887h6.951v.934h-6.951c-1.223-.004-1.228 1.865 0 1.865h6.951v.932h-6.951c-1.223.004-1.228 1.875 0 1.866h6.951v.955h-6.951c-1.223-.011-1.228 1.858 0 1.865h6.951v.93h-6.951c-1.223-.001-1.203 1.872 0 1.866h6.951v18.159c.004 2.767 4.207 2.717 4.219 0v-42.495c-.012-1.264-1.05-2.862-2.758-2.867h-8.412c-1.256.001-1.209 1.873 0 1.865l6.951.023v.93h-6.951c-1.254-.006-1.207 1.865 0 1.866h6.951v.957zm-7.429 32.194c-.004-3.23-3.352-6.704-7.352-4.454v-12.354l-2.587-20.375c-.054-.539-.511-.666-.818-.675-.317.009-.952.136-1.021.675l-2.574 20.375v12.354c-4-2.25-7.24 1.246-7.241 4.429.001 2.832 2.181 5.158 5.131 5.151 2.972.007 5.11-2.6 5.11-5.151v-12.833h1v12.833c0 2.856 2.212 4.97 4.67 5.104-.041 1.566.47 3.8 1.432 4.686 1.128 1.04 2.471-.29 1.92-1.373-.532-1.008-1.054-1.605-.63-3.806 1.772-.82 2.956-2.546 2.96-4.586zm-16.348 2.541c-1.396-.009-2.524-1.141-2.526-2.541.002-1.399 1.13-2.536 2.526-2.544 1.386.008 2.515 1.145 2.525 2.544-.01 1.401-1.139 2.533-2.525 2.541zm8.571-2.541c.009-1.399 1.136-2.536 2.526-2.544 1.392.008 2.521 1.145 2.525 2.544-.004 1.4-1.132 2.532-2.525 2.541-1.39-.008-2.518-1.14-2.526-2.541z"/></svg>;
+const SparklesIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="currentColor" viewBox="0 0 512 512"><g><path d="M345.116,261.87c-13.849,0.001-26.866,5.389-36.665,15.189c-16.786,16.786-34.439,25.303-52.45,25.303 c-18.011,0-35.664-8.517-52.45-25.314c-9.799-9.788-22.817-15.177-36.666-15.177H0.174 c48.237,57.952,151.384,138.247,255.827,138.247s207.59-80.295,255.827-138.247H345.116z"/></g><g><path d="M363.32,112.531c-37.274-4.534-62.891,15.683-81.645,30.421c-9.968,7.831-19.385,15.234-25.674,15.234 c-6.289,0-15.706-7.403-25.674-15.234c-18.754-14.738-44.373-34.944-81.645-30.421C105.636,117.728,58.244,154.335,0,227.31 h166.884c23.075,0,44.766,8.978,61.102,25.291c20.161,20.184,35.867,20.173,56.028,0.011 c16.336-16.325,38.027-25.303,61.102-25.303H512C453.756,154.335,406.364,117.728,363.32,112.531z"/></g></svg>;
 
 
 const Feature: React.FC<{ title: string; description: string }> = ({ title, description }) => (
@@ -72,28 +72,28 @@ const LandingPage: React.FC = () => {
         title: t('landing.designs.tabs.entrepreneur.title'),
         icon: <StoreIcon />,
         description: t('landing.designs.tabs.entrepreneur.desc'),
-        imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto,w_600/v1762055851/card_loyalfly_tmx9vh.png'
+        imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto,w_600/v1775414854/card_loyalfly_tmx9vh.png'
       },
       {
         id: 'cafeterias',
         title: t('landing.designs.tabs.cafe.title'),
         icon: <CoffeeIcon />,
         description: t('landing.designs.tabs.cafe.desc'),
-        imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto,w_600/v1762057146/card_cafe_mzjj0q.png'
+        imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto,w_600/v1775414924/card_cafe_mzjj0q.png'
       },
       {
         id: 'barberias',
         title: t('landing.designs.tabs.barber.title'),
         icon: <ScissorsIcon />,
         description: t('landing.designs.tabs.barber.desc'),
-        imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto,w_600/v1762057493/card_barber_ftfyxa.png'
+        imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto,w_600/v1775414865/card_barber_ftfyxa.png'
       },
       {
         id: 'belleza',
         title: t('landing.designs.tabs.beauty.title'),
         icon: <SparklesIcon />,
         description: t('landing.designs.tabs.beauty.desc'),
-        imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto,w_600/v1762057298/card_beauty_cu1r3n.png'
+        imageUrl: 'https://res.cloudinary.com/dg4wbuppq/image/upload/f_auto,q_auto,w_600/v1775414915/card_beauty_cu1r3n.png'
       }
     ];
 
