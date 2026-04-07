@@ -215,6 +215,8 @@ const CardEditorPage: React.FC = () => {
     reader.readAsDataURL(file);
   };
 
+  const [previewMode, setPreviewMode] = useState<'web' | 'apple' | 'google'>('web');
+
   if (isLoadingData) {
       return (
           <div className="flex items-center justify-center py-20">
@@ -224,6 +226,156 @@ const CardEditorPage: React.FC = () => {
           </div>
       );
   }
+
+  // Mock data for preview
+  const mockCustomer = {
+    name: 'John Doe',
+    phone: '+52 55 1234 5678',
+    id: 'JD12345678'
+  };
+
+  const renderAppleWallet = () => {
+    const isLight = textColorScheme === 'light';
+    const primaryTextColor = isLight ? 'text-white' : 'text-black';
+    const secondaryTextColor = isLight ? 'text-white/70' : 'text-gray-500';
+    
+    return (
+      <div className="w-full max-w-[320px] mx-auto rounded-[20px] overflow-hidden shadow-2xl flex flex-col font-sans" style={{ backgroundColor: cardColor }}>
+        {/* Apple Header */}
+        <div className="p-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center overflow-hidden">
+              {logoUrl ? <img src={logoUrl} alt="logo" className="w-full h-full object-cover" /> : <span className="text-white font-bold text-xs">L</span>}
+            </div>
+            <span className={`text-[10px] font-bold tracking-widest uppercase truncate max-w-[120px] ${isLight ? 'text-white/80' : 'text-black/60'}`}>
+              {businessName || 'LOYALFLY'}
+            </span>
+          </div>
+        </div>
+
+        {/* Apple Strip Image (Stamps) */}
+        <div className="px-4 py-2">
+          <div className="grid grid-cols-5 gap-2 p-3 rounded-xl">
+            {Array.from({ length: stampsGoal }).map((_, i) => (
+              <div key={i} className={`aspect-square rounded-full flex items-center justify-center ${i < sampleStamps ? (isLight ? 'bg-white' : 'bg-black') : 'bg-white/20'}`}>
+                {i < sampleStamps && (
+                  <div className="w-full h-full p-1 flex items-center justify-center">
+                    {stampIconType === 'star' && <StarIcon className="w-full h-full" style={{ color: stampColor }} />}
+                    {stampIconType === 'coffee' && <CoffeeIcon className="w-full h-full" style={{ color: stampColor }} />}
+                    {stampIconType === 'heart' && <HeartIcon className="w-full h-full" style={{ color: stampColor }} />}
+                    {stampIconType === 'scissors' && <ScissorsIcon className="w-full h-full" style={{ color: stampColor }} />}
+                    {stampIconType === 'gift' && <GiftIcon className="w-full h-full" style={{ color: stampColor }} />}
+                    {stampIconType === 'custom' && customStampUrl && <img src={customStampUrl} alt="stamp" className="w-full h-full object-contain" />}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Apple Fields */}
+        <div className="p-4">
+          <div className="flex justify-between items-start gap-2">
+            <div className="flex flex-col min-w-0 flex-[1.5]">
+              <span className={`text-[9px] font-bold uppercase tracking-tighter ${isLight ? 'text-white/60' : 'text-black/40'}`}>CLIENTE</span>
+              <span className={`text-xs font-semibold truncate ${primaryTextColor}`}>{mockCustomer.name}</span>
+            </div>
+            <div className="flex flex-col min-w-0 flex-shrink-0 text-center">
+              <span className={`text-[9px] font-bold uppercase tracking-tighter ${isLight ? 'text-white/60' : 'text-black/40'}`}>SELLOS</span>
+              <span className={`text-xs font-semibold ${primaryTextColor}`}>{sampleStamps}/{stampsGoal}</span>
+            </div>
+            <div className="flex flex-col min-w-0 flex-[1.5] text-right">
+              <span className={`text-[9px] font-bold uppercase tracking-tighter ${isLight ? 'text-white/60' : 'text-black/40'}`}>RECOMPENSA</span>
+              <span className={`text-xs font-semibold truncate ${primaryTextColor}`}>{rewardText || 'Premio'}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Apple QR */}
+        <div className="p-6 flex flex-col items-center gap-2 mt-auto">
+          <div className="bg-white p-2 rounded-lg shadow-sm">
+             <img 
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${mockCustomer.id}`} 
+                alt="QR" 
+                className="w-28 h-28"
+              />
+          </div>
+          <span className={`text-[10px] font-medium tracking-wide ${isLight ? 'text-white/60' : 'text-black/40'}`}>Escanea, suma sellos</span>
+        </div>
+      </div>
+    );
+  };
+
+  const renderGoogleWallet = () => {
+    const isLight = textColorScheme === 'light';
+    const primaryTextColor = isLight ? 'text-white' : 'text-black';
+    const secondaryTextColor = isLight ? 'text-white/70' : 'text-gray-500';
+
+    return (
+      <div className="w-full max-w-[320px] mx-auto rounded-xl overflow-hidden shadow-2xl flex flex-col font-sans border border-black/5" style={{ backgroundColor: cardColor }}>
+        {/* Google Header */}
+        <div className="p-4 flex items-center gap-3 border-b border-black/5">
+          <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center overflow-hidden border border-white/10">
+            {logoUrl ? <img src={logoUrl} alt="logo" className="w-full h-full object-cover" /> : <span className={`${primaryTextColor} font-bold text-sm`}>L</span>}
+          </div>
+          <span className={`text-base font-medium truncate ${primaryTextColor}`}>
+            {businessName || 'Loyalfly'}
+          </span>
+        </div>
+
+        {/* Google Hero Image (Stamps) */}
+        <div className="p-4">
+          <div className="grid grid-cols-5 gap-2 p-3 rounded-lg">
+            {Array.from({ length: stampsGoal }).map((_, i) => (
+              <div key={i} className={`aspect-square rounded-full flex items-center justify-center ${i < sampleStamps ? (isLight ? 'bg-white' : 'bg-black') : 'bg-white/20'}`}>
+                {i < sampleStamps && (
+                  <div className="w-full h-full p-1 flex items-center justify-center">
+                    {stampIconType === 'star' && <StarIcon className="w-full h-full" style={{ color: stampColor }} />}
+                    {stampIconType === 'coffee' && <CoffeeIcon className="w-full h-full" style={{ color: stampColor }} />}
+                    {stampIconType === 'heart' && <HeartIcon className="w-full h-full" style={{ color: stampColor }} />}
+                    {stampIconType === 'scissors' && <ScissorsIcon className="w-full h-full" style={{ color: stampColor }} />}
+                    {stampIconType === 'gift' && <GiftIcon className="w-full h-full" style={{ color: stampColor }} />}
+                    {stampIconType === 'custom' && customStampUrl && <img src={customStampUrl} alt="stamp" className="w-full h-full object-contain" />}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Google Info */}
+        <div className="p-5 space-y-4">
+           <div className="flex flex-col">
+              <span className={`text-sm font-medium ${primaryTextColor}`}>{mockCustomer.name}</span>
+              <span className={`text-xs ${isLight ? 'text-white/60' : 'text-gray-500'}`}>Miembro desde hoy</span>
+           </div>
+
+           <div className="grid grid-cols-2 gap-4 pt-2">
+              <div>
+                <span className={`block text-xs mb-1 ${isLight ? 'text-white/60' : 'text-gray-500'}`}>Sellos acumulados</span>
+                <span className={`text-lg font-bold ${primaryTextColor}`}>{sampleStamps}</span>
+              </div>
+              <div>
+                <span className={`block text-xs mb-1 ${isLight ? 'text-white/60' : 'text-gray-500'}`}>Recompensas</span>
+                <span className={`text-lg font-bold ${primaryTextColor}`}>0</span>
+              </div>
+           </div>
+        </div>
+
+        {/* Google QR */}
+        <div className="p-6 flex flex-col items-center border-t border-black/5 mt-auto">
+          <div className="bg-white p-2 rounded-lg shadow-sm">
+             <img 
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${mockCustomer.id}`} 
+                alt="QR" 
+                className="w-32 h-32"
+              />
+          </div>
+          <span className={`mt-2 text-sm font-mono tracking-widest ${isLight ? 'text-white/80' : 'text-gray-600'}`}>{mockCustomer.id.substring(0, 8)}</span>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
@@ -533,8 +685,30 @@ const CardEditorPage: React.FC = () => {
       </div>
       
       {/* Card Preview */}
-      <div className="lg:sticky lg:top-8 h-full">
-        <div className="mb-8 flex justify-center">
+      <div className="lg:sticky lg:top-8 h-full flex flex-col items-center">
+        {/* Preview Mode Selector */}
+        <div className="mb-6 flex p-1 bg-gray-100 rounded-xl w-full max-w-sm">
+          <button
+            onClick={() => setPreviewMode('web')}
+            className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${previewMode === 'web' ? 'bg-white text-black shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+          >
+            Web
+          </button>
+          <button
+            onClick={() => setPreviewMode('apple')}
+            className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${previewMode === 'apple' ? 'bg-white text-black shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+          >
+            Apple Wallet
+          </button>
+          <button
+            onClick={() => setPreviewMode('google')}
+            className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${previewMode === 'google' ? 'bg-white text-black shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+          >
+            Google Wallet
+          </button>
+        </div>
+
+        <div className="mb-8 flex justify-center w-full">
           <div 
             className="relative flex items-center w-full max-w-sm bg-white border border-gray-200 rounded-full px-6 py-3 shadow-sm cursor-pointer hover:bg-gray-50 transition-colors" 
             ref={shareMenuRef}
@@ -544,7 +718,7 @@ const CardEditorPage: React.FC = () => {
             onKeyDown={(e) => e.key === 'Enter' && setShowShareMenu(!showShareMenu)}
           >
             <div className="flex-1 text-center text-xl font-medium text-black truncate select-none">
-                {publicCardUrl.replace(/^https?:\/\/(www\.)?/, '')}
+                {publicCardUrl.replace(/^https?:\/\/(www\.)?/, '') || 'loyalfly.com.mx/view/tu-negocio'}
             </div>
             <div className="ml-2 p-1 text-black">
                 <ShareIcon />
@@ -623,18 +797,28 @@ const CardEditorPage: React.FC = () => {
             )}
           </div>
         </div>
-         <CardPreview 
-            businessName={businessName}
-            rewardText={rewardText}
-            cardColor={cardColor}
-            stamps={sampleStamps}
-            textColorScheme={textColorScheme}
-            logoUrl={logoUrl}
-            stampsGoal={stampsGoal}
-            stampIconType={stampIconType}
-            stampColor={stampColor}
-            customStampUrl={customStampUrl}
-         />
+
+        <div className="w-full animate-fade-in">
+          {previewMode === 'web' && (
+            <CardPreview 
+                businessName={businessName}
+                rewardText={rewardText}
+                cardColor={cardColor}
+                stamps={sampleStamps}
+                textColorScheme={textColorScheme}
+                logoUrl={logoUrl}
+                stampsGoal={stampsGoal}
+                stampIconType={stampIconType}
+                stampColor={stampColor}
+                customStampUrl={customStampUrl}
+                customerName={mockCustomer.name}
+                customerPhone={mockCustomer.phone}
+                customerId={mockCustomer.id}
+            />
+          )}
+          {previewMode === 'apple' && renderAppleWallet()}
+          {previewMode === 'google' && renderGoogleWallet()}
+        </div>
       </div>
     </div>
   );
