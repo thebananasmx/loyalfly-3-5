@@ -254,7 +254,7 @@ const CardEditorPage: React.FC = () => {
         </div>
 
         {/* Apple Strip Image (Stamps) */}
-        <div className="px-4 py-2">
+        <div className="px-0 py-0">
           <div className="grid grid-cols-5 gap-2 p-3 rounded-xl">
             {Array.from({ length: stampsGoal }).map((_, i) => (
               <div key={i} className={`aspect-square rounded-full flex items-center justify-center ${i < sampleStamps ? (isLight ? 'bg-white' : 'bg-black') : 'bg-white/20'}`}>
@@ -324,7 +324,7 @@ const CardEditorPage: React.FC = () => {
         </div>
 
         {/* Google Hero Image (Stamps) */}
-        <div className="p-4">
+        <div className="p-0">
           <div className="grid grid-cols-5 gap-2 p-3 rounded-lg">
             {Array.from({ length: stampsGoal }).map((_, i) => (
               <div key={i} className={`aspect-square rounded-full flex items-center justify-center ${i < sampleStamps ? (isLight ? 'bg-white' : 'bg-black') : 'bg-white/20'}`}>
