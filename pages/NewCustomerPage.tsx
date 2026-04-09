@@ -1,27 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createNewCustomer, getBusinessData } from '../services/firebaseService';
+import { createNewCustomer, getBusinessData, getCustomerByPhone } from '../services/firebaseService';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import ErrorMessage from '../components/ErrorMessage';
 import ExclamationCircleIcon from '../components/icons/ExclamationCircleIcon';
 import type { Business } from '../types';
-
-const validateMexicanPhoneNumber = (phone: string): string => {
-    if (!phone) return "El número de teléfono es requerido.";
-    let cleaned = phone.trim();
-
-    if (cleaned.startsWith('+521')) {
-        cleaned = cleaned.substring(4);
-    } else if (cleaned.startsWith('+52')) {
-        cleaned = cleaned.substring(3);
-    }
-
-    cleaned = cleaned.replace(/\D/g, '');
-
-    return /^\d{10}$/.test(cleaned) ? "" : "Por favor, ingresa un número de teléfono válido de 10 dígitos.";
-};
+import { COUNTRIES, validatePhoneNumber, formatPhoneWithDialCode } from '../utils/phoneUtils';
 
 const PLAN_LIMITS = {
     Gratis: 100,
@@ -35,6 +21,7 @@ const NewCustomerPage: React.FC = () => {
 
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
+    const [selectedCountry, setSelectedCountry] = useState('MX');
     const [email, setEmail] = useState('');
     const [errors, setErrors] = useState<{ name?: string; phone?: string; email?: string }>({});
     const [loading, setLoading] = useState(false);
@@ -61,7 +48,8 @@ const NewCustomerPage: React.FC = () => {
 
     const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const sanitized = e.target.value.replace(/\D/g, '');
-        setPhone(sanitized.slice(0, 10));
+        const maxDigits = COUNTRIES.find(c => c.code === selectedCountry)?.digits || 10;
+        setPhone(sanitized.slice(0, maxDigits));
     };
 
     const validate = () => {
@@ -69,7 +57,7 @@ const NewCustomerPage: React.FC = () => {
 
         if (!name) newErrors.name = "El nombre del cliente es requerido.";
 
-        const phoneError = validateMexicanPhoneNumber(phone);
+        const phoneError = validatePhoneNumber(phone, selectedCountry);
         if (phoneError) newErrors.phone = phoneError;
 
         if (email && !/\S+@\S+\.\S+/.test(email)) {
@@ -98,7 +86,21 @@ const NewCustomerPage: React.FC = () => {
         setLoading(true);
 
         try {
-            const newCustomer = await createNewCustomer(user.uid, { name, phone, email });
+            const fullPhone = formatPhoneWithDialCode(phone, selectedCountry);
+            let existingCustomer = await getCustomerByPhone(user.uid, fullPhone);
+            
+            // Dual search for existing check
+            if (!existingCustomer && selectedCountry === 'MX') {
+                existingCustomer = await getCustomerByPhone(user.uid, phone.replace(/\D/g, ''));
+            }
+
+            if (existingCustomer) {
+                setErrors({ phone: 'Este número de teléfono ya está registrado.' });
+                setLoading(false);
+                return;
+            }
+
+            const newCustomer = await createNewCustomer(user.uid, { name, phone: fullPhone, email });
             showToast(`¡Cliente "${newCustomer.name}" registrado con éxito!`, 'success');
             setName('');
             setPhone('');
@@ -173,25 +175,36 @@ const NewCustomerPage: React.FC = () => {
 
                 <div>
                     <label htmlFor="phone" className="block text-base font-medium text-gray-700">Número de Teléfono</label>
-                    <div className="relative mt-1">
-                        <input
-                            id="phone"
-                            type="tel"
-                            value={phone}
-                            onChange={handlePhoneChange}
-                            maxLength={10}
-                            required
+                    <div className="flex gap-2 mt-1">
+                        <select
+                            value={selectedCountry}
+                            onChange={(e) => setSelectedCountry(e.target.value)}
                             disabled={isLimitReached}
-                            className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none disabled:bg-gray-100 ${errors.phone ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
-                            placeholder="Ej: 5512345678 (10 dígitos)"
-                            aria-invalid={!!errors.phone}
-                            aria-describedby="phone-error"
-                        />
-                        {errors.phone && (
-                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                                <ExclamationCircleIcon />
-                            </div>
-                        )}
+                            className="block w-24 px-2 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black bg-white disabled:bg-gray-100"
+                        >
+                            {COUNTRIES.map(c => (
+                                <option key={c.code} value={c.code}>{c.code} ({c.dialCode})</option>
+                            ))}
+                        </select>
+                        <div className="relative flex-1">
+                            <input
+                                id="phone"
+                                type="tel"
+                                value={phone}
+                                onChange={handlePhoneChange}
+                                required
+                                disabled={isLimitReached}
+                                className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none disabled:bg-gray-100 ${errors.phone ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
+                                placeholder="Ej: 5512345678"
+                                aria-invalid={!!errors.phone}
+                                aria-describedby="phone-error"
+                            />
+                            {errors.phone && (
+                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                    <ExclamationCircleIcon />
+                                </div>
+                            )}
+                        </div>
                     </div>
                      <ErrorMessage message={errors.phone} id="phone-error" />
                 </div>

@@ -1,29 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { getCustomerById, updateCustomer, deleteCustomer } from '../services/firebaseService';
+import { getCustomerById, updateCustomer, deleteCustomer, getCustomerByPhone } from '../services/firebaseService';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import ErrorMessage from '../components/ErrorMessage';
 import ExclamationCircleIcon from '../components/icons/ExclamationCircleIcon';
 import ConfirmationModal from '../components/ConfirmationModal';
+import { COUNTRIES, validatePhoneNumber, formatPhoneWithDialCode, parsePhoneNumber } from '../utils/phoneUtils';
 
 const ArrowLeftIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>;
 const TrashIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" /></svg>;
-
-const validateMexicanPhoneNumber = (phone: string): string => {
-    if (!phone) return "El número de teléfono es requerido.";
-    let cleaned = phone.trim();
-
-    if (cleaned.startsWith('+521')) {
-        cleaned = cleaned.substring(4);
-    } else if (cleaned.startsWith('+52')) {
-        cleaned = cleaned.substring(3);
-    }
-
-    cleaned = cleaned.replace(/\D/g, '');
-
-    return /^\d{10}$/.test(cleaned) ? "" : "Por favor, ingresa un número de teléfono válido de 10 dígitos.";
-};
 
 const EditCustomerPage: React.FC = () => {
     const { customerId } = useParams<{ customerId: string }>();
@@ -33,6 +19,7 @@ const EditCustomerPage: React.FC = () => {
 
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
+    const [selectedCountry, setSelectedCountry] = useState('MX');
     const [email, setEmail] = useState('');
     const [errors, setErrors] = useState<{ name?: string; phone?: string; email?: string }>({});
     
@@ -51,7 +38,9 @@ const EditCustomerPage: React.FC = () => {
                 const customerData = await getCustomerById(user.uid, customerId);
                 if (customerData) {
                     setName(customerData.name);
-                    setPhone(customerData.phone);
+                    const parsedPhone = parsePhoneNumber(customerData.phone);
+                    setPhone(parsedPhone.number);
+                    setSelectedCountry(parsedPhone.countryCode);
                     setEmail(customerData.email);
                     document.title = `Editar: ${customerData.name} | Loyalfly App`;
                 } else {
@@ -71,7 +60,8 @@ const EditCustomerPage: React.FC = () => {
 
     const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const sanitized = e.target.value.replace(/\D/g, '');
-        setPhone(sanitized.slice(0, 10));
+        const maxDigits = COUNTRIES.find(c => c.code === selectedCountry)?.digits || 10;
+        setPhone(sanitized.slice(0, maxDigits));
     };
 
     const validate = () => {
@@ -79,7 +69,7 @@ const EditCustomerPage: React.FC = () => {
 
         if (!name) newErrors.name = "El nombre del cliente es requerido.";
 
-        const phoneError = validateMexicanPhoneNumber(phone);
+        const phoneError = validatePhoneNumber(phone, selectedCountry);
         if (phoneError) newErrors.phone = phoneError;
 
         if (email && !/\S+@\S+\.\S+/.test(email)) {
@@ -96,7 +86,21 @@ const EditCustomerPage: React.FC = () => {
 
         setIsSaving(true);
         try {
-            await updateCustomer(user.uid, customerId, { name, phone, email });
+            const fullPhone = formatPhoneWithDialCode(phone, selectedCountry);
+            
+            // Check if phone is already taken by another customer
+            let existingCustomer = await getCustomerByPhone(user.uid, fullPhone);
+            if (!existingCustomer && selectedCountry === 'MX') {
+                existingCustomer = await getCustomerByPhone(user.uid, phone.replace(/\D/g, ''));
+            }
+
+            if (existingCustomer && existingCustomer.id !== customerId) {
+                setErrors({ phone: 'Este número de teléfono ya está registrado por otro cliente.' });
+                setIsSaving(false);
+                return;
+            }
+
+            await updateCustomer(user.uid, customerId, { name, phone: fullPhone, email });
             showToast('Cliente actualizado con éxito.', 'success');
             navigate('/app/dashboard');
         } catch (error) {
@@ -165,22 +169,32 @@ const EditCustomerPage: React.FC = () => {
                 </div>
                 <div>
                     <label htmlFor="phone" className="block text-base font-medium text-gray-700">Número de Teléfono</label>
-                    <div className="relative mt-1">
-                        <input
-                            id="phone"
-                            type="tel"
-                            value={phone}
-                            onChange={handlePhoneChange}
-                            maxLength={10}
-                            required
-                            className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.phone ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
-                            aria-invalid={!!errors.phone}
-                        />
-                         {errors.phone && (
-                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                                <ExclamationCircleIcon />
-                            </div>
-                        )}
+                    <div className="flex gap-2 mt-1">
+                        <select
+                            value={selectedCountry}
+                            onChange={(e) => setSelectedCountry(e.target.value)}
+                            className="block w-24 px-2 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black bg-white"
+                        >
+                            {COUNTRIES.map(c => (
+                                <option key={c.code} value={c.code}>{c.code} ({c.dialCode})</option>
+                            ))}
+                        </select>
+                        <div className="relative flex-1">
+                            <input
+                                id="phone"
+                                type="tel"
+                                value={phone}
+                                onChange={handlePhoneChange}
+                                required
+                                className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.phone ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
+                                aria-invalid={!!errors.phone}
+                            />
+                             {errors.phone && (
+                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                    <ExclamationCircleIcon />
+                                </div>
+                            )}
+                        </div>
                     </div>
                     <ErrorMessage message={errors.phone} />
                 </div>

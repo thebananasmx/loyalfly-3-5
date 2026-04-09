@@ -7,6 +7,7 @@ import ErrorMessage from '../components/ErrorMessage';
 import ExclamationCircleIcon from '../components/icons/ExclamationCircleIcon';
 import LanguageSelector from '../components/LanguageSelector';
 import { useTranslation } from 'react-i18next';
+import { COUNTRIES, validatePhoneNumber, formatPhoneWithDialCode } from '../utils/phoneUtils';
 
 // --- CONFIGURACIÓN DE BACKEND (Cloud Functions 2nd Gen) ---
 const GOOGLE_WALLET_URL = "https://generatewalletpass-qt7vvfswnq-uc.a.run.app";
@@ -36,21 +37,6 @@ interface SurveySettings {
     surveyId: string;
 }
 
-const validateMexicanPhoneNumber = (phone: string): string => {
-    if (!phone) return ""; 
-    let cleaned = phone.trim();
-
-    if (cleaned.startsWith('+521')) {
-        cleaned = cleaned.substring(4);
-    } else if (cleaned.startsWith('+52')) {
-        cleaned = cleaned.substring(3);
-    }
-
-    cleaned = cleaned.replace(/\D/g, '');
-
-    return /^\d{10}$/.test(cleaned) ? "" : "Por favor, ingresa un número de teléfono válido de 10 dígitos.";
-};
-
 const PublicCardPage: React.FC = () => {
     const { t } = useTranslation();
     const { slug } = useParams<{ slug: string }>();
@@ -68,8 +54,10 @@ const PublicCardPage: React.FC = () => {
     const [hasVoted, setHasVoted] = useState(true);
     
     const [phoneLookup, setPhoneLookup] = useState(''); 
+    const [selectedCountryLookup, setSelectedCountryLookup] = useState('MX');
     const [userName, setUserName] = useState('');
     const [userPhone, setUserPhone] = useState('');
+    const [selectedCountryRegister, setSelectedCountryRegister] = useState('MX');
     const [userEmail, setUserEmail] = useState('');
     const { i18n } = useTranslation();
 
@@ -150,16 +138,17 @@ const PublicCardPage: React.FC = () => {
         }
     }, [view]);
 
-    const handlePhoneChange = (setter: React.Dispatch<React.SetStateAction<string>>) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handlePhoneChange = (setter: React.Dispatch<React.SetStateAction<string>>, countryCode: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
         const sanitized = e.target.value.replace(/\D/g, '');
-        setter(sanitized.slice(0, 10));
+        const maxDigits = COUNTRIES.find(c => c.code === countryCode)?.digits || 10;
+        setter(sanitized.slice(0, maxDigits));
     };
 
     const handleLookup = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!businessId || !phoneLookup) return;
 
-        const phoneError = validateMexicanPhoneNumber(phoneLookup);
+        const phoneError = validatePhoneNumber(phoneLookup, selectedCountryLookup);
         if (phoneError) {
             setErrors({ phoneLookup: phoneError });
             return;
@@ -168,7 +157,14 @@ const PublicCardPage: React.FC = () => {
         setIsSubmitting(true);
         setErrors({});
         try {
-            const foundCustomer = await getCustomerByPhone(businessId, phoneLookup);
+            const fullPhone = formatPhoneWithDialCode(phoneLookup, selectedCountryLookup);
+            let foundCustomer = await getCustomerByPhone(businessId, fullPhone);
+            
+            // Dual search for backward compatibility
+            if (!foundCustomer && selectedCountryLookup === 'MX') {
+                foundCustomer = await getCustomerByPhone(businessId, phoneLookup.replace(/\D/g, ''));
+            }
+
             if (foundCustomer) {
                 setCustomer(foundCustomer);
                 const surveyData = await getSurveySettings(businessId);
@@ -182,6 +178,7 @@ const PublicCardPage: React.FC = () => {
                 setView('display');
             } else {
                 setUserPhone(phoneLookup); 
+                setSelectedCountryRegister(selectedCountryLookup);
                 setView('register');
             }
         } catch (err) {
@@ -198,7 +195,7 @@ const PublicCardPage: React.FC = () => {
         const newErrors: { userName?: string, userPhone?: string, userEmail?: string } = {};
         if (!userName) newErrors.userName = "Tu nombre es requerido.";
         
-        const phoneError = validateMexicanPhoneNumber(userPhone);
+        const phoneError = validatePhoneNumber(userPhone, selectedCountryRegister);
         if (phoneError) newErrors.userPhone = phoneError;
         
         if (userEmail && !/\S+@\S+\.\S+/.test(userEmail)) {
@@ -214,14 +211,21 @@ const PublicCardPage: React.FC = () => {
         setErrors({});
 
         try {
-            const existingCustomer = await getCustomerByPhone(businessId, userPhone);
+            const fullPhone = formatPhoneWithDialCode(userPhone, selectedCountryRegister);
+            let existingCustomer = await getCustomerByPhone(businessId, fullPhone);
+            
+            // Dual search for existing check
+            if (!existingCustomer && selectedCountryRegister === 'MX') {
+                existingCustomer = await getCustomerByPhone(businessId, userPhone.replace(/\D/g, ''));
+            }
+
             if (existingCustomer) {
                 setErrors({ userPhone: 'Este número de teléfono ya está registrado.' });
                 setIsSubmitting(false);
                 return;
             }
 
-            const newCustomer = await createNewCustomer(businessId, { name: userName, phone: userPhone, email: userEmail });
+            const newCustomer = await createNewCustomer(businessId, { name: userName, phone: fullPhone, email: userEmail });
             setCustomer(newCustomer);
             const surveyData = await getSurveySettings(businessId);
             if (surveyData && surveyData.isEnabled) {
@@ -271,24 +275,34 @@ const PublicCardPage: React.FC = () => {
                                 <form onSubmit={handleLookup} className="space-y-4">
                                     <div>
                                         <label htmlFor="phoneLookup" className="sr-only">{t('common.phone')}</label>
-                                        <div className="relative">
-                                            <input
-                                                id="phoneLookup"
-                                                type="tel"
-                                                value={phoneLookup}
-                                                onChange={handlePhoneChange(setPhoneLookup)}
-                                                maxLength={10}
-                                                required
-                                                className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.phoneLookup ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
-                                                placeholder={t('publicView.lookupSubtitle')}
-                                                aria-invalid={!!errors.phoneLookup}
-                                                aria-describedby="phoneLookup-error"
-                                            />
-                                            {errors.phoneLookup && (
-                                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                                                    <ExclamationCircleIcon />
-                                                </div>
-                                            )}
+                                        <div className="flex gap-2">
+                                            <select
+                                                value={selectedCountryLookup}
+                                                onChange={(e) => setSelectedCountryLookup(e.target.value)}
+                                                className="block w-24 px-2 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black bg-white"
+                                            >
+                                                {COUNTRIES.map(c => (
+                                                    <option key={c.code} value={c.code}>{c.code} ({c.dialCode})</option>
+                                                ))}
+                                            </select>
+                                            <div className="relative flex-1">
+                                                <input
+                                                    id="phoneLookup"
+                                                    type="tel"
+                                                    value={phoneLookup}
+                                                    onChange={handlePhoneChange(setPhoneLookup, selectedCountryLookup)}
+                                                    required
+                                                    className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.phoneLookup ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
+                                                    placeholder={t('publicView.lookupSubtitle')}
+                                                    aria-invalid={!!errors.phoneLookup}
+                                                    aria-describedby="phoneLookup-error"
+                                                />
+                                                {errors.phoneLookup && (
+                                                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                                        <ExclamationCircleIcon />
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
                                         <ErrorMessage message={errors.phoneLookup} id="phoneLookup-error" />
                                     </div>
@@ -344,24 +358,34 @@ const PublicCardPage: React.FC = () => {
                                     </div>
                                     <div>
                                         <label htmlFor="userPhone" className="block text-base font-medium text-gray-700 sr-only">{t('common.phone')}</label>
-                                         <div className="relative">
-                                            <input
-                                                id="userPhone"
-                                                type="tel"
-                                                value={userPhone}
-                                                onChange={handlePhoneChange(setUserPhone)}
-                                                maxLength={10}
-                                                required
-                                                className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.userPhone ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
-                                                placeholder={t('common.phone')}
-                                                aria-invalid={!!errors.userPhone}
-                                                aria-describedby="userPhone-error"
-                                            />
-                                            {errors.userPhone && (
-                                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                                                    <ExclamationCircleIcon />
-                                                </div>
-                                            )}
+                                         <div className="flex gap-2">
+                                            <select
+                                                value={selectedCountryRegister}
+                                                onChange={(e) => setSelectedCountryRegister(e.target.value)}
+                                                className="block w-24 px-2 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black bg-white"
+                                            >
+                                                {COUNTRIES.map(c => (
+                                                    <option key={c.code} value={c.code}>{c.code} ({c.dialCode})</option>
+                                                ))}
+                                            </select>
+                                            <div className="relative flex-1">
+                                                <input
+                                                    id="userPhone"
+                                                    type="tel"
+                                                    value={userPhone}
+                                                    onChange={handlePhoneChange(setUserPhone, selectedCountryRegister)}
+                                                    required
+                                                    className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none ${errors.userPhone ? 'pr-10 border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 placeholder-gray-400 focus:ring-black focus:border-black'}`}
+                                                    placeholder={t('common.phone')}
+                                                    aria-invalid={!!errors.userPhone}
+                                                    aria-describedby="userPhone-error"
+                                                />
+                                                {errors.userPhone && (
+                                                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                                        <ExclamationCircleIcon />
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
                                         <ErrorMessage message={errors.userPhone} id="userPhone-error" />
                                     </div>
