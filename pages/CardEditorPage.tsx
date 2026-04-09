@@ -247,7 +247,7 @@ const CardEditorPage: React.FC = () => {
             <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center overflow-hidden">
               {logoUrl ? <img src={logoUrl} alt="logo" className="w-full h-full object-cover" /> : <span className="text-white font-bold text-xs">L</span>}
             </div>
-            <span className={`text-[10px] font-bold tracking-widest uppercase truncate max-w-[120px] ${isLight ? 'text-white/80' : 'text-black/60'}`}>
+            <span className={`text-sm font-bold tracking-widest uppercase truncate max-w-[160px] ${isLight ? 'text-white/80' : 'text-black/60'}`}>
               {businessName || 'LOYALFLY'}
             </span>
           </div>
@@ -292,15 +292,15 @@ const CardEditorPage: React.FC = () => {
         </div>
 
         {/* Apple QR */}
-        <div className="p-6 flex flex-col items-center gap-2 mt-auto">
-          <div className="bg-white p-2 rounded-lg shadow-sm">
+        <div className="p-6 flex flex-col items-center mt-auto">
+          <div className="bg-white p-3 rounded-xl shadow-sm flex flex-col items-center gap-2">
              <img 
                 src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${mockCustomer.id}`} 
                 alt="QR" 
                 className="w-28 h-28"
               />
+             <span className="text-[10px] font-medium tracking-wide text-gray-800">Escanea, suma sellos</span>
           </div>
-          <span className={`text-[10px] font-medium tracking-wide ${isLight ? 'text-white/60' : 'text-black/40'}`}>Escanea, suma sellos</span>
         </div>
       </div>
     );
@@ -323,8 +323,38 @@ const CardEditorPage: React.FC = () => {
           </span>
         </div>
 
+        {/* Google Info */}
+        <div className="p-4 space-y-3">
+           <div className="flex flex-col">
+              <span className={`text-4xl font-bold ${primaryTextColor}`}>{mockCustomer.name}</span>
+           </div>
+
+           <div className="grid grid-cols-2 gap-4">
+              <div>
+                <span className={`block text-xs mb-1 ${isLight ? 'text-white/60' : 'text-gray-500'}`}>Sellos acumulados</span>
+                <span className={`text-xl font-bold ${primaryTextColor}`}>{sampleStamps}</span>
+              </div>
+              <div>
+                <span className={`block text-xs mb-1 ${isLight ? 'text-white/60' : 'text-gray-500'}`}>Recompensas</span>
+                <span className={`text-xl font-bold ${primaryTextColor}`}>0</span>
+              </div>
+           </div>
+        </div>
+
+        {/* Google QR */}
+        <div className="p-4 flex flex-col items-center">
+          <div className="bg-white p-2 rounded-lg shadow-sm">
+             <img 
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${mockCustomer.id}`} 
+                alt="QR" 
+                className="w-32 h-32"
+              />
+          </div>
+          <span className={`mt-2 text-sm font-mono tracking-widest ${isLight ? 'text-white/80' : 'text-gray-600'}`}>{mockCustomer.id.substring(0, 8)}</span>
+        </div>
+
         {/* Google Hero Image (Stamps) */}
-        <div className="p-0">
+        <div className="p-0 mt-auto border-t border-black/5">
           <div className="grid grid-cols-5 gap-2 p-3 rounded-lg">
             {Array.from({ length: stampsGoal }).map((_, i) => (
               <div key={i} className={`aspect-square rounded-full flex items-center justify-center ${i < sampleStamps ? (isLight ? 'bg-white' : 'bg-black') : 'bg-white/20'}`}>
@@ -341,37 +371,6 @@ const CardEditorPage: React.FC = () => {
               </div>
             ))}
           </div>
-        </div>
-
-        {/* Google Info */}
-        <div className="p-5 space-y-4">
-           <div className="flex flex-col">
-              <span className={`text-sm font-medium ${primaryTextColor}`}>{mockCustomer.name}</span>
-              <span className={`text-xs ${isLight ? 'text-white/60' : 'text-gray-500'}`}>Miembro desde hoy</span>
-           </div>
-
-           <div className="grid grid-cols-2 gap-4 pt-2">
-              <div>
-                <span className={`block text-xs mb-1 ${isLight ? 'text-white/60' : 'text-gray-500'}`}>Sellos acumulados</span>
-                <span className={`text-lg font-bold ${primaryTextColor}`}>{sampleStamps}</span>
-              </div>
-              <div>
-                <span className={`block text-xs mb-1 ${isLight ? 'text-white/60' : 'text-gray-500'}`}>Recompensas</span>
-                <span className={`text-lg font-bold ${primaryTextColor}`}>0</span>
-              </div>
-           </div>
-        </div>
-
-        {/* Google QR */}
-        <div className="p-6 flex flex-col items-center border-t border-black/5 mt-auto">
-          <div className="bg-white p-2 rounded-lg shadow-sm">
-             <img 
-                src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${mockCustomer.id}`} 
-                alt="QR" 
-                className="w-32 h-32"
-              />
-          </div>
-          <span className={`mt-2 text-sm font-mono tracking-widest ${isLight ? 'text-white/80' : 'text-gray-600'}`}>{mockCustomer.id.substring(0, 8)}</span>
         </div>
       </div>
     );
