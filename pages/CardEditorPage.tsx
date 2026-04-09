@@ -823,6 +823,19 @@ const CardEditorPage: React.FC = () => {
           )}
           {previewMode === 'apple' && renderAppleWallet()}
           {previewMode === 'google' && renderGoogleWallet()}
+
+          {isFreePlan && (previewMode === 'apple' || previewMode === 'google') && (
+            <div className="mt-6 p-4 bg-indigo-50/50 border border-indigo-100 rounded-xl text-center max-w-[320px] mx-auto">
+              <div className="flex justify-center mb-2">
+                <span className="inline-flex items-center gap-1 text-xs font-bold text-indigo-600 bg-indigo-100 px-2 py-0.5 rounded-full">
+                  <LockIcon /> Premium
+                </span>
+              </div>
+              <p className="text-sm text-indigo-900 font-medium">
+                Suscríbete al plan Entrepreneur para que tus clientes descarguen en su wallet.
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
