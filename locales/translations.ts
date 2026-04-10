@@ -243,7 +243,7 @@ export const es = {
   },
   publicView: {
     lookupTitle: "Consulta tu tarjeta",
-    lookupSubtitle: "Tu número de teléfono (10 dígitos)",
+    lookupSubtitle: "Tu número de teléfono",
     lookupBtn: "Consultar",
     registerTitle: "Regístrate",
     registerBtn: "Registrarme",
@@ -564,7 +564,7 @@ export const en = {
   },
   publicView: {
     lookupTitle: "Check your card",
-    lookupSubtitle: "Your phone number (10 digits)",
+    lookupSubtitle: "Your phone number",
     lookupBtn: "Check",
     registerTitle: "Sign Up",
     registerBtn: "Register",
@@ -886,7 +886,7 @@ export const pt = {
   },
   publicView: {
     lookupTitle: "Consulte seu cartão",
-    lookupSubtitle: "Seu número de telefone (10 dígitos)",
+    lookupSubtitle: "Seu número de telefone",
     lookupBtn: "Consultar",
     registerTitle: "Cadastre-se",
     registerBtn: "Registrar",

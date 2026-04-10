@@ -165,7 +165,7 @@
   },
   "publicView": {
     "lookupTitle": "Consulta tu tarjeta",
-    "lookupSubtitle": "Tu número de teléfono (10 dígitos)",
+    "lookupSubtitle": "Tu número de teléfono",
     "lookupBtn": "Consultar",
     "registerTitle": "Regístrate",
     "registerBtn": "Registrarme",

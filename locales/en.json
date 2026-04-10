@@ -165,7 +165,7 @@
   },
   "publicView": {
     "lookupTitle": "Check your card",
-    "lookupSubtitle": "Your phone number (10 digits)",
+    "lookupSubtitle": "Your phone number",
     "lookupBtn": "Check",
     "registerTitle": "Sign Up",
     "registerBtn": "Register",
