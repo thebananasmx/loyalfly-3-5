@@ -192,6 +192,37 @@ const LandingPage: React.FC = () => {
             {/* Stats Banner Section */}
             <StatsBanner />
 
+            {/* Trusted By Section */}
+            <section className="py-20 bg-white border-b border-gray-100">
+                <div className="container mx-auto px-4">
+                    <div className="text-center mb-12">
+                        <h2 className="text-3xl font-bold text-black">
+                            Confían en nosotros
+                        </h2>
+                    </div>
+                    <div className="max-w-4xl mx-auto flex flex-wrap justify-center md:justify-between items-center gap-8 md:gap-4">
+                        <a href="https://instagram.com/anonimmobarra" target="_blank" rel="noopener noreferrer" className="block transition-all hover:scale-105 opacity-60 hover:opacity-100 grayscale hover:grayscale-0 duration-300">
+                            <img src="https://res.cloudinary.com/dg4wbuppq/image/upload/v1777084222/anonimo_yzrun9.png" alt="Anonimo Barra" className="h-10 md:h-12 object-contain" />
+                        </a>
+                        <a href="https://instagram.com/grumo.helados" target="_blank" rel="noopener noreferrer" className="block transition-all hover:scale-105 opacity-60 hover:opacity-100 grayscale hover:grayscale-0 duration-300">
+                            <img src="https://res.cloudinary.com/dg4wbuppq/image/upload/v1777084222/grumo_ho3bol.png" alt="Grumo" className="h-10 md:h-12 object-contain" />
+                        </a>
+                        <a href="https://instagram.com/alta_cafeteria" target="_blank" rel="noopener noreferrer" className="block transition-all hover:scale-105 opacity-60 hover:opacity-100 grayscale hover:grayscale-0 duration-300">
+                            <img src="https://res.cloudinary.com/dg4wbuppq/image/upload/v1777084222/alta_xlw79q.png" alt="Alta Cafe" className="h-10 md:h-12 object-contain" />
+                        </a>
+                        <a href="https://instagram.com/olverabeauty22" target="_blank" rel="noopener noreferrer" className="block transition-all hover:scale-105 opacity-60 hover:opacity-100 grayscale hover:grayscale-0 duration-300">
+                            <img src="https://res.cloudinary.com/dg4wbuppq/image/upload/v1777084222/olvera_jx5xxx.png" alt="Olvera Beauty" className="h-10 md:h-12 object-contain" />
+                        </a>
+                        <a href="https://instagram.com/habitohn" target="_blank" rel="noopener noreferrer" className="block transition-all hover:scale-105 opacity-60 hover:opacity-100 grayscale hover:grayscale-0 duration-300">
+                            <img src="https://res.cloudinary.com/dg4wbuppq/image/upload/v1777084222/habito_muvtnr.png" alt="Hábito" className="h-10 md:h-12 object-contain" />
+                        </a>
+                        <a href="https://instagram.com/funde_rele" target="_blank" rel="noopener noreferrer" className="block transition-all hover:scale-105 opacity-60 hover:opacity-100 grayscale hover:grayscale-0 duration-300">
+                            <img src="https://res.cloudinary.com/dg4wbuppq/image/upload/v1777084222/funderele_rhsizi.png" alt="Funderele" className="h-10 md:h-12 object-contain" />
+                        </a>
+                    </div>
+                </div>
+            </section>
+
             {/* Designs Tab Section */}
             <section className="py-20 bg-gray-50">
                 <div className="container mx-auto px-4">
