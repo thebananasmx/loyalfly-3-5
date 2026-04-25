@@ -195,29 +195,53 @@ const LandingPage: React.FC = () => {
             {/* Trusted By Section */}
             <section className="py-20 bg-white border-b border-gray-100">
                 <div className="container mx-auto px-4">
-                    <div className="text-center mb-12">
+                    <div className="text-center mb-16">
                         <h2 className="text-3xl font-bold text-black">
                             Confían en nosotros
                         </h2>
                     </div>
-                    <div className="max-w-4xl mx-auto flex flex-wrap justify-center md:justify-between items-center gap-8 md:gap-4">
-                        <a href="https://instagram.com/anonimmobarra" target="_blank" rel="noopener noreferrer" className="block transition-all hover:scale-105 opacity-60 hover:opacity-100 grayscale hover:grayscale-0 duration-300">
-                            <img src="https://res.cloudinary.com/dg4wbuppq/image/upload/v1777084222/anonimo_yzrun9.png" alt="Anonimo Barra" className="h-10 md:h-12 object-contain" />
+                    <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-12 md:gap-8">
+                        <a href="https://instagram.com/anonimmobarra" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center group transition-all duration-300">
+                            <div className="h-24 md:h-32 flex items-center justify-center mb-4 transition-all group-hover:scale-105 opacity-100 group-hover:opacity-80 grayscale-0 group-hover:grayscale duration-300">
+                                <img src="https://res.cloudinary.com/dg4wbuppq/image/upload/v1777084222/anonimo_yzrun9.png" alt="Anonimo Barra" className="max-h-full w-auto object-contain" />
+                            </div>
+                            <span className="text-sm font-semibold text-gray-900 group-hover:text-black">Anonimo Barra</span>
+                            <span className="text-xs text-gray-500">@anonimmobarra</span>
                         </a>
-                        <a href="https://instagram.com/grumo.helados" target="_blank" rel="noopener noreferrer" className="block transition-all hover:scale-105 opacity-60 hover:opacity-100 grayscale hover:grayscale-0 duration-300">
-                            <img src="https://res.cloudinary.com/dg4wbuppq/image/upload/v1777084222/grumo_ho3bol.png" alt="Grumo" className="h-10 md:h-12 object-contain" />
+                        <a href="https://instagram.com/grumo.helados" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center group transition-all duration-300">
+                            <div className="h-24 md:h-32 flex items-center justify-center mb-4 transition-all group-hover:scale-105 opacity-100 group-hover:opacity-80 grayscale-0 group-hover:grayscale duration-300">
+                                <img src="https://res.cloudinary.com/dg4wbuppq/image/upload/v1777084222/grumo_ho3bol.png" alt="Grumo" className="max-h-full w-auto object-contain" />
+                            </div>
+                            <span className="text-sm font-semibold text-gray-900 group-hover:text-black">Grumo</span>
+                            <span className="text-xs text-gray-500">@grumo.helados</span>
                         </a>
-                        <a href="https://instagram.com/alta_cafeteria" target="_blank" rel="noopener noreferrer" className="block transition-all hover:scale-105 opacity-60 hover:opacity-100 grayscale hover:grayscale-0 duration-300">
-                            <img src="https://res.cloudinary.com/dg4wbuppq/image/upload/v1777084222/alta_xlw79q.png" alt="Alta Cafe" className="h-10 md:h-12 object-contain" />
+                        <a href="https://instagram.com/alta_cafeteria" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center group transition-all duration-300">
+                            <div className="h-24 md:h-32 flex items-center justify-center mb-4 transition-all group-hover:scale-105 opacity-100 group-hover:opacity-80 grayscale-0 group-hover:grayscale duration-300">
+                                <img src="https://res.cloudinary.com/dg4wbuppq/image/upload/v1777084222/alta_xlw79q.png" alt="Alta Cafe" className="max-h-full w-auto object-contain" />
+                            </div>
+                            <span className="text-sm font-semibold text-gray-900 group-hover:text-black">Alta Cafe</span>
+                            <span className="text-xs text-gray-500">@alta_cafeteria</span>
                         </a>
-                        <a href="https://instagram.com/olverabeauty22" target="_blank" rel="noopener noreferrer" className="block transition-all hover:scale-105 opacity-60 hover:opacity-100 grayscale hover:grayscale-0 duration-300">
-                            <img src="https://res.cloudinary.com/dg4wbuppq/image/upload/v1777084222/olvera_jx5xxx.png" alt="Olvera Beauty" className="h-10 md:h-12 object-contain" />
+                        <a href="https://instagram.com/olverabeauty22" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center group transition-all duration-300">
+                            <div className="h-24 md:h-32 flex items-center justify-center mb-4 transition-all group-hover:scale-105 opacity-100 group-hover:opacity-80 grayscale-0 group-hover:grayscale duration-300">
+                                <img src="https://res.cloudinary.com/dg4wbuppq/image/upload/v1777084222/olvera_jx5xxx.png" alt="Olvera Beauty" className="max-h-full w-auto object-contain" />
+                            </div>
+                            <span className="text-sm font-semibold text-gray-900 group-hover:text-black">Olvera Beauty</span>
+                            <span className="text-xs text-gray-500">@olverabeauty22</span>
                         </a>
-                        <a href="https://instagram.com/habitohn" target="_blank" rel="noopener noreferrer" className="block transition-all hover:scale-105 opacity-60 hover:opacity-100 grayscale hover:grayscale-0 duration-300">
-                            <img src="https://res.cloudinary.com/dg4wbuppq/image/upload/v1777084222/habito_muvtnr.png" alt="Hábito" className="h-10 md:h-12 object-contain" />
+                        <a href="https://instagram.com/habitohn" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center group transition-all duration-300">
+                            <div className="h-24 md:h-32 flex items-center justify-center mb-4 transition-all group-hover:scale-105 opacity-100 group-hover:opacity-80 grayscale-0 group-hover:grayscale duration-300">
+                                <img src="https://res.cloudinary.com/dg4wbuppq/image/upload/v1777084222/habito_muvtnr.png" alt="Hábito" className="max-h-full w-auto object-contain" />
+                            </div>
+                            <span className="text-sm font-semibold text-gray-900 group-hover:text-black">Hábito</span>
+                            <span className="text-xs text-gray-500">@habitohn</span>
                         </a>
-                        <a href="https://instagram.com/funde_rele" target="_blank" rel="noopener noreferrer" className="block transition-all hover:scale-105 opacity-60 hover:opacity-100 grayscale hover:grayscale-0 duration-300">
-                            <img src="https://res.cloudinary.com/dg4wbuppq/image/upload/v1777084222/funderele_rhsizi.png" alt="Funderele" className="h-10 md:h-12 object-contain" />
+                        <a href="https://instagram.com/funde_rele" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center group transition-all duration-300">
+                            <div className="h-24 md:h-32 flex items-center justify-center mb-4 transition-all group-hover:scale-105 opacity-100 group-hover:opacity-80 grayscale-0 group-hover:grayscale duration-300">
+                                <img src="https://res.cloudinary.com/dg4wbuppq/image/upload/v1777084222/funderele_rhsizi.png" alt="Funderele" className="max-h-full w-auto object-contain" />
+                            </div>
+                            <span className="text-sm font-semibold text-gray-900 group-hover:text-black">Funderele</span>
+                            <span className="text-xs text-gray-500">@funde_rele</span>
                         </a>
                     </div>
                 </div>
